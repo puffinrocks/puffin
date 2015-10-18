@@ -1,0 +1,84 @@
+{% extends "bootstrap/base.html" %}
+
+
+{% block title %}Puffin{% endblock %}
+
+
+{% block head %}
+{{ super() }}
+<link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.ico') }}" type="image/x-icon">
+<link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}" type="image/x-icon">
+{% endblock %}
+
+
+{% block styles %}
+{{ super() }}
+<link rel="stylesheet" href="{{url_for('static', filename='styles/puffin.css')}}">
+{% endblock %}
+
+
+{% block scripts %}
+{{ super() }}
+{% endblock %}
+
+
+{% block navbar %}
+
+<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+			<span class="navbar-brand">
+				<a href="{{ url_for('gui.index') }}"><img src="{{ url_for('static', filename='images/logo.png') }}"/></a>
+			<span>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                {% if current_user.is_authenticated() %}
+                <li><a href="{{ url_for('security.logout') }}">Log Out</a></li>
+                {% else %}
+                <li><a href="{{ url_for('security.login') }}">Log In</a></li>
+                <li><a href="{{ url_for('security.register') }}">Register</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
+
+{% endblock %}
+
+
+{% block content %}
+
+{% if self.hero() %}
+<div class="jumbotron">
+	<div class="container">
+		{% block hero %}{% endblock %}
+	</div>
+</div>
+{% endif %}
+
+<div class="container">
+	{% for message in get_flashed_messages() %}
+	<div class="alert alert-warning">
+		<button type="button" class="close" data-dismiss="alert">&times;</button>
+		{{ message }}
+	</div>
+	{% endfor %}
+
+	{% block page %}{% endblock %}
+</div>
+
+<footer class="footer">
+	<div class="container">
+		<p>[FOOTER]</p>
+	</div>
+</footer>
+
+{% endblock %}
+

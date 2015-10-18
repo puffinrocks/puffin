@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+
+{% block title %}Puffin{% endblock %}
+
+
+{% block hero %}
+
+<div class="pull-right"><img src="{{ url_for('static', filename='images/puffin-scaled.png') }}"></img></div>
+<h1>Welcome to Puffin!</h1>
+<p>Puffin is a web app store. It's a one stop shop for running software on the net.</p>
+
+{% endblock %}
+
+
+{% block page %}
+
+<div class="row">
+	
+	<div class="col-md-4">
+		<h2><span class="glyphicon glyphicon-user"></span> usr</h2>
+		<p>Puffin lets you simply run web applications written by developers all around the world. They will be always reachable from any device.</p>
+		<p><a class="btn btn-default" href="#" role="button">Learn more &raquo;</a></p>
+	</div>
+
+	<div class="col-md-4">
+		<h2><span class="glyphicon glyphicon-headphones"></span> dev</h2>
+		<p>As a developer you can add your web applications to our store, which will make them more accessible and help you reach a wider audience. The process will be easy because Puffin uses popular Docker container technology.</p>
+		<p><a class="btn btn-default" href="#" role="button">Learn more &raquo;</a></p>
+	</div>
+
+	<div class="col-md-4">
+		<h2><span class="glyphicon glyphicon-wrench"></span> ops</h2>
+		<p>If you have a spare server and would like to let other people run their software on it, let us know. You can also make it private to run your applications with ease.</p>
+		<p><a class="btn btn-default" href="#" role="button">Learn more &raquo;</a></p>
+	</div>
+
+</div>
+
+{% endblock %}
+
