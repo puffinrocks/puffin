@@ -32,4 +32,8 @@ body {
 }
 .github-fork-ribbon a, .github-fork-ribbon a:hover {
 	border-style: none;
+	text-shadow: none;
+}
+.github-fork-ribbon {
+	box-shadow: none;
 }
