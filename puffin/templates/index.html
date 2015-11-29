@@ -14,37 +14,125 @@
 
 
 {% block page %}
+	
+    {{ self.about() }}
 
-<div class="github-fork-ribbon-wrapper right">
+    {{ self.apps() }}
+
+{% endblock %}
+
+
+{% block about %}
+
+<div class="github-fork-ribbon-wrapper right fixed">
 	<div class="github-fork-ribbon">
 		<a class="ribbon" href="https://github.com/loomchild/puffin">Fork me on Github</a>
 	</div>
 </div>
 
+<div class="well well-lg">
+    <div class="row">
+        
+        <div class="col-md-4">
+            <h2><span class="glyphicon glyphicon-user"></span> User</h2>
+            <p>
+                Puffin lets you simply run web applications written by developers from around the world. 
+                They will be always running and will be reachable from any location.
+            </p>
+            <p><a class="btn btn-default" href="#" role="button">Learn more &raquo;</a></p>
+        </div>
+
+        <div class="col-md-4">
+            <h2><span class="glyphicon glyphicon-headphones"></span> Developer</h2>
+            <p>You can add your web applications to our store, which will help you reach a wider audience. It's easy because Puffin uses popular Docker container technology.</p>
+            <p><a class="btn btn-default" href="#" role="button">Learn more &raquo;</a></p>
+        </div>
+
+        <div class="col-md-4">
+            <h2><span class="glyphicon glyphicon-wrench"></span> Sysadmin</h2>
+            <p>If you have a spare server and would like to let other people run their software on it, let us know. You can also make it private to run your own applications with ease.</p>
+            <p><a class="btn btn-default" href="#" role="button">Learn more &raquo;</a></p>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}
+
+
+{% block apps %}
+
 <div class="row">
-	
-	<div class="col-md-4">
-		<h2><span class="glyphicon glyphicon-user"></span> User</h2>
-		<p>
-            Puffin lets you simply run web applications written by developers from around the world. 
-            They will be always running and will be reachable from any location.
-        </p>
-		<p><a class="btn btn-default" href="#" role="button">Learn more &raquo;</a></p>
-	</div>
 
-	<div class="col-md-4">
-		<h2><span class="glyphicon glyphicon-headphones"></span> Developer</h2>
-		<p>You can add your web applications to our store, which will help you reach a wider audience. It's easy because Puffin uses popular Docker container technology.</p>
-		<p><a class="btn btn-default" href="#" role="button">Learn more &raquo;</a></p>
-	</div>
+  <div class="col-sm-4 col-md-3">
+    <div class="thumbnail">
+      <img src="{{ url_for('static', filename='images/apps/wordpress.png') }}" alt="Wordpress">
+      <div class="caption">
+        <h3>Wordpress</h3>
+        <p>WordPress is a free and open source blogging tool and a content management system.</p>
+        <p><a href="#" class="btn btn-default" role="button">Install</a></p>
+      </div>
+    </div>
+  </div>
 
-	<div class="col-md-4">
-		<h2><span class="glyphicon glyphicon-wrench"></span> Sysadmin</h2>
-		<p>If you have a spare server and would like to let other people run their software on it, let us know. You can also make it private to run your own applications with ease.</p>
-		<p><a class="btn btn-default" href="#" role="button">Learn more &raquo;</a></p>
-	</div>
+  <div class="col-sm-4 col-md-3">
+    <div class="thumbnail">
+      <img src="{{ url_for('static', filename='images/apps/ghost.png') }}" alt="ghost">
+      <div class="caption">
+        <h3>ghost</h3>
+        <p>Ghost is a blogging platform designed to simplify the process of online publishing for individuals.</p>
+        <p><a href="#" class="btn btn-default" role="button">Install</a></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sm-4 col-md-3">
+    <div class="thumbnail">
+      <img src="{{ url_for('static', filename='images/apps/jenkins.png') }}" alt="Jenkins">
+      <div class="caption">
+        <h3>Jenkins</h3>
+        <p>The Jenkins Continuous Integration and Delivery server.</p>
+        <p><a href="#" class="btn btn-default" role="button">Install</a></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sm-4 col-md-3">
+    <div class="thumbnail">
+      <img src="{{ url_for('static', filename='images/apps/owncloud.png') }}" alt="ownCloud">
+      <div class="caption">
+        <h3>ownCloud</h3>
+        <p>ownCloud is a self-hosted file sync and share server.</p>
+        <p><a href="#" class="btn btn-default" role="button">Install</a></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sm-4 col-md-3">
+    <div class="thumbnail">
+      <img src="{{ url_for('static', filename='images/apps/rocket.chat.png') }}" alt="Rocket.Chat">
+      <div class="caption">
+        <h3>Rocket.Chat</h3>
+        <p>Rocket.Chat is a Web Chat Server.</p>
+        <p><a href="#" class="btn btn-default" role="button">Install</a></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sm-4 col-md-3">
+    <div class="thumbnail">
+      <img src="{{ url_for('static', filename='images/apps/redmine.png') }}" alt="Redmine">
+      <div class="caption">
+        <h3>Redmine</h3>
+        <p>Redmine is a web-based project management and issue tracking tool.</p>
+        <p><a href="#" class="btn btn-default" role="button">Install</a></p>
+      </div>
+    </div>
+  </div>
 
 </div>
 
 {% endblock %}
+
+
 

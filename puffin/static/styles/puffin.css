@@ -37,3 +37,8 @@ body {
 .github-fork-ribbon {
 	box-shadow: none;
 }
+
+/* App thumbnails */
+.thumbnail {
+    height: 390px;
+}
