@@ -29,7 +29,7 @@ def init():
 
     app.config['SECURITY_EMAIL_SENDER'] = app.config['MAIL_DEFAULT_SENDER']
 
-    app.config['SECURITY_POST_LOGIN_VIEW'] = "/pledge.html"
+    app.config['SECURITY_POST_LOGIN_VIEW'] = "/"
 
     security = Security(app, CustomUserDatastore(), 
             confirm_register_form=CustomRegisterForm)
