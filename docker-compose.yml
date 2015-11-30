@@ -1,0 +1,25 @@
+web:
+    build: .
+    ports: 
+        - "8080:8080"
+    links:
+        - db
+        - mail
+    environment:
+        - DB_HOST=db
+        - DB_PORT=5432
+        - DB_NAME=puffin
+        - DB_USER=postgres
+        - MAIL_SERVER=mail
+        - MAIL_PORT=1025
+    command: sh -c "python3 -u puffin.py db create ; python3 -u puffin.py db upgrade ; python3 -u puffin.py server"
+
+db:
+    image: postgres
+
+mail:
+    image: mailhog/mailhog
+    ports: 
+        - "1025:1025"
+        - "8025:8025"
+
