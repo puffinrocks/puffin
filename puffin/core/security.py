@@ -2,6 +2,7 @@ from uuid import UUID
 from flask_security import Security
 from flask_security.datastore import SQLAlchemyDatastore, UserDatastore
 from flask_security.forms import RegisterForm
+from flask import Markup
 from wtforms import StringField
 from wtforms.validators import Required, Length, Regexp
 from .. import app
@@ -19,7 +20,10 @@ def init():
     app.config['SECURITY_REGISTERABLE'] = True
     app.config['SECURITY_CONFIRMABLE'] = True
     app.config['SECURITY_PASSWORD_HASH'] = "bcrypt"
-    
+    app.config['SECURITY_MSG_CONFIRMATION_REQUIRED'] = (
+            Markup('Email requires confirmation. <a href="/confirm">Resend confirmation instructions</a>.'), 
+            'error')
+
     # Update all salts with SECRET_KEY if they are not set
     secret_key = app.config['SECRET_KEY']
     for salt in ('SECURITY_PASSWORD_SALT', 'SECURITY_CONFIRM_SALT', 
