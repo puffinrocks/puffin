@@ -1,4 +1,5 @@
 # Puffin
+[![Build Status](https://travis-ci.org/loomchild/puffin.svg?branch=master)](https://travis-ci.org/loomchild/puffin)
 
 ## Intro
 
@@ -11,3 +12,31 @@ First version is essentially a specialized package manager for Docker, with easy
 See below screenshot of the front page:
 ![Puffin Front Page](/doc/screenshot.png?raw=true)
 
+## Deployment
+The easiest way to deploy Puffin and start playing with it is to use Docker.
+
+Create docker machine:
+
+	docker-machine create -d virtualbox dev
+	eval "$(docker-machine env dev)"
+
+Deploy Puffin and its dependencies:
+
+    cd deploy/dev
+	docker-compose up -d
+
+Access Puffin:
+
+	docker-machine ip dev
+
+Take the IP address of your machine and go to [IP]:8080 to access the system and [IP]:8025 to access the emails.
+The ports can also be forwarded.
+
+To execute Puffin commands, you can enter the container:
+
+	docker exec -i -t dev_web_1 bash
+	./puffin.py db upgrade
+
+Update docker images:
+
+	docker-compose pull
