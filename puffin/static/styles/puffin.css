@@ -10,6 +10,9 @@ body {
   
   /* Margin bottom by footer height */
   margin-bottom: 60px;
+
+  /* Always show scroll bar for consistent width */
+  overflow-y: scroll;
 }
 
 .footer {
