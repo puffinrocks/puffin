@@ -11,6 +11,20 @@ from .model import User
 
 db = SQLAlchemy()
 
+user_table = db.Table('user',
+    db.Column('user_id', UUID(as_uuid=True), primary_key=True, default=uuid.uuid4),
+    db.Column('name', db.String(128), nullable=False),
+    db.Column('email', db.String(256), nullable=False),
+    db.Column('password', db.String(256), nullable=True),
+    db.Column('active', db.Boolean()),
+    db.Column('confirmed_at', db.DateTime()),
+)
+
+db.Index('idx_user_email', user_table.c.email, unique=True)
+
+mapper(User, user_table)
+
+
 def init():
     url = get_url(app.config["DB_USER"], app.config["DB_PASSWORD"], 
         app.config["DB_HOST"], app.config["DB_PORT"], app.config["DB_NAME"])
@@ -61,17 +75,4 @@ def get_url(user, password, host, port, name):
 
     return string
 
-
-user_table = db.Table('user',
-    db.Column('user_id', UUID(as_uuid=True), primary_key=True, default=uuid.uuid4),
-    db.Column('name', db.String(128), nullable=False),
-    db.Column('email', db.String(256), nullable=False),
-    db.Column('password', db.String(256), nullable=True),
-    db.Column('active', db.Boolean()),
-    db.Column('confirmed_at', db.DateTime()),
-)
-
-db.Index('idx_user_email', user_table.c.email, unique=True)
-
-mapper(User, user_table)
 
