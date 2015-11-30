@@ -22,7 +22,6 @@ Create docker machine:
 
 Deploy Puffin and its dependencies:
 
-    cd deploy/dev
 	docker-compose up -d
 
 Access Puffin:
