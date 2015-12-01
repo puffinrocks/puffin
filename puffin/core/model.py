@@ -22,6 +22,7 @@ class User(UserMixin):
     def roles(self, role):
         pass
 
+
 class App:
     
     def __init__(self, app_id, name, logo, description):
@@ -37,3 +38,13 @@ class App:
     @property
     def logo_url(self):
         return "/static/apps/" + self.app_id + "/" + self.logo
+
+
+class Machine:
+    
+    def __init__(self, base_url, tls_config=None):
+        self.base_url = base_url
+        if tls_config:
+            tls_config.assert_hostname = False
+        self.tls_config = tls_config
+

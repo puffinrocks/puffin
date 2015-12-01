@@ -11,4 +11,4 @@ waitress>=0.8
 psycopg2>=2.6
 bcrypt>=2.0.0
 cachetools>=1.1.5
-
+docker-py>=1.6
