@@ -1,7 +1,7 @@
 from uuid import UUID
 from flask_security import Security
 from flask_security.datastore import SQLAlchemyDatastore, UserDatastore
-from flask_security.forms import RegisterForm
+from flask_security.forms import LoginForm, RegisterForm
 from flask import Markup
 from wtforms import StringField
 from wtforms.validators import Required, Length, Regexp
@@ -36,6 +36,7 @@ def init():
     app.config['SECURITY_POST_LOGIN_VIEW'] = "/"
 
     security = Security(app, CustomUserDatastore(), 
+            login_form=CustomLoginForm,
             confirm_register_form=CustomRegisterForm)
 
     security.send_mail_task(send_security_mail)
@@ -52,6 +53,8 @@ class CustomUserDatastore(SQLAlchemyDatastore, UserDatastore):
             user = db.session.query(User).get(identifier)
         else:
             user = db.session.query(User).filter_by(email=identifier).first()
+            if user == None:
+                user = db.session.query(User).filter_by(login=identifier).first()
         return user
 
     def find_user(self, **kwargs):
@@ -64,8 +67,15 @@ class CustomUserDatastore(SQLAlchemyDatastore, UserDatastore):
     def find_role(self, role):
         return None
 
+class CustomLoginForm(LoginForm):
+
+    email = StringField("Email or Login")
+
 class CustomRegisterForm(RegisterForm):
     
+    login = StringField('Login', validators=[Required(), Length(3, 32), 
+            Regexp(r'^[a-z][a-z0-9_]*$', 0, 'Login must have only lowercase letters, numbers or underscores')])
+
     name = StringField('Name', validators=[Required(), Length(1, 64), 
             Regexp(r'^[A-Za-z0-9_\- ]+$', 0, 'Name must have only letters, numbers, spaces, dots, dashes or underscores')])
 

@@ -4,7 +4,8 @@ from flask.ext.security import UserMixin
 
 class User(UserMixin):
     
-    def __init__(self, name, email, password, active, roles):
+    def __init__(self, login, name, email, password, active, roles):
+        self.login = login
         self.name = name
         self.email = email
         self.password = password

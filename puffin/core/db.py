@@ -13,6 +13,7 @@ db = SQLAlchemy()
 
 user_table = db.Table('user',
     db.Column('user_id', UUID(as_uuid=True), primary_key=True, default=uuid.uuid4),
+    db.Column('login', db.String(32), nullable=False),
     db.Column('name', db.String(128), nullable=False),
     db.Column('email', db.String(256), nullable=False),
     db.Column('password', db.String(256), nullable=True),
@@ -20,6 +21,7 @@ user_table = db.Table('user',
     db.Column('confirmed_at', db.DateTime()),
 )
 
+db.Index('idx_user_login', user_table.c.login, unique=True)
 db.Index('idx_user_email', user_table.c.email, unique=True)
 
 mapper(User, user_table)
