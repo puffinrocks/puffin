@@ -6,7 +6,7 @@ from flask_security.decorators import login_required
 from ..util import to_uuid
 from ..core.db import db
 from ..core.model import User
-from ..core.apps import APP_HOME, get_apps
+from ..core.apps import APP_HOME, get_app, get_app_list
 from . import gui
 
 
@@ -22,9 +22,13 @@ def utility_processor():
 
 @gui.route('/', methods=['GET'])
 def index():
-    return render_template('index.html', apps=get_apps())
+    return render_template('index.html', apps=get_app_list())
+
+@gui.route('/app/<app_id>.html', methods=['GET'])
+def app(app_id):
+    return render_template('app.html', app=get_app(app_id))
 
 @gui.route('/static/apps/<path:path>')
-def send_app(path):
+def app_static(path):
     return send_from_directory(APP_HOME, path)
 

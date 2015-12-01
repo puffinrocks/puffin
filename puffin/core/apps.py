@@ -13,17 +13,21 @@ app_cache = TTLCache(maxsize=1, ttl=120)
 def init():
     pass
 
-def get_apps():
-    apps = load_apps()
+def get_app(app_id):
+    apps = get_apps()
+    return apps[app_id]
+
+def get_app_list():
+    apps = get_apps().values()
     apps = sorted(apps, key=lambda app: app.name.lower())
     return apps
 
 @cached(app_cache)
-def load_apps():
-    apps = []
+def get_apps():
+    apps = {}
     for app_id in listdir(APP_HOME):
         app = load_app(app_id)
-        apps.append(app)
+        apps[app_id] = app
     return apps
         
 def load_app(app_id):

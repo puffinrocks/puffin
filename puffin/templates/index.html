@@ -67,11 +67,10 @@
 
     <div class="col-sm-4 col-md-3">
     <div class="thumbnail">
-      <img src="{{ app.logo_url }}" alt="{{ app.name }}">
+      <a href="{{ url_for('gui.app', app_id=app.app_id) }}"><img src="{{ app.logo_url }}" alt="{{ app.name }}"></a>
       <div class="caption">
-        <h3>{{ app.name }}</h3>
+        <h3><a href="{{ url_for('gui.app', app_id=app.app_id) }}">{{ app.name }}</a></h3>
         <p>{{ app.short_description }}</p>
-        <p><a href="#" class="btn btn-default" role="button">Install</a></p>
       </div>
     </div>
   </div>

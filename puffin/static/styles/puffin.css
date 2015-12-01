@@ -43,5 +43,13 @@ body {
 
 /* App thumbnails */
 .thumbnail {
-    height: 390px;
+    height: 360px;
+}
+
+.thumbnail a {
+    color: black;
+}
+
+.app .logo {
+    float: right;
 }

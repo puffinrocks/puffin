@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+
+{% block title %}Puffin | {{ app.name }}{% endblock %}
+
+
+{% block page %}
+	
+<div class="row">
+
+    <div class="app">
+
+        <img class="logo" src="{{ app.logo_url }}" alt="{{ app.name }}">
+        
+        <h1>{{ app.name }}</h1>
+        
+        <p>{{ app.description }}</p>
+        
+        {% if current_user.is_authenticated() %}
+        <p><a href="#" class="btn btn-default" role="button">Install</a></p>
+        {% else %}
+        <p>
+            <a href="{{ url_for('security.login', next=request.path) }}">Log In</a> or 
+            <a href="{{ url_for('security.register', next=request.path) }}">Register</a>
+            to Install application.
+        </p>
+        {% endif %}
+  
+    </div>
+
+</div>
+
+{% endblock %}
+
+
+
