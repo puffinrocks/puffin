@@ -5,13 +5,13 @@ from docker.tls import TLSConfig
 
 
 
-REMOTE_MACHINE = Machine("https://52.29.5.191:2376", 
-    TLSConfig(
-        client_cert=(
-            '/home/loomchild/.docker/machine/machines/frankfurt/cert.pem', 
-            '/home/loomchild/.docker/machine/machines/frankfurt/key.pem'),
-        verify='/home/loomchild/.docker/machine/machines/frankfurt/ca.pem'
-    ))
+#REMOTE_MACHINE = Machine("https://52.29.5.191:2376", 
+#    TLSConfig(
+#        client_cert=(
+#            '/home/loomchild/.docker/machine/machines/frankfurt/cert.pem', 
+#            '/home/loomchild/.docker/machine/machines/frankfurt/key.pem'),
+#        verify='/home/loomchild/.docker/machine/machines/frankfurt/ca.pem'
+#    ))
 
 LOCAL_MACHINE = Machine('unix://var/run/docker.sock')
 
