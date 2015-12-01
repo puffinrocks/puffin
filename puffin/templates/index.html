@@ -63,73 +63,20 @@
 {% block apps %}
 
 <div class="row">
+{% for app in apps %}
 
-  <div class="col-sm-4 col-md-3">
+    <div class="col-sm-4 col-md-3">
     <div class="thumbnail">
-      <img src="{{ url_for('static', filename='images/apps/wordpress.png') }}" alt="Wordpress">
+      <img src="{{ app.logo_url }}" alt="{{ app.name }}">
       <div class="caption">
-        <h3>Wordpress</h3>
-        <p>WordPress is a free and open source blogging tool and a content management system.</p>
+        <h3>{{ app.name }}</h3>
+        <p>{{ app.short_description }}</p>
         <p><a href="#" class="btn btn-default" role="button">Install</a></p>
       </div>
     </div>
   </div>
 
-  <div class="col-sm-4 col-md-3">
-    <div class="thumbnail">
-      <img src="{{ url_for('static', filename='images/apps/ghost.png') }}" alt="ghost">
-      <div class="caption">
-        <h3>ghost</h3>
-        <p>Ghost is a blogging platform designed to simplify the process of online publishing for individuals.</p>
-        <p><a href="#" class="btn btn-default" role="button">Install</a></p>
-      </div>
-    </div>
-  </div>
-
-  <div class="col-sm-4 col-md-3">
-    <div class="thumbnail">
-      <img src="{{ url_for('static', filename='images/apps/jenkins.png') }}" alt="Jenkins">
-      <div class="caption">
-        <h3>Jenkins</h3>
-        <p>The Jenkins Continuous Integration and Delivery server.</p>
-        <p><a href="#" class="btn btn-default" role="button">Install</a></p>
-      </div>
-    </div>
-  </div>
-
-  <div class="col-sm-4 col-md-3">
-    <div class="thumbnail">
-      <img src="{{ url_for('static', filename='images/apps/owncloud.png') }}" alt="ownCloud">
-      <div class="caption">
-        <h3>ownCloud</h3>
-        <p>ownCloud is a self-hosted file sync and share server.</p>
-        <p><a href="#" class="btn btn-default" role="button">Install</a></p>
-      </div>
-    </div>
-  </div>
-
-  <div class="col-sm-4 col-md-3">
-    <div class="thumbnail">
-      <img src="{{ url_for('static', filename='images/apps/rocket.chat.png') }}" alt="Rocket.Chat">
-      <div class="caption">
-        <h3>Rocket.Chat</h3>
-        <p>Rocket.Chat is a Web Chat Server.</p>
-        <p><a href="#" class="btn btn-default" role="button">Install</a></p>
-      </div>
-    </div>
-  </div>
-
-  <div class="col-sm-4 col-md-3">
-    <div class="thumbnail">
-      <img src="{{ url_for('static', filename='images/apps/redmine.png') }}" alt="Redmine">
-      <div class="caption">
-        <h3>Redmine</h3>
-        <p>Redmine is a web-based project management and issue tracking tool.</p>
-        <p><a href="#" class="btn btn-default" role="button">Install</a></p>
-      </div>
-    </div>
-  </div>
-
+{% endfor %}
 </div>
 
 {% endblock %}

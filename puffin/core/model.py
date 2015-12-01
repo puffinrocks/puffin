@@ -1,3 +1,4 @@
+from ..util import truncate
 from flask.ext.security import UserMixin
 
 
@@ -21,3 +22,18 @@ class User(UserMixin):
     def roles(self, role):
         pass
 
+class App:
+    
+    def __init__(self, app_id, name, logo, description):
+        self.app_id = app_id
+        self.name = name
+        self.logo = logo
+        self.description = description
+
+    @property
+    def short_description(self):
+        return truncate(self.description, 90)
+
+    @property
+    def logo_url(self):
+        return "/static/apps/" + self.app_id + "/" + self.logo

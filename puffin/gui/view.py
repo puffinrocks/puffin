@@ -1,11 +1,12 @@
 import time
-from flask import redirect, render_template, request, url_for, flash, abort, send_file
+from flask import redirect, render_template, request, url_for, flash, abort, send_file, send_from_directory
 from flask_bootstrap import Bootstrap
 from flask_security.core import current_user
 from flask_security.decorators import login_required
 from ..util import to_uuid
 from ..core.db import db
 from ..core.model import User
+from ..core.apps import APP_HOME, get_apps
 from . import gui
 
 
@@ -21,4 +22,9 @@ def utility_processor():
 
 @gui.route('/', methods=['GET'])
 def index():
-    return render_template('index.html')
+    return render_template('index.html', apps=get_apps())
+
+@gui.route('/static/apps/<path:path>')
+def send_app(path):
+    return send_from_directory(APP_HOME, path)
+
