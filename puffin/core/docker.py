@@ -14,6 +14,7 @@ from docker.tls import TLSConfig
 #    ))
 
 LOCAL_MACHINE = Machine('unix://var/run/docker.sock')
+DOMAIN = "stinky"
 
 def init():
     pass
@@ -33,7 +34,10 @@ def get_container(client, user, app_id):
         return None
 
 def get_container_name(user, app_id):
-    return str(user.user_id) + "_" + app_id
+    return user.login + "_" + app_id
+
+def get_container_domain(user, app_id):
+    return app_id + "." + user.login + "." + DOMAIN
 
 def get_containers(client):
     return client.containers()
@@ -41,14 +45,14 @@ def get_containers(client):
 def create_container(client, user, app):
     name = get_container_name(user, app.app_id)
     client.pull(app.image)
-    host_config = client.create_host_config(port_bindings={
-        2368: 9000,
-    })
     container = client.create_container(
         image=app.image,
         name=name,
-        ports=[2368],
-        host_config=host_config,
+        ports=[app.port],
+        environment={
+            "VIRTUAL_HOST": get_container_domain(user, app.app_id),
+            "VIRTUAL_PORT": app.port,
+        }
     )
     client.start(container)
-       
+

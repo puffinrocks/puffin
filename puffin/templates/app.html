@@ -22,7 +22,7 @@
                 {% if not container %}
                     {{ wtf.quick_form(form, button_map={'install': 'success'}) }}
                 {% else %}
-                    <a class="btn btn-primary" role="button" href="http://localhost:9000" target="_blank">Open</a>
+                    <a class="btn btn-primary" role="button" href="{{ "http://" + container_domain }}" target="_blank">Open</a>
                 {% endif %}
             {% else %}
                 <a href="{{ url_for('security.login', next=request.path) }}">Log In</a> or 

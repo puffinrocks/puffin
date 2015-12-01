@@ -38,7 +38,8 @@ def load_app(app_id):
         logo = manifest["logo"]
         description = manifest["description"]
         image = manifest.get("image")
+        port = manifest.get("port", 80)
 
-        app = App(app_id, name, logo, description, image)
+        app = App(app_id, name, logo, description, image, port)
         return app
 

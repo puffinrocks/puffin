@@ -7,7 +7,7 @@ from ..util import to_uuid
 from ..core.db import db
 from ..core.model import User
 from ..core.apps import APP_HOME, get_app, get_app_list
-from ..core.docker import get_client, get_container, create_container
+from ..core.docker import get_client, get_container, create_container, get_container_domain
 from . import gui
 from .form import UpdateAppForm
 
@@ -29,6 +29,7 @@ def index():
 @gui.route('/app/<app_id>.html', methods=['GET', 'POST'])
 def app(app_id):
     container = None
+    container_domain = None
     form = None
 
     if current_user.is_authenticated():
@@ -43,8 +44,10 @@ def app(app_id):
                 app = get_app(app_id)
                 create_container(client, current_user, app)
         container = get_container(client, current_user, app_id)
+        container_domain = get_container_domain(current_user, app_id)
 
-    return render_template('app.html', app=get_app(app_id), container=container, form=form)
+    return render_template('app.html', app=get_app(app_id), 
+        container=container, container_domain=container_domain, form=form)
 
 @gui.route('/static/apps/<path:path>')
 def app_static(path):
