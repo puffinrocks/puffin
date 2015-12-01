@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
 
 
 {% block title %}Puffin | {{ app.name }}{% endblock %}
@@ -16,15 +17,19 @@
         
         <p>{{ app.description }}</p>
         
-        {% if current_user.is_authenticated() %}
-        <p><a href="#" class="btn btn-default" role="button">Install</a></p>
-        {% else %}
-        <p>
-            <a href="{{ url_for('security.login', next=request.path) }}">Log In</a> or 
-            <a href="{{ url_for('security.register', next=request.path) }}">Register</a>
-            to Install application.
-        </p>
-        {% endif %}
+        <div>
+            {% if current_user.is_authenticated() %}
+                {% if not container %}
+                    {{ wtf.quick_form(form, button_map={'install': 'success'}) }}
+                {% else %}
+                    <a class="btn btn-primary" role="button" href="http://localhost:9000" target="_blank">Open</a>
+                {% endif %}
+            {% else %}
+                <a href="{{ url_for('security.login', next=request.path) }}">Log In</a> or 
+                <a href="{{ url_for('security.register', next=request.path) }}">Register</a>
+                to Install application.
+            {% endif %}
+        </div>
   
     </div>
 

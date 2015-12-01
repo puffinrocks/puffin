@@ -7,7 +7,9 @@ from ..util import to_uuid
 from ..core.db import db
 from ..core.model import User
 from ..core.apps import APP_HOME, get_app, get_app_list
+from ..core.docker import get_client, get_container, create_container
 from . import gui
+from .form import UpdateAppForm
 
 
 @gui.record_once
@@ -24,9 +26,25 @@ def utility_processor():
 def index():
     return render_template('index.html', apps=get_app_list())
 
-@gui.route('/app/<app_id>.html', methods=['GET'])
+@gui.route('/app/<app_id>.html', methods=['GET', 'POST'])
 def app(app_id):
-    return render_template('app.html', app=get_app(app_id))
+    container = None
+    form = None
+
+    if current_user.is_authenticated():
+        client = get_client()
+
+        form = UpdateAppForm()
+        
+        if form.validate_on_submit():
+            install = form.install.data
+
+            if install:
+                app = get_app(app_id)
+                create_container(client, current_user, app)
+        container = get_container(client, current_user, app_id)
+
+    return render_template('app.html', app=get_app(app_id), container=container, form=form)
 
 @gui.route('/static/apps/<path:path>')
 def app_static(path):

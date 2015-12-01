@@ -25,11 +25,12 @@ class User(UserMixin):
 
 class App:
     
-    def __init__(self, app_id, name, logo, description):
+    def __init__(self, app_id, name, logo, description, image):
         self.app_id = app_id
         self.name = name
         self.logo = logo
         self.description = description
+        self.image = image
 
     @property
     def short_description(self):
