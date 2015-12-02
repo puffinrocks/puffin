@@ -30,6 +30,8 @@ class DefaultConfig:
     MAIL_PASSWORD = None
     MAIL_DEFAULT_SENDER = "puffin <puffin@localhost>"
 
+    MACHINE = "local"
+
 def init():
     app.config.from_object("puffin.core.config.DefaultConfig")
     
