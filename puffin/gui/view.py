@@ -1,5 +1,5 @@
 import time
-from flask import redirect, render_template, request, url_for, flash, abort, send_file, send_from_directory
+from flask import redirect, render_template, request, url_for, flash, abort, send_file, send_from_directory, jsonify
 from flask_bootstrap import Bootstrap
 from flask_security.core import current_user
 from flask_security.decorators import login_required
@@ -7,7 +7,7 @@ from ..util import to_uuid
 from ..core.db import db
 from ..core.model import User
 from ..core.apps import APP_HOME, get_app, get_app_list
-from ..core.docker import get_client, create_app, delete_app, get_app_domain, is_app_running
+from ..core.docker import get_client, create_app, delete_app, get_app_domain, get_app_status
 from . import gui
 from .form import AppForm
 
@@ -46,11 +46,20 @@ def app(app_id):
                 delete_app(client, current_user, app)
             return redirect(url_for('.app', app_id=app_id))
         
-        app_running = is_app_running(client, current_user, app)
+        app_status = get_app_status(client, current_user, app)
         app_domain = get_app_domain(current_user, app)
 
     return render_template('app.html', app=get_app(app_id), 
-        app_running=app_running, app_domain=app_domain, form=form)
+        app_status=app_status, app_domain=app_domain, form=form)
+
+#TODO: move to API
+@gui.route('/app/<app_id>.json', methods=['GET'])
+@login_required
+def app_status(app_id):
+    client = get_client()
+    app = get_app(app_id)
+    app_status = get_app_status(client, current_user, app)
+    return jsonify(status=app_status)
 
 @gui.route('/static/apps/<path:path>')
 def app_static(path):

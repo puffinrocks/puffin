@@ -53,3 +53,11 @@ body {
 .app .logo {
     float: right;
 }
+
+.blinking {
+  animation: blinker 1.5s cubic-bezier(.5, 0, 1, 1) infinite alternate;  
+}
+@keyframes blinker {  
+  from { opacity: 1; }
+  to { opacity: 0.5; }
+}

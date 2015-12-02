@@ -7,6 +7,8 @@ from docker import Client
 from compose import config
 from compose.project import Project
 
+updating_apps = set()
+
 
 def init():
     pass
@@ -18,29 +20,50 @@ def get_client():
     return client
 
 def create_app(client, user, app, async=True):
+    name = get_container_name(user, app.app_id)
     if (async):
+        if name in updating_apps:
+            raise RuntimeError("Already updating " + name)
+        updating_apps.add(name)
         if getattr(user, "_get_current_object", None):
             user = user._get_current_object()
         task(create_app, client, user, app, async=False)
         return
-    project = get_project(client, user, app)
-    project.up()
+    
+    try:
+        project = get_project(client, user, app)
+        project.up()
+    finally:
+        updating_apps.remove(name)
         
 def delete_app(client, user, app, async=True):
+    name = get_container_name(user, app.app_id)
     if (async):
+        if name in updating_apps:
+            raise RuntimeError("Already updating " + name)
+        updating_apps.add(name)
         if getattr(user, "_get_current_object", None):
             user = user._get_current_object()
         task(delete_app, client, user, app, async=False)
         return
-    project = get_project(client, user, app)
-    project.stop()
-    project.remove_stopped()
+    
+    try:
+        project = get_project(client, user, app)
+        project.stop()
+        project.remove_stopped()
+    finally:
+        updating_apps.remove(name)
 
-def is_app_running(client, user, app):
+def get_app_status(client, user, app):
+    name = get_container_name(user, app.app_id)
+    if name in updating_apps:
+        return "updating"
     containers = get_containers(client)
-    container_name = get_container_name(user, app.app_id)
-    container = [c for c in containers if "/" + container_name in c["Names"]]
-    return len(container) > 0 
+    container = [c for c in containers if "/" + name in c["Names"]]
+    if len(container) > 0:
+        return "running"
+    else:
+        return "stopped"
            
 def get_app_domain(user, application):
     domain = app.config["SERVER_NAME"] or "localhost"

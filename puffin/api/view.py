@@ -6,4 +6,3 @@ from . import api
 def version():
     return jsonify(version=app.config['VERSION'])
 
-
