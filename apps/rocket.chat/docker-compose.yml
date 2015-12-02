@@ -1,0 +1,11 @@
+main:
+    image: rocket.chat:latest
+    links:
+        - db
+    ports:
+        - 3000
+
+db:
+    image: mongo
+
+

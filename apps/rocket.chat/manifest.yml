@@ -2,3 +2,4 @@ name: Rocket.Chat
 logo: logo.png
 description: >
     Rocket.Chat is a Web Chat Server.
+compose: docker-compose.yml

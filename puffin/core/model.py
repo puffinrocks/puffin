@@ -26,13 +26,13 @@ class User(UserMixin):
 
 class App:
     
-    def __init__(self, app_id, name, logo, description, image, port):
+    def __init__(self, app_id, path, name, logo, description, compose):
         self.app_id = app_id
+        self.path = path
         self.name = name
         self.logo = logo
         self.description = description
-        self.image = image
-        self.port = port
+        self.compose = compose
 
     @property
     def short_description(self):
@@ -42,7 +42,7 @@ class App:
     def logo_url(self):
         return "/static/apps/" + self.app_id + "/" + self.logo
 
-
+    
 class Machine:
     
     def __init__(self, base_url, tls_config=None):

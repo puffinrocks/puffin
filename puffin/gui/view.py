@@ -7,7 +7,7 @@ from ..util import to_uuid
 from ..core.db import db
 from ..core.model import User
 from ..core.apps import APP_HOME, get_app, get_app_list
-from ..core.docker import get_client, get_container, create_container, delete_container, get_container_domain
+from ..core.docker import get_client, create_app, delete_app, get_app_domain, is_app_running
 from . import gui
 from .form import AppForm
 
@@ -34,23 +34,22 @@ def app(app_id):
 
     if current_user.is_authenticated():
         client = get_client()
+        app = get_app(app_id)
 
         form = AppForm()
         
         if form.validate_on_submit():
             if form.install.data:
-                app = get_app(app_id)
-                create_container(client, current_user, app)
+                create_app(client, current_user, app)
             
             if form.uninstall.data:
-                app = get_app(app_id)
-                delete_container(client, current_user, app)
+                delete_app(client, current_user, app)
         
-        container = get_container(client, current_user, app_id)
-        container_domain = get_container_domain(current_user, app_id)
+        app_running = is_app_running(client, current_user, app)
+        app_domain = get_app_domain(current_user, app)
 
     return render_template('app.html', app=get_app(app_id), 
-        container=container, container_domain=container_domain, form=form)
+        app_running=app_running, app_domain=app_domain, form=form)
 
 @gui.route('/static/apps/<path:path>')
 def app_static(path):

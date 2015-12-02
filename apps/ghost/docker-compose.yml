@@ -1,0 +1,6 @@
+main:
+    image: ghost:latest
+    ports: 
+        - 2368
+
+

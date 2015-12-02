@@ -31,15 +31,15 @@ def get_apps():
     return apps
         
 def load_app(app_id):
-    with open(join(APP_HOME, app_id, "manifest.yml")) as manifest_file:    
+    path = join(APP_HOME, app_id)
+    with open(join(path, "manifest.yml")) as manifest_file:    
         manifest = yaml.load(manifest_file)
 
         name = manifest["name"]
         logo = manifest["logo"]
         description = manifest["description"]
-        image = manifest.get("image")
-        port = manifest.get("port", 80)
+        compose = manifest.get("compose")
 
-        app = App(app_id, name, logo, description, image, port)
+        app = App(app_id, path, name, logo, description, compose)
         return app
 

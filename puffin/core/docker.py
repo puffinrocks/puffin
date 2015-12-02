@@ -1,6 +1,10 @@
-from docker import Client
 from .machine import get_machine
 from .. import app
+
+from docker import Client
+
+from compose import config
+from compose.project import Project
 
 
 def init():
@@ -12,41 +16,49 @@ def get_client():
     client.ping()
     return client
 
-def get_container(client, user, app_id):
+def create_app(client, user, app):
+    project = get_project(client, user, app)
+    project.up()
+        
+def delete_app(client, user, app):
+    project = get_project(client, user, app)
+    project.stop()
+    project.remove_stopped()
+
+def is_app_running(client, user, app):
     containers = get_containers(client)
-    container_name = get_container_name(user, app_id)
+    container_name = get_container_name(user, app.app_id)
     container = [c for c in containers if "/" + container_name in c["Names"]]
-    if len(container) > 0:
-        return container[0]
-    else:
-        return None
+    return len(container) > 0 
+           
+def get_app_domain(user, application):
+    domain = app.config["SERVER_NAME"] or "localhost"
+    return application.app_id + "." + user.login + "." + domain
+
+def get_project(client, user, app):
+    name = get_container_name(user, app.app_id)
+    config_details = config.find(app.path, [app.compose])
+    project_config = config.load(config_details)
+
+    project = Project.from_dicts(name, project_config, client, False, None)
+
+    service = project.get_service("main")
+    
+    ports = service.options.get("ports", [])
+    
+    service.options["container_name"] = name
+
+    environment = service.options.get("environment", {})
+    service.options["environment"] = environment
+    environment["VIRTUAL_HOST"] = get_app_domain(user, app)
+    if ports:
+        environment["VIRTUAL_PORT"] = ports[0]
+
+    return project
 
 def get_container_name(user, app_id):
     return user.login + "_" + app_id
 
-def get_container_domain(user, app_id):
-    domain = app.config["SERVER_NAME"] or "localhost"
-    return app_id + "." + user.login + "." + domain
-
 def get_containers(client):
     return client.containers()
  
-def create_container(client, user, app):
-    name = get_container_name(user, app.app_id)
-    client.pull(app.image)
-    container = client.create_container(
-        image=app.image,
-        name=name,
-        ports=[app.port],
-        environment={
-            "VIRTUAL_HOST": get_container_domain(user, app.app_id),
-            "VIRTUAL_PORT": app.port,
-        }
-    )
-    client.start(container)
-
-def delete_container(client, user, app):
-    name = get_container_name(user, app.app_id)
-    client.stop(name)
-    client.remove_container(name)
-

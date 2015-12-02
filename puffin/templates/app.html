@@ -22,11 +22,11 @@
                 <form class="form" method="post" role="form" action="">
                     {{ form.hidden_tag() }}
                     {{ wtf.form_errors(form, hiddens="only") }}
-                {% if not container %}
-                    {{ wtf.form_field(form.install, button_map={'install': 'success'}) }}
-                {% else %}
-                    <a class="btn btn-primary" role="button" href="{{ "http://" + container_domain }}" target="_blank">Open</a>
+                {% if app_running %}
+                    <a class="btn btn-primary" role="button" href="{{ "http://" + app_domain }}" target="_blank">Open</a>
                     {{ wtf.form_field(form.uninstall, button_map={'uninstall': 'danger'}) }}
+                {% else %}
+                    {{ wtf.form_field(form.install, button_map={'install': 'success'}) }}
                 {% endif %}
                 </form>
             {% else %}
