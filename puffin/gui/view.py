@@ -28,7 +28,7 @@ def index():
 
 @gui.route('/app/<app_id>.html', methods=['GET', 'POST'])
 def app(app_id):
-    app_running = False
+    app_status = None
     app_domain = None
     form = None
 
