@@ -1,4 +1,5 @@
 from .machine import get_machine
+from .queue import task
 from .. import app
 
 from docker import Client
@@ -16,11 +17,21 @@ def get_client():
     client.ping()
     return client
 
-def create_app(client, user, app):
+def create_app(client, user, app, async=True):
+    if (async):
+        if getattr(user, "_get_current_object", None):
+            user = user._get_current_object()
+        task(create_app, client, user, app, async=False)
+        return
     project = get_project(client, user, app)
     project.up()
         
-def delete_app(client, user, app):
+def delete_app(client, user, app, async=True):
+    if (async):
+        if getattr(user, "_get_current_object", None):
+            user = user._get_current_object()
+        task(delete_app, client, user, app, async=False)
+        return
     project = get_project(client, user, app)
     project.stop()
     project.remove_stopped()
