@@ -45,3 +45,8 @@ def create_container(client, user, app):
     )
     client.start(container)
 
+def delete_container(client, user, app):
+    name = get_container_name(user, app.app_id)
+    client.stop(name)
+    client.remove_container(name)
+

@@ -7,9 +7,9 @@ from ..util import to_uuid
 from ..core.db import db
 from ..core.model import User
 from ..core.apps import APP_HOME, get_app, get_app_list
-from ..core.docker import get_client, get_container, create_container, get_container_domain
+from ..core.docker import get_client, get_container, create_container, delete_container, get_container_domain
 from . import gui
-from .form import UpdateAppForm
+from .form import AppForm
 
 
 @gui.record_once
@@ -35,14 +35,17 @@ def app(app_id):
     if current_user.is_authenticated():
         client = get_client()
 
-        form = UpdateAppForm()
+        form = AppForm()
         
         if form.validate_on_submit():
-            install = form.install.data
-
-            if install:
+            if form.install.data:
                 app = get_app(app_id)
                 create_container(client, current_user, app)
+            
+            if form.uninstall.data:
+                app = get_app(app_id)
+                delete_container(client, current_user, app)
+        
         container = get_container(client, current_user, app_id)
         container_domain = get_container_domain(current_user, app_id)
 

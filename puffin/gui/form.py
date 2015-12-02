@@ -3,6 +3,6 @@ from wtforms import StringField, IntegerField, PasswordField, SubmitField, Selec
 from ..core.db import db
 from ..core.model import User
 
-class UpdateAppForm(Form):
+class AppForm(Form):
     install = SubmitField('Install')
-
+    uninstall = SubmitField('Uninstall')

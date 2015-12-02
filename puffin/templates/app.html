@@ -19,11 +19,16 @@
         
         <div>
             {% if current_user.is_authenticated() %}
+                <form class="form" method="post" role="form" action="">
+                    {{ form.hidden_tag() }}
+                    {{ wtf.form_errors(form, hiddens="only") }}
                 {% if not container %}
-                    {{ wtf.quick_form(form, button_map={'install': 'success'}) }}
+                    {{ wtf.form_field(form.install, button_map={'install': 'success'}) }}
                 {% else %}
                     <a class="btn btn-primary" role="button" href="{{ "http://" + container_domain }}" target="_blank">Open</a>
+                    {{ wtf.form_field(form.uninstall, button_map={'uninstall': 'danger'}) }}
                 {% endif %}
+                </form>
             {% else %}
                 <a href="{{ url_for('security.login', next=request.path) }}">Log In</a> or 
                 <a href="{{ url_for('security.register', next=request.path) }}">Register</a>
