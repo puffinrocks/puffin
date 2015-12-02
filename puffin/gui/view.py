@@ -28,8 +28,8 @@ def index():
 
 @gui.route('/app/<app_id>.html', methods=['GET', 'POST'])
 def app(app_id):
-    container = None
-    container_domain = None
+    app_running = False
+    app_domain = None
     form = None
 
     if current_user.is_authenticated():
@@ -44,6 +44,7 @@ def app(app_id):
             
             if form.uninstall.data:
                 delete_app(client, current_user, app)
+            return redirect(url_for('.app', app_id=app_id))
         
         app_running = is_app_running(client, current_user, app)
         app_domain = get_app_domain(current_user, app)
