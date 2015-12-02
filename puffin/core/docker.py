@@ -1,7 +1,7 @@
 from docker import Client
 from .machine import get_machine
+from .. import app
 
-DOMAIN = "stinky"
 
 def init():
     pass
@@ -25,7 +25,8 @@ def get_container_name(user, app_id):
     return user.login + "_" + app_id
 
 def get_container_domain(user, app_id):
-    return app_id + "." + user.login + "." + DOMAIN
+    domain = app.config["SERVER_NAME"] or "localhost"
+    return app_id + "." + user.login + "." + domain
 
 def get_containers(client):
     return client.containers()
