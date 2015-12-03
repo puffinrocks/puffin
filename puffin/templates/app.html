@@ -25,10 +25,10 @@
                 {% if app_status == AppStatus.CREATED %}
                     <a class="btn btn-primary" role="button" href="{{ "http://" + app_domain }}" target="_blank">Open</a>
                     {{ wtf.form_field(form.uninstall, button_map={'uninstall': 'danger'}) }}
+                {% elif app_status == AppStatus.DELETED %}
+                    {{ wtf.form_field(form.install, button_map={'install': 'success'}) }}
                 {% elif app_status == AppStatus.ERROR %}
                     <button type="button" class="btn btn-warning">Error</button>
-                {% elif app_status == None %}
-                    {{ wtf.form_field(form.install, button_map={'install': 'success'}) }}
                 {% else %}
                     <button type="button" class="btn btn-warning blinking">Updating</button>
                     <script>

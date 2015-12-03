@@ -45,6 +45,7 @@ class App:
 
 
 class AppStatus(Enum):
+    DELETED = 0
     CREATED = 10
     CREATING = 20
     DELETING = 20
@@ -57,8 +58,15 @@ class AppInstallation:
         self.user = user
         #TODO: autoconvert to IDs and vals
         self.app_id = app_id
-        self.status = status
+        self.status_id = status.value
 
+    @property
+    def status(self):
+        return AppStatus(self.status_id)
+
+    @status.setter
+    def status(self, status):
+        self.status_id = status.value
     
 class Machine:
     

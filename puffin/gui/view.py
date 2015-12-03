@@ -7,7 +7,7 @@ from ..util import to_uuid
 from ..core.db import db
 from ..core.model import User, AppStatus
 from ..core.apps import APP_HOME, get_app, get_app_list
-from ..core.docker import get_client, create_app, delete_app, get_app_domain, get_app_installation
+from ..core.docker import get_client, create_app, delete_app, get_app_domain, get_app_status
 from . import gui
 from .form import AppForm
 
@@ -46,9 +46,7 @@ def app(app_id):
                 delete_app(client, current_user, app)
             return redirect(url_for('.app', app_id=app_id))
         
-        app_installation = get_app_installation(current_user, app)
-        if app_installation:
-            app_status = AppStatus(app_installation.status)
+        app_status = get_app_status(current_user, app)
         app_domain = get_app_domain(current_user, app)
 
     return render_template('app.html', app=get_app(app_id), 
@@ -60,10 +58,7 @@ def app(app_id):
 def app_status(app_id):
     client = get_client()
     app = get_app(app_id)
-    app_installation = get_app_installation(current_user, app)
-    status = None
-    if app_installation:
-        status = AppStatus(app_installation.status).name
+    status = get_app_status(current_user, app).name
     return jsonify(status=status)
 
 @gui.route('/static/apps/<path:path>')

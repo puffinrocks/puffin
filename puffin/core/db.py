@@ -32,7 +32,7 @@ app_installation_table = db.Table('app_installation',
     db.Column("version_id", db.Integer(), nullable=False),
     db.Column('user_id', UUID(as_uuid=True), db.ForeignKey(user_table.c.user_id), nullable=False),
     db.Column('app_id', db.String(128)),
-    db.Column('status', db.Integer(), nullable=False),
+    db.Column('status_id', db.Integer(), nullable=False),
 )
 
 db.Index('idx_app_installation_user_id_app_id', 
