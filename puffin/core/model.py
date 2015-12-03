@@ -1,5 +1,6 @@
 from ..util import truncate
 from flask.ext.security import UserMixin
+from enum import Enum
 
 
 class User(UserMixin):
@@ -41,6 +42,22 @@ class App:
     @property
     def logo_url(self):
         return "/static/apps/" + self.app_id + "/" + self.logo
+
+
+class AppStatus(Enum):
+    CREATED = 10
+    CREATING = 20
+    DELETING = 20
+    ERROR = 90
+
+
+class AppInstallation:
+    
+    def __init__(self, user, app_id, status):
+        self.user = user
+        #TODO: autoconvert to IDs and vals
+        self.app_id = app_id
+        self.status = status
 
     
 class Machine:

@@ -1,13 +1,13 @@
 from .machine import get_machine
 from .queue import task
+from .model import User, App, AppStatus, AppInstallation
+from .db import db
 from .. import app
 
 from docker import Client
 
 from compose import config
 from compose.project import Project
-
-updating_apps = set()
 
 
 def init():
@@ -19,51 +19,63 @@ def get_client():
     client.ping()
     return client
 
-def create_app(client, user, app, async=True):
-    name = get_container_name(user, app.app_id)
-    if (async):
-        if name in updating_apps:
-            raise RuntimeError("Already updating " + name)
-        updating_apps.add(name)
-        if getattr(user, "_get_current_object", None):
-            user = user._get_current_object()
-        task(create_app, client, user, app, async=False)
-        return
+def create_app(client, user, app):
+    app_installation = get_app_installation(user, app)
+    if app_installation:
+        raise RuntimeError("App already installed or updating, user: {}, app: {}".format(user.login, app.app_id))
     
+    app_installation = AppInstallation(user, app.app_id, AppStatus.CREATING.value)
+    db.session.add(app_installation)
+    db.session.commit()
+        
+    task(create_app_task, client, user.user_id, app)
+
+def create_app_task(client, user_id, app):
+    user = db.session.query(User).get(user_id)
+    app_installation = get_app_installation(user, app)
     try:
         project = get_project(client, user, app)
         project.up()
+        app_installation.status = AppStatus.CREATED.value
+    except:
+        app_installation.status = AppStatus.ERROR.value
     finally:
-        updating_apps.remove(name)
+        db.session.add(app_installation)
+        db.session.commit()
         
 def delete_app(client, user, app, async=True):
-    name = get_container_name(user, app.app_id)
-    if (async):
-        if name in updating_apps:
-            raise RuntimeError("Already updating " + name)
-        updating_apps.add(name)
-        if getattr(user, "_get_current_object", None):
-            user = user._get_current_object()
-        task(delete_app, client, user, app, async=False)
-        return
+    app_installation = get_app_installation(user, app)
+    if not app_installation or app_installation.status != AppStatus.CREATED.value:
+        raise RuntimeError("App not installed or updating, user: {}, app: {}".format(user.login, app.app_id))
     
+    app_installation.status = AppStatus.DELETING.value
+    db.session.add(app_installation)
+    db.session.commit()
+        
+    task(delete_app_task, client, user.user_id, app)
+
+def delete_app_task(client, user_id, app):
+    user = db.session.query(User).get(user_id)
+    app_installation = get_app_installation(user, app)
     try:
         project = get_project(client, user, app)
         project.stop()
         project.remove_stopped()
+        db.session.delete(app_installation)
+    except:
+        app_installation.status = AppStatus.ERROR.value
+        db.session.add(app_installation)
     finally:
-        updating_apps.remove(name)
+        db.session.commit()
 
-def get_app_status(client, user, app):
+def get_app_installation(user, app):
+    return db.session.query(AppInstallation).filter_by(user_id=user.user_id, app_id=app.app_id).first()
+
+def is_app_running(client, user, app):
     name = get_container_name(user, app.app_id)
-    if name in updating_apps:
-        return "updating"
     containers = get_containers(client)
     container = [c for c in containers if "/" + name in c["Names"]]
-    if len(container) > 0:
-        return "running"
-    else:
-        return "stopped"
+    return len(container) > 0
            
 def get_app_domain(user, application):
     domain = app.config["SERVER_NAME"] or "localhost"

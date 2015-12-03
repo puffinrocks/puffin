@@ -14,3 +14,10 @@ def truncate(string, length, suffix="..."):
         return string
     else:
         return string[:length].rsplit(' ', 1)[0] + suffix
+
+def deproxy(o):
+    "Returns a real current object if an object is a Flask proxy"
+    if getattr(o, "_get_current_object", None):
+        o = o._get_current_object()
+    return o
+

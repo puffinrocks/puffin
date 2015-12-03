@@ -6,7 +6,7 @@ from sqlalchemy.dialects.postgresql import UUID
 from flask.ext.migrate import Migrate
 
 from .. import app
-from .model import User
+from .model import User, AppInstallation
 
 
 db = SQLAlchemy()
@@ -25,6 +25,24 @@ db.Index('idx_user_login', user_table.c.login, unique=True)
 db.Index('idx_user_email', user_table.c.email, unique=True)
 
 mapper(User, user_table)
+
+
+app_installation_table = db.Table('app_installation', 
+    db.Column('app_installation_id', UUID(as_uuid=True), primary_key=True, default=uuid.uuid4),
+    db.Column("version_id", db.Integer(), nullable=False),
+    db.Column('user_id', UUID(as_uuid=True), db.ForeignKey(user_table.c.user_id), nullable=False),
+    db.Column('app_id', db.String(128)),
+    db.Column('status', db.Integer(), nullable=False),
+)
+
+db.Index('idx_app_installation_user_id_app_id', 
+    app_installation_table.c.user_id, app_installation_table.c.app_id, unique=True)
+
+mapper(AppInstallation, app_installation_table, 
+    version_id_col=app_installation_table.c.version_id, 
+    properties={
+        'user': db.relationship(User, lazy="joined"),
+    })
 
 
 def init():
