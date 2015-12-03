@@ -1,7 +1,7 @@
 Flask>=0.10.1
 Flask-SQLAlchemy>=1.0.4
 Flask-Migrate>=1.4.0
-Flask-Security>=1.7
+Flask-Security==1.7.4
 Flask-Login==0.2.11
 Flask-WTF>=0.9.5
 flask-bootstrap>=3.3
