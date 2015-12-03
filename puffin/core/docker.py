@@ -9,6 +9,11 @@ from docker import Client
 from compose import config
 from compose.project import Project
 
+from time import sleep
+
+
+# Sleep after creating an app to allow it to startup
+APP_CREATE_SLEEP = 5
 
 def init():
     pass
@@ -37,6 +42,7 @@ def create_app_task(client, user_id, app):
         project = get_project(client, user, app)
         project.up()
         app_installation.status = AppStatus.CREATED.value
+        sleep(APP_CREATE_SLEEP)
     except:
         app_installation.status = AppStatus.ERROR.value
     finally:
