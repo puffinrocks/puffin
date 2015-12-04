@@ -9,8 +9,11 @@ While many other tools are looking at containers as a way to run massive applica
 
 First version is essentially a specialized package manager for Docker, with easy to use interface à la app store. Security will be managed through automatic software updates. Beginners will be able to run containers for free on hardware provided by volunteers, while more demanding users will be able to connect their own machine to run their or their friends' applications.
 
-See below screenshot of the front page:
-![Puffin Front Page](/doc/screenshot.png?raw=true)
+## Demo
+
+Live demo is available at [puffin.rocks](http://puffin.rocks)
+
+[![Puffin Front Page](/doc/screenshot.png?raw=true)](http://puffin.rocks)
 
 ## Deployment
 The easiest way to deploy Puffin and start playing with it is to use Docker.
