@@ -24,23 +24,6 @@ body {
   height: 60px;
 }
 
-.github-fork-ribbon-wrapper {
-	top: 50px;
-}
-.github-fork-ribbon {
-	background-color: #222222;
-}
-.github-fork-ribbon a {
-	color: #9d9d9d;
-}
-.github-fork-ribbon a, .github-fork-ribbon a:hover {
-	border-style: none;
-	text-shadow: none;
-}
-.github-fork-ribbon {
-	box-shadow: none;
-}
-
 /* App thumbnails */
 .thumbnail {
     height: 360px;
