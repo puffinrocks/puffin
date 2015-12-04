@@ -18,14 +18,7 @@ APP_CREATE_SLEEP = 5
 
 
 def init():
-    install_proxy()
-
-def install_proxy():
-    client = get_client()
-    user = PUFFIN_USER
-    app = get_app("_proxy")
-    if not is_app_running(client, user, app):
-        create_app_do(client, user, app)
+    pass
 
 def get_client():
     machine = get_machine()
@@ -144,3 +137,13 @@ def get_container(client, name):
         return container
     else:
         return None
+
+def install_proxy():
+    client = get_client()
+    user = PUFFIN_USER
+    app = get_app("_proxy")
+    if is_app_running(client, user, app):
+        return False
+    create_app_do(client, user, app)
+    return True
+

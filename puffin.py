@@ -6,7 +6,7 @@ from flask.ext.migrate import MigrateCommand
 
 from puffin import app
 from puffin import core
-from puffin.core import model, db, queue, mail
+from puffin.core import model, db, queue, mail, docker
 
 manager = Manager(app, with_default_commands=False)
 
@@ -30,6 +30,16 @@ def create_database(name):
         print("Created {} database".format(name))
 
 manager.add_command('db', MigrateCommand)
+
+
+machine = Manager()
+
+manager.add_command("machine", machine)
+
+@machine.command
+def proxy():
+    if docker.install_proxy():
+        print("Installed docker proxy on machine")
 
 
 if __name__ == "__main__":
