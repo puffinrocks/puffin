@@ -19,7 +19,13 @@ def get_app(app_id):
 
 def get_app_list():
     apps = get_apps().values()
+    
+    # Filter private apps
+    apps = (a for a in apps if not a.app_id.startswith("_"))
+    
+    # Sort alphabetically
     apps = sorted(apps, key=lambda app: app.name.lower())
+    
     return apps
 
 @cached(app_cache)
@@ -36,8 +42,8 @@ def load_app(app_id):
         manifest = yaml.load(manifest_file)
 
         name = manifest["name"]
-        logo = manifest["logo"]
-        description = manifest["description"]
+        logo = manifest.get("logo", "")
+        description = manifest.get("description", "")
         compose = manifest.get("compose")
 
         app = App(app_id, path, name, logo, description, compose)

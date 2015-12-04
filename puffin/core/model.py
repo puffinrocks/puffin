@@ -24,6 +24,13 @@ class User(UserMixin):
     def roles(self, role):
         pass
 
+class SystemUser:
+    
+    def __init__(self, login):
+        self.login = login
+
+PUFFIN_USER = SystemUser("puffin")
+
 
 class App:
     

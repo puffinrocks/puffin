@@ -63,5 +63,7 @@ def app_status(app_id):
 
 @gui.route('/static/apps/<path:path>')
 def app_static(path):
+    if not path[-3:] in ("png", "jpg"):
+        raise Exception("Unsupported file")
     return send_from_directory(APP_HOME, path)
 

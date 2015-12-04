@@ -1,6 +1,7 @@
 from .machine import get_machine
+from .apps import get_app
 from .queue import task
-from .model import User, App, AppStatus, AppInstallation
+from .model import User, App, AppStatus, AppInstallation, PUFFIN_USER
 from .db import db
 from .. import app
 
@@ -15,8 +16,16 @@ from time import sleep
 # Sleep after creating an app to allow it to startup
 APP_CREATE_SLEEP = 5
 
+
 def init():
-    pass
+    install_proxy()
+
+def install_proxy():
+    client = get_client()
+    user = PUFFIN_USER
+    app = get_app("_proxy")
+    if not is_app_running(client, user, app):
+        create_app_do(client, user, app)
 
 def get_client():
     machine = get_machine()
@@ -39,15 +48,19 @@ def create_app_task(client, user_id, app):
     user = db.session.query(User).get(user_id)
     app_installation = get_app_installation(user, app)
     try:
-        project = get_project(client, user, app)
-        project.up()
+        create_app_do(client, user, app)
         app_installation.status = AppStatus.CREATED
         sleep(APP_CREATE_SLEEP)
     except:
         app_installation.status = AppStatus.ERROR
+        raise
     finally:
         db.session.add(app_installation)
         db.session.commit()
+
+def create_app_do(client, user, app):
+    project = get_project(client, user, app)
+    project.up()
         
 def delete_app(client, user, app, async=True):
     app_installation = get_app_installation(user, app)
@@ -64,15 +77,19 @@ def delete_app_task(client, user_id, app):
     user = db.session.query(User).get(user_id)
     app_installation = get_app_installation(user, app)
     try:
-        project = get_project(client, user, app)
-        project.stop()
-        project.remove_stopped()
+        delete_app_do(client, user, app)
         db.session.delete(app_installation)
     except:
         app_installation.status = AppStatus.ERROR
         db.session.add(app_installation)
+        raise
     finally:
         db.session.commit()
+
+def delete_app_do(client, user, app):
+    project = get_project(client, user, app)
+    project.stop()
+    project.remove_stopped()
 
 def get_app_installation(user, app):
     return db.session.query(AppInstallation).filter_by(user_id=user.user_id, app_id=app.app_id).first()
@@ -86,9 +103,8 @@ def get_app_status(user, app):
 
 def is_app_running(client, user, app):
     name = get_container_name(user, app.app_id)
-    containers = get_containers(client)
-    container = [c for c in containers if "/" + name in c["Names"]]
-    return len(container) > 0
+    container = get_container(client, name)
+    return container != None
            
 def get_app_domain(user, application):
     domain = app.config["SERVER_NAME"] or "localhost"
@@ -121,3 +137,10 @@ def get_container_name(user, app_id):
 def get_containers(client):
     return client.containers()
  
+def get_container(client, name):
+    containers = get_containers(client)
+    container = [c for c in containers if "/" + name in c["Names"]]
+    if len(container) > 0:
+        return container
+    else:
+        return None
