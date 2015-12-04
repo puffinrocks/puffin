@@ -44,3 +44,8 @@ body {
   from { opacity: 1; }
   to { opacity: 0.5; }
 }
+
+.version {
+    font-size: 16px;
+    color: #9d9d9d; 
+}
