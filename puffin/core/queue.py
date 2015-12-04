@@ -1,11 +1,14 @@
-from queue import Queue
-from threading import Thread
 from .. import app
+from queue import Queue
+from threading import Thread, Lock
+from ..util import SafeSet
 
 # Based on http://code.activestate.com/recipes/577187-python-thread-pool/
 
-
 queue = None
+
+task_ids = SafeSet()
+
 
 def init():
     global queue
@@ -14,9 +17,14 @@ def init():
     for _ in range(threads): 
         Worker(queue)
 
-def task(func, *args, **kwargs):
-    queue.put((func, args, kwargs))
-    
+def task(task_id, func, *args, **kwargs):
+    if task_id:
+        task_ids.add(task_id)
+    queue.put((task_id, func, args, kwargs))
+
+def task_exists(task_id):
+    return task_ids.contains(task_id)
+
 def wait():
     queue.join()
 
@@ -30,10 +38,13 @@ class Worker(Thread):
     
     def run(self):
         while True:
-            func, args, kwargs = self.queue.get()
+            task_id, func, args, kwargs = self.queue.get()
             try: 
                 func(*args, **kwargs)
             except Exception as e: 
                 app.logger.warn("Error processing task", e)
-            self.queue.task_done()
+            finally:
+                self.queue.task_done()
+                if task_id:
+                    task_ids.remove(task_id)
 

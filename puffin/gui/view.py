@@ -34,11 +34,11 @@ def app(app_id):
 
     if current_user.is_authenticated():
         app = get_app(app_id)
+        client = get_client()
 
         form = AppForm()
         
         if form.validate_on_submit():
-            client = get_client()
             if form.install.data:
                 create_app(client, current_user, app)
             
@@ -46,7 +46,7 @@ def app(app_id):
                 delete_app(client, current_user, app)
             return redirect(url_for('.app', app_id=app_id))
         
-        app_status = get_app_status(current_user, app)
+        app_status = get_app_status(client, current_user, app)
         app_domain = get_app_domain(current_user, app)
 
     return render_template('app.html', app=get_app(app_id), 
@@ -58,7 +58,8 @@ def app(app_id):
 def app_status(app_id):
     client = get_client()
     app = get_app(app_id)
-    status = get_app_status(current_user, app).name
+    client = get_client()
+    status = get_app_status(client, current_user, app).name
     return jsonify(status=status)
 
 @gui.route('/static/apps/<path:path>')

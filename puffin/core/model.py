@@ -54,27 +54,10 @@ class App:
 class AppStatus(Enum):
     DELETED = 0
     CREATED = 10
-    CREATING = 20
-    DELETING = 20
+    UPDATING = 20
     ERROR = 90
 
 
-class AppInstallation:
-    
-    def __init__(self, user, app_id, status):
-        self.user = user
-        #TODO: autoconvert to IDs and vals
-        self.app_id = app_id
-        self.status_id = status.value
-
-    @property
-    def status(self):
-        return AppStatus(self.status_id)
-
-    @status.setter
-    def status(self, status):
-        self.status_id = status.value
-    
 class Machine:
     
     def __init__(self, base_url, tls_config=None):

@@ -27,20 +27,20 @@
                     {{ wtf.form_field(form.uninstall, button_map={'uninstall': 'danger'}) }}
                 {% elif app_status == AppStatus.DELETED %}
                     {{ wtf.form_field(form.install, button_map={'install': 'success'}) }}
-                {% elif app_status == AppStatus.ERROR %}
-                    <button type="button" class="btn btn-warning">Error</button>
-                {% else %}
+                {% elif app_status == AppStatus.UPDATING %}
                     <button type="button" class="btn btn-warning blinking">Updating</button>
                     <script>
                         function check_status() {
                             $.get("{{'/app/' + app.app_id + '.json' }}", function(data) {
-                                if (data.status != "CREATING" && data.status != "DELETING") {
+                                if (data.status != "UPDATING") {
                                     window.location.reload(false);
                                 }
                             }, "json");
                         }
                         setInterval(check_status, 2500);
                     </script>
+                {% else %}
+                    <button type="button" class="btn btn-warning">Error</button>
                 {% endif %}
                 </form>
             {% else %}

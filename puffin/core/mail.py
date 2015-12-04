@@ -17,7 +17,7 @@ def send(recipient=None, subject=None, template=None, message=None, async=True, 
         message = create_message(recipient, subject, template, **kwargs)
     
     if async:
-        task(send_message, app, message)
+        task(None, send_message, app, message)
     else:
         send_message(app, message)
 

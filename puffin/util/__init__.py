@@ -1,4 +1,5 @@
 from uuid import UUID
+from threading import Lock
 
 
 def to_uuid(string):
@@ -20,4 +21,24 @@ def deproxy(o):
     if getattr(o, "_get_current_object", None):
         o = o._get_current_object()
     return o
+
+class SafeSet():
+    
+    def __init__(self):
+        self.data = set()
+        self.lock = Lock()
+
+    def add(self, element):
+        with self.lock:
+            if element in self.data:
+                raise Exception("Element already exists")
+            self.data.add(element)
+
+    def remove(self, element):
+        with self.lock:
+            self.data.remove(element)
+
+    def contains(self, element):
+        with self.lock:
+            return element in self.data
 
