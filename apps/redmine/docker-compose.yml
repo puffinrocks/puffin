@@ -2,8 +2,4 @@ main:
     image: redmine:latest
     ports: 
         - 3000
-    links:
-        - db
-db:
-    image: postgres
 
