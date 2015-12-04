@@ -10,11 +10,12 @@ from docker import Client
 from compose import config
 from compose.project import Project
 
-from time import sleep
+import requests
+from time import time, sleep
 
 
-# Sleep after creating an app to allow it to startup
-APP_CREATE_SLEEP = 5
+# How long wait for app startup
+APP_CREATE_TIMEOUT = 60
 
 
 def init():
@@ -35,7 +36,8 @@ def create_app(client, user, app):
 def create_app_task(client, user_id, app):
     user = db.session.query(User).get(user_id)
     create_app_do(client, user, app)
-    sleep(APP_CREATE_SLEEP)
+    app_url = "http://" + get_app_domain(user, app)
+    wait_until_up(app_url)
 
 def create_app_do(client, user, app):
     project = get_project(client, user, app)
@@ -104,6 +106,16 @@ def get_container(client, name):
         return container
     else:
         return None
+
+def wait_until_up(url, timeout=APP_CREATE_TIMEOUT):
+    start_time = time()
+    while True:
+        r = requests.get(url)
+        if r.status_code == 200:
+            break
+        if start_time + timeout <= time():
+            break
+        sleep(1)
 
 def install_proxy():
     client = get_client()
