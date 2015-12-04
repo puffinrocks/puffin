@@ -1,0 +1,6 @@
+main:
+    image: owncloud:latest
+    ports: 
+        - 80
+
+

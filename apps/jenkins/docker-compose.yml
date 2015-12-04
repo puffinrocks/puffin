@@ -1,0 +1,6 @@
+main:
+    image: jenkins:latest
+    ports: 
+        - 8080
+
+
