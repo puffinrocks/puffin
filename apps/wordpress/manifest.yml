@@ -2,3 +2,4 @@ name: WordPress
 logo: logo.png
 description: |
     WordPress is a free and open source blogging tool and a content management system.
+compose: docker-compose.yml

@@ -2,4 +2,5 @@ name: Redmine
 logo: logo.png
 description: |
     Redmine is a web-based project management and issue tracking tool.
+compose: docker-compose.yml
 
