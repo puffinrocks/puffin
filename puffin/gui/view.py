@@ -26,6 +26,10 @@ def utility_processor():
 def index():
     return render_template('index.html', apps=get_app_list())
 
+@gui.route('/about.html', methods=['GET'])
+def about():
+    return render_template('about.html')
+
 @gui.route('/app/<app_id>.html', methods=['GET', 'POST'])
 def app(app_id):
     app_status = None

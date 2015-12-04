@@ -8,48 +8,17 @@
 
 <div class="pull-right"><img src="{{ url_for('static', filename='images/puffin-scaled.png') }}"></img></div>
 <h1>Welcome to Puffin!</h1>
-<p>Puffin is a webapp store. It's the easiest way to run software on the net.</p>
+<p>
+    Puffin is a webapp store. It's the easiest way to run software on the net.
+    <a href="{{ url_for("gui.about") }}">Learn more &raquo;</a>
+</p>
 
 {% endblock %}
 
 
 {% block page %}
 	
-    {{ self.about() }}
-
     {{ self.apps() }}
-
-{% endblock %}
-
-
-{% block about %}
-
-<div class="well well-lg">
-    <div class="row">
-        
-        <div class="col-md-4">
-            <h2>User</h2>
-            <p>
-                Puffin lets you simply run web applications written by developers from around the world. 
-                They will be always up and reachable from any location.
-            </p>
-            <p><a class="btn btn-default" href="#" role="button">Learn more &raquo;</a></p>
-        </div>
-
-        <div class="col-md-4">
-            <h2>Developer</h2>
-            <p>You can add your web applications to Puffin, which will help you reach a wider audience. It's easy because Puffin uses popular Docker container technology.</p>
-            <p><a class="btn btn-default" href="#" role="button">Learn more &raquo;</a></p>
-        </div>
-
-        <div class="col-md-4">
-            <h2>Sysadmin</h2>
-            <p>If you have a spare server and would like to let other people run their software on it, let us know. You can also keep it private to run your own applications.</p>
-            <p><a class="btn btn-default" href="#" role="button">Learn more &raquo;</a></p>
-        </div>
-
-    </div>
-</div>
 
 {% endblock %}
 
