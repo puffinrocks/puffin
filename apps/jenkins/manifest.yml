@@ -1,5 +1,5 @@
 name: Jenkins 
 logo: logo.png
-description: >
+description: |
     The Jenkins Continuous Integration and Delivery server.
 

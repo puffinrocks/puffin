@@ -44,7 +44,11 @@ class App:
 
     @property
     def short_description(self):
-        return truncate(self.description, 90)
+        short_description = self.description
+        index = self.description.find('\n')
+        if index >= 0:
+            short_description = short_description[0:index]
+        return short_description
 
     @property
     def logo_url(self):
