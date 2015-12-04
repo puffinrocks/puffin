@@ -1,6 +1,0 @@
-name: Jenkins 
-logo: logo.png
-description: |
-    The Jenkins Continuous Integration and Delivery server.
-    This is a fully functional Jenkins server, based on the Long Term Support release.
-compose: docker-compose.yml
