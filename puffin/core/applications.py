@@ -1,0 +1,51 @@
+from . model import Application
+from ..util.homer import HOME
+
+from cachetools import cached, TTLCache
+
+from os import listdir
+from os.path import join
+import yaml
+
+APPLICATION_HOME = join(HOME, "apps")
+application_cache = TTLCache(maxsize=1, ttl=120)
+
+def init():
+    pass
+
+def get_application(application_id):
+    applications = get_applications()
+    return applications[application_id]
+
+def get_application_list():
+    applications = get_applications().values()
+    
+    # Filter private applications
+    applications = (a for a in applications if not a.application_id.startswith("_"))
+    
+    # Sort alphabetically
+    applications = sorted(applications, key=lambda a: a.name.lower())
+    
+    return applications
+
+@cached(application_cache)
+def get_applications():
+    applications = {}
+    for application_id in listdir(APPLICATION_HOME):
+        application = load_application(application_id)
+        applications[application_id] = application
+    return applications
+        
+def load_application(application_id):
+    path = join(APPLICATION_HOME, application_id)
+    with open(join(path, "manifest.yml")) as manifest_file:    
+        manifest = yaml.load(manifest_file)
+
+        name = manifest["name"]
+        logo = manifest.get("logo", "")
+        description = manifest.get("description", "")
+        compose = manifest.get("compose")
+
+        application = Application(application_id, path, name, logo, description, compose)
+        return application
+

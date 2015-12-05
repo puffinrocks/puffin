@@ -47,9 +47,9 @@ def get_version():
     version = "Unknown"
     try:
         description = subprocess.check_output(
-            ["git", "describe", "--long",  "--match", "v*"], 
+            ["git", "describe", "--long",  "--match", "[0-9].*"], 
             stderr=subprocess.STDOUT, cwd=HOME, universal_newlines=True)
-        m = re.match(r"v([\w\.]+)-\d+-g(\w+)", description)
+        m = re.match(r"([\w\.]+)-\d+-g(\w+)", description)
         if m:
             version = m.group(1) + "-" + m.group(2)
     except subprocess.CalledProcessError:

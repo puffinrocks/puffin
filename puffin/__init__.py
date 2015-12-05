@@ -1,13 +1,11 @@
+from flask_bootstrap import Bootstrap
 from flask import Flask
 
 app = Flask(__name__)
 
-from .api import api
+Bootstrap(app)
+app.config['BOOTSTRAP_SERVE_LOCAL'] = True
 
-app.register_blueprint(api)
-
-from .gui import gui
-
-app.register_blueprint(gui)
+from . import gui
 
 

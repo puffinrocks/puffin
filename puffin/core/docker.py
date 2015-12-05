@@ -1,7 +1,7 @@
 from .machine import get_machine
-from .apps import get_app
+from .applications import get_application
 from .queue import task, task_exists
-from .model import User, App, AppStatus, PUFFIN_USER
+from .model import User, Application, ApplicationStatus, PUFFIN_USER
 from .db import db
 from .. import app
 
@@ -14,8 +14,8 @@ import requests
 from time import time, sleep
 
 
-# How long wait for app startup
-APP_CREATE_TIMEOUT = 60
+# How long wait for application startup
+APPLICATION_CREATE_TIMEOUT = 60
 
 
 def init():
@@ -27,54 +27,54 @@ def get_client():
     client.ping()
     return client
 
-def create_app(client, user, app):
-    if get_app_status(client, user, app) != AppStatus.DELETED:
-        raise RuntimeError("App already installed or updating, user: {}, app: {}".format(user.login, app.app_id))
-    name = get_container_name(user, app.app_id)
-    task(name, create_app_task, client, user.user_id, app)
+def create_application(client, user, application):
+    if get_application_status(client, user, application) != ApplicationStatus.DELETED:
+        raise RuntimeError("Application already installed or updating, user: {}, application: {}".format(user.login, application.application_id))
+    name = get_container_name(user, application.application_id)
+    task(name, create_application_task, client, user.user_id, application)
 
-def create_app_task(client, user_id, app):
+def create_application_task(client, user_id, application):
     user = db.session.query(User).get(user_id)
-    create_app_do(client, user, app)
-    app_url = "http://" + get_app_domain(user, app)
-    wait_until_up(app_url)
+    create_application_do(client, user, application)
+    application_url = "http://" + get_application_domain(user, application)
+    wait_until_up(application_url)
 
-def create_app_do(client, user, app):
-    project = get_project(client, user, app)
+def create_application_do(client, user, application):
+    project = get_project(client, user, application)
     project.up()
         
-def delete_app(client, user, app, async=True):
-    if get_app_status(client, user, app) != AppStatus.CREATED:
-        raise RuntimeError("App not installed or updating, user: {}, app: {}".format(user.login, app.app_id))
-    name = get_container_name(user, app.app_id)
-    task(name, delete_app_task, client, user.user_id, app)
+def delete_application(client, user, application, async=True):
+    if get_application_status(client, user, application) != ApplicationStatus.CREATED:
+        raise RuntimeError("Application not installed or updating, user: {}, application: {}".format(user.login, application.application_id))
+    name = get_container_name(user, application.application_id)
+    task(name, delete_application_task, client, user.user_id, application)
 
-def delete_app_task(client, user_id, app):
+def delete_application_task(client, user_id, application):
     user = db.session.query(User).get(user_id)
-    delete_app_do(client, user, app)
+    delete_application_do(client, user, application)
 
-def delete_app_do(client, user, app):
-    project = get_project(client, user, app)
+def delete_application_do(client, user, application):
+    project = get_project(client, user, application)
     project.stop()
     project.remove_stopped()
 
-def get_app_status(client, user, app):
-    name = get_container_name(user, app.app_id)
+def get_application_status(client, user, application):
+    name = get_container_name(user, application.application_id)
     if task_exists(name):
-        return AppStatus.UPDATING
+        return ApplicationStatus.UPDATING
     container = get_container(client, name)
     if container:
-        return AppStatus.CREATED
+        return ApplicationStatus.CREATED
     else:
-        return AppStatus.DELETED
+        return ApplicationStatus.DELETED
 
-def get_app_domain(user, application):
+def get_application_domain(user, application):
     domain = app.config["SERVER_NAME"] or "localhost"
-    return application.app_id + "." + user.login + "." + domain
+    return application.application_id + "." + user.login + "." + domain
 
-def get_project(client, user, app):
-    name = get_container_name(user, app.app_id)
-    config_details = config.find(app.path, [app.compose])
+def get_project(client, user, application):
+    name = get_container_name(user, application.application_id)
+    config_details = config.find(application.path, [application.compose])
     project_config = config.load(config_details)
 
     project = Project.from_dicts(name, project_config, client, False, None)
@@ -87,14 +87,14 @@ def get_project(client, user, app):
 
     environment = service.options.get("environment", {})
     service.options["environment"] = environment
-    environment["VIRTUAL_HOST"] = get_app_domain(user, app)
+    environment["VIRTUAL_HOST"] = get_application_domain(user, application)
     if ports:
         environment["VIRTUAL_PORT"] = ports[0]
 
     return project
 
-def get_container_name(user, app_id):
-    return user.login + "_" + app_id
+def get_container_name(user, application_id):
+    return user.login + "_" + application_id
 
 def get_containers(client):
     return client.containers()
@@ -107,7 +107,7 @@ def get_container(client, name):
     else:
         return None
 
-def wait_until_up(url, timeout=APP_CREATE_TIMEOUT):
+def wait_until_up(url, timeout=APPLICATION_CREATE_TIMEOUT):
     start_time = time()
     while True:
         r = requests.get(url)
@@ -120,9 +120,9 @@ def wait_until_up(url, timeout=APP_CREATE_TIMEOUT):
 def install_proxy():
     client = get_client()
     user = PUFFIN_USER
-    app = get_app("_proxy")
-    if is_app_running(client, user, app):
+    application = get_application("_proxy")
+    if is_application_running(client, user, application):
         return False
-    create_app_do(client, user, app)
+    create_application_do(client, user, application)
     return True
 

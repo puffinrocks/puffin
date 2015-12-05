@@ -10,7 +10,7 @@
 <h1>Welcome to Puffin!</h1>
 <p>
     Puffin is a webapp store. It's the easiest way to run software on the net.
-    <a href="{{ url_for("gui.about") }}">Learn more &raquo;</a>
+    <a href="{{ url_for("about") }}">Learn more &raquo;</a>
 </p>
 
 {% endblock %}
@@ -18,22 +18,22 @@
 
 {% block page %}
 	
-    {{ self.apps() }}
+    {{ self.applications() }}
 
 {% endblock %}
 
 
-{% block apps %}
+{% block applications %}
 
 <div class="row">
-{% for app in apps %}
+{% for application in applications %}
 
     <div class="col-sm-4 col-md-3">
     <div class="thumbnail">
-      <a href="{{ url_for('gui.app', app_id=app.app_id) }}"><img src="{{ app.logo_url }}" alt="{{ app.name }}"></a>
+      <a href="{{ url_for('application', application_id=application.application_id) }}"><img src="{{ application.logo_url }}" alt="{{ application.name }}"></a>
       <div class="caption">
-        <h3><a href="{{ url_for('gui.app', app_id=app.app_id) }}">{{ app.name }}</a></h3>
-        <p>{{ app.short_description }}</p>
+        <h3><a href="{{ url_for('application', application_id=application.application_id) }}">{{ application.name }}</a></h3>
+        <p>{{ application.short_description }}</p>
       </div>
     </div>
   </div>

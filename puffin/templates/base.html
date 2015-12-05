@@ -34,7 +34,7 @@
                 <span class="icon-bar"></span>
             </button>
             <span class="navbar-brand">
-                <a href="{{ url_for('gui.index') }}"><img src="{{ url_for('static', filename='images/logo.png') }}"/></a>
+                <a href="{{ url_for('index') }}"><img src="{{ url_for('static', filename='images/logo.png') }}"/></a>
                 <span class="version">&alpha; alpha {{ version }}</span>
             </span>
         </div>
@@ -85,5 +85,15 @@
 	</div>
 </footer>
 
+{{ self.tracking() }}
+
 {% endblock %}
 
+
+{% block tracking %}
+
+{% if tracking_url %}
+<img src="{{ tracking_url }} />
+{% endif %}
+
+{% endblock %}

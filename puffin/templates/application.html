@@ -2,35 +2,35 @@
 {% import "bootstrap/wtf.html" as wtf %}
 
 
-{% block title %}Puffin | {{ app.name }}{% endblock %}
+{% block title %}Puffin | {{ application.name }}{% endblock %}
 
 
 {% block page %}
 	
 <div class="row">
 
-    <div class="pull-right"><img class="logo" src="{{ app.logo_url }}" alt="{{ app.name }}"></div>
+    <div class="pull-right"><img class="logo" src="{{ application.logo_url }}" alt="{{ application.name }}"></div>
   
     <div class="">
-        <h1>{{ app.name }}</h1>
+        <h1>{{ application.name }}</h1>
         
-        <p>{{ app.description }}</p>
+        <p>{{ application.description }}</p>
         
         <div>
             {% if current_user.is_authenticated() %}
                 <form class="form" method="post" role="form" action="">
                     {{ form.hidden_tag() }}
                     {{ wtf.form_errors(form, hiddens="only") }}
-                {% if app_status == AppStatus.CREATED %}
-                    <a class="btn btn-primary" role="button" href="{{ "http://" + app_domain }}" target="_blank">Open</a>
+                {% if application_status == ApplicationStatus.CREATED %}
+                    <a class="btn btn-primary" role="button" href="{{ "http://" + application_domain }}" target="_blank">Open</a>
                     {{ wtf.form_field(form.uninstall, button_map={'uninstall': 'danger'}) }}
-                {% elif app_status == AppStatus.DELETED %}
+                {% elif application_status == ApplicationStatus.DELETED %}
                     {{ wtf.form_field(form.install, button_map={'install': 'success'}) }}
-                {% elif app_status == AppStatus.UPDATING %}
+                {% elif application_status == ApplicationStatus.UPDATING %}
                     <button type="button" class="btn btn-warning blinking">Updating</button>
                     <script>
                         function check_status() {
-                            $.get("{{'/app/' + app.app_id + '.json' }}", function(data) {
+                            $.get("{{ url_for('application_status', application_id=application.application_id) }}", function(data) {
                                 if (data.status != "UPDATING") {
                                     window.location.reload(false);
                                 }

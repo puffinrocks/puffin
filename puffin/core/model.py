@@ -32,10 +32,10 @@ class SystemUser:
 PUFFIN_USER = SystemUser("puffin")
 
 
-class App:
+class Application:
     
-    def __init__(self, app_id, path, name, logo, description, compose):
-        self.app_id = app_id
+    def __init__(self, application_id, path, name, logo, description, compose):
+        self.application_id = application_id
         self.path = path
         self.name = name
         self.logo = logo
@@ -52,10 +52,10 @@ class App:
 
     @property
     def logo_url(self):
-        return "/static/apps/" + self.app_id + "/" + self.logo
+        return "/static/applications/" + self.application_id + "/" + self.logo
 
 
-class AppStatus(Enum):
+class ApplicationStatus(Enum):
     DELETED = 0
     CREATED = 10
     UPDATING = 20
