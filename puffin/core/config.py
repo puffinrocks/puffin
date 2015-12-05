@@ -33,6 +33,8 @@ class DefaultConfig:
     MACHINE_URL = "unix://var/run/docker.sock"
     MACHINE_PATH = None
 
+    TRACKING_URL = None
+
 def init():
     app.config.from_object("puffin.core.config.DefaultConfig")
     
