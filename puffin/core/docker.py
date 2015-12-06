@@ -13,6 +13,8 @@ from compose.project import Project
 import requests
 from time import time, sleep
 
+# How long to wait after creating an app, to allow dependencies startup
+APPLICATION_SLEEP_AFTER_CREATE = 10
 
 # How long wait for application startup
 APPLICATION_CREATE_TIMEOUT = 60
@@ -37,6 +39,7 @@ def create_application_task(client, user_id, application):
     user = db.session.query(User).get(user_id)
     create_application_do(client, user, application)
     application_url = "http://" + get_application_domain(user, application)
+    sleep(APPLICATION_SLEEP_AFTER_CREATE)
     wait_until_up(application_url)
 
 def create_application_do(client, user, application):
