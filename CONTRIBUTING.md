@@ -5,31 +5,41 @@ I hope that everyone will find something for themselves.
 
 ## Adding new applications
 
-To do that see how other applications are configured in [apps/](apps/) directory. 
-For this repository and propose a Pull Request.
-There are no clear rules which applications will be accepted yet,
+First see how other applications are configured in [apps/](apps/) directory. 
+To add your application simply fork puffin repository and submit a Pull Request with your changes.
+
+There are no clear rules which applications will be accepted as of yet,
 but the main conditions are Free / Open Source License and relatively low memory footprint 
-(this will be improved by using special optimized database dependency container images).
+(this will be improved in the near future by using optimized database dependency container images).
 
 ## Issues
 
-If you find an issue in Puffin, please report it via [GitHub](/issues).
+If you find an bug in Puffin, or would like to propose an enhancement, 
+please report it via GitHub [Issues](https://github.com/loomchild/puffin/issues).
 
 ## Development
 
-For project Organisation we use [Trello](). 
+For core project organisation we use [Trello](https://trello.com/b/ov1cHTtu). 
+For direct communication we use [puffin@librelist.com](mailto:puffin@librelist.com) mailing list.
 
 ## Running your own Puffin
 
-You can run your own clone of puffin for yourself or your friends. 
-All you need to do is to is to install Docker on your server (the easiest way to do it is via [docker-machine](), 
-see my article) and run it [link to README].
-For security reasons, make sure to change the SECRET_KEY.
+You can run your own clone of puffin for yourself and your friends. 
+First you need to do is to is to install Docker on your server.
+The easiest way is via Docker Machine [in the cloud](https://docs.docker.com/machine/get-started-cloud/) 
+or on [your own server](http://loomchild.net/2015/09/20/your-own-docker-machine/).
+
+Next you need to run Puffin on it. Follow the instructions in [README](README.md#Using-Docker).
+For security reasons make sure to change the SECRET_KEY. 
+Keep in mind the software is in early alpha development stage, so it should be used for experimentation only.
 
 ## Server
 
-You can donate your server to host other people's containers. This option is not available yet. 
+You can donate your own server to host other people's containers. This option is not available yet. 
 
 ## Donations
 
-If you'd like to donate money to Puffin to help us maintain our servers, click on the below button.
+If you'd like to donate money to Puffin to help us maintain our infrastructure and fund the development, 
+click on the below button:
+
+[![Gratipay](https://img.shields.io/gratipay/loomchild.svg)](https://gratipay.com/~loomchild/)
