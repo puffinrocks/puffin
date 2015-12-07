@@ -1,7 +1,7 @@
 # Puffin
 [![Build Status](https://travis-ci.org/loomchild/puffin.svg?branch=master)](https://travis-ci.org/loomchild/puffin)
 
-## Intro
+## Introduction
 
 The goal of the project is to allow average, tech-oriented users to run their own server applications, without worrying about maintaining a server. The ultimate aim is to achieve greater decentralization of federated services, such as social networking, file sharing, blog or email, on the net.
 
@@ -30,7 +30,7 @@ Deploy Puffin and its dependencies:
 
 	docker-compose up -d
 
-Go to [http://localhost:8001](http://localhost:8080) to acces Puffin and 
+Go to [http://localhost:8080](http://localhost:8080) to acces Puffin and 
 [http://localhost:8025](http://localhost:8025) to access the emails.
 
 Update docker images:
@@ -47,43 +47,50 @@ During development it may be more convenient to run Puffin in virtualenv.
 
 First of all make sure that you have Python 3 installed on your system. For example on Debian run:
 
-apt-get install python3 ...
+    apt-get install python3
 
 ##### Postgres
 
-Puffin also uses Postgresql database, to configure it use:
+Puffin also uses Postgresql database. For example to install it on Debian run:
+
+    apt-get install postgresql
 
 ##### Email
 
-To send emails you can use any SMTP server. For simplicity I recomment [Mailhog]().
-First download it:
+To send emails you can use any SMTP server. For development recommend [MailHog](https://github.com/mailhog/MailHog),
+which can be run via [Docker](https://hub.docker.com/r/mailhog/mailhog/) or 
+by directly [downloading it](https://github.com/mailhog/MailHog/releases) and running it, for example:
 
-then run it:
+    ./MailHog_linux_amd64
 
-and change mail port before starting Puffin:
+To use MailHog you need to change SMTP port before starting Puffin:
 
     export MAIL_PORT=8025
 
 #### Virtual environment
 
-To create the virtual environment run venv (or pyvenv on Debian):
+First of all you need to install it:
 
-    venv env
+    apt-get install python3-venv
 
-Next activate it:
+then create it:
+
+    pyvenv env
+
+and activate it:
     
-    env/bin/activate
+    . env/bin/activate
 
-Install runtime and development dependencies:
+Next you can install runtime and development dependencies:
     
     pip install -r requirements-dev.txt
 
 You might have some problems in the last step, most likely due to missing libraries on your system. 
-Read the message carefully and install the development versions of offending library (libxxx-dev on debian).
+Read the message carefully and install the development versions of offending library (lib&lt;name&gt;-dev on debian).
 
 #### Running
 
-To run puffin:
+To run puffin execute:
 
     ./puffin.py server
 
@@ -99,8 +106,14 @@ Either set them directly before starting the system:
 
     export SECRET_KEY=mysupersecretkey
 
-or cofigure them in .env file for Docker Compose 
-(see [docker-compose.yml](docker-compose.yml) and [.env](./env) for example).
+or cofigure them in .env file for [Docker Compose](http://docs.docker.com/compose/compose-file/#env-file).
 
 For a full list of configuration options see [puffin/core/config.py](puffin/core/config.py).
 
+# Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md).
+
+# License
+
+AGPL, see [LICENSE.txt](LICENSE.txt) for detais.

@@ -9,7 +9,7 @@ First see how other applications are configured in [apps/](apps/) directory.
 To add your application simply fork puffin repository and submit a Pull Request with your changes.
 
 There are no clear rules which applications will be accepted as of yet,
-but the main conditions are Free / Open Source License and relatively low memory footprint 
+but the main conditions are free / open source license and relatively low memory footprint 
 (this will be improved in the near future by using optimized database dependency container images).
 
 ## Issues
@@ -20,7 +20,7 @@ please report it via GitHub [Issues](https://github.com/loomchild/puffin/issues)
 ## Development
 
 For core project organisation we use [Trello](https://trello.com/b/ov1cHTtu). 
-For direct communication we use [puffin@librelist.com](mailto:puffin@librelist.com) mailing list.
+For direct communication we use [mailing list](mailto:puffin@librelist.com) mailing list.
 
 ## Running your own Puffin
 
@@ -29,7 +29,7 @@ First you need to do is to is to install Docker on your server.
 The easiest way is via Docker Machine [in the cloud](https://docs.docker.com/machine/get-started-cloud/) 
 or on [your own server](http://loomchild.net/2015/09/20/your-own-docker-machine/).
 
-Next you need to run Puffin on it. Follow the instructions in [README](README.md#Using-Docker).
+Next you need to run Puffin. To do that follow the instructions in [README](README.md#using-docker).
 For security reasons make sure to change the SECRET_KEY. 
 Keep in mind the software is in early alpha development stage, so it should be used for experimentation only.
 
