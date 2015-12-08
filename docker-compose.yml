@@ -1,21 +1,24 @@
-web:
+main:
     build: .
     ports: 
         - "8080:8080"
     links:
         - db
         - mail
+    volumes: 
+        - /var/run/docker.sock:/var/run/docker.sock
     environment:
         - DB_HOST=db
         - DB_PORT=5432
         - DB_NAME=puffin
-        - DB_USER=postgres
         - MAIL_SERVER=mail
         - MAIL_PORT=1025
-    command: sh docker-run.sh
+    command: sh entrypoint.sh
 
 db:
     image: postgres
+    ports:
+        - "15432:5432"
 
 mail:
     image: mailhog/mailhog

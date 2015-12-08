@@ -124,7 +124,7 @@ def install_proxy():
     client = get_client()
     user = PUFFIN_USER
     application = get_application("_proxy")
-    if is_application_running(client, user, application):
+    if get_application_status(client, user, application) != ApplicationStatus.DELETED:
         return False
     create_application_do(client, user, application)
     return True

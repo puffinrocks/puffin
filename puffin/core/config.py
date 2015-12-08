@@ -27,14 +27,14 @@ class DefaultConfig:
     
     # Postgres database connection settings
     DB_HOST = "localhost"
-    DB_PORT = "5432"
+    DB_PORT = "15432"
     DB_NAME = "puffin"
-    DB_USER = ""
+    DB_USER = "postgres"
     DB_PASSWORD = ""
 
     # SMTP connection settings used to send emails
     MAIL_SERVER = "localhost"
-    MAIL_PORT = 25
+    MAIL_PORT = 1025
     MAIL_USE_TLS = False
     MAIL_USE_SSL = False
     MAIL_USERNAME = None

@@ -31,7 +31,8 @@ Deploy Puffin and its dependencies:
 	docker-compose up -d
 
 Go to [http://localhost:8080](http://localhost:8080) to acces Puffin and 
-[http://localhost:8025](http://localhost:8025) to access the emails.
+[http://localhost:8025](http://localhost:8025) to access the emails. 
+The first things you need to do in Puffin is to register and confirm your email.
 
 Update docker images:
 
@@ -40,32 +41,13 @@ Update docker images:
 ### Directly on host system
 
 During development it may be more convenient to run Puffin in virtualenv. 
+All the dependencies can be run via Docker, but the program itself can be run locally.
 
 #### Dependencies:
 
-##### Python
-
-First of all make sure that you have Python 3 installed on your system. For example on Debian run:
+Make sure that you have Python 3 installed on your system. For example on Debian run:
 
     apt-get install python3
-
-##### Postgres
-
-Puffin also uses Postgresql database. For example to install it on Debian run:
-
-    apt-get install postgresql
-
-##### Email
-
-To send emails you can use any SMTP server. For development recommend [MailHog](https://github.com/mailhog/MailHog),
-which can be run via [Docker](https://hub.docker.com/r/mailhog/mailhog/) or 
-by directly [downloading it](https://github.com/mailhog/MailHog/releases) and running it, for example:
-
-    ./MailHog_linux_amd64
-
-To use MailHog you need to change SMTP port before starting Puffin:
-
-    export MAIL_PORT=8025
 
 #### Virtual environment
 
@@ -88,9 +70,29 @@ Next you can install runtime and development dependencies:
 You might have some problems in the last step, most likely due to missing libraries on your system. 
 Read the message carefully and install the development versions of offending library (lib&lt;name&gt;-dev on debian).
 
-#### Running
+#### Run dependencies
 
-To run puffin execute:
+Run only dependencies:
+
+    docker-compose run main true
+
+#### Configure dependencies
+
+Create database:
+
+    ./puffin.py db create
+
+Populate database:
+
+    ./puffin.py db upgrade
+
+Start app proxy:
+
+    ./puffin.py machine proxy
+
+#### Run Puffin
+
+Finally to run Puffin execute:
 
     ./puffin.py server
 
