@@ -15,12 +15,15 @@ but the main conditions are free / open source license and relatively low memory
 ## Issues
 
 If you find an bug in Puffin, or would like to propose an enhancement, 
-please report it via GitHub [Issues](https://github.com/loomchild/puffin/issues).
+please report it via [GitHub Issues](https://github.com/loomchild/puffin/issues).
 
 ## Development
 
 For core project organisation we use [Trello](https://trello.com/b/ov1cHTtu). 
-For direct communication we use [mailing list](mailto:puffin@librelist.com) mailing list.
+If you'd like to contribute code, feel free to open a [Github Issue](https://github.com/loomchild/puffin/issues) 
+and send us a pull request.
+To contact project members directly, please send an email to [puffin@puffin.rocks](mailto:puffin@puffin.rocks). 
+We are in the process of setting up a discussion forum / mailing list / chat.
 
 ## Running your own Puffin
 
