@@ -38,7 +38,7 @@ Update docker images:
 
 	docker-compose pull
 
-### Directly on host system
+### Deploying directly on host system
 
 During development it may be more convenient to run Puffin in virtualenv. 
 All the dependencies can be run via Docker, but the program itself can be run locally.
@@ -99,6 +99,20 @@ Finally to run Puffin execute:
 If you want to automatically reload the server on any code change, I recommend using [reload](https://github.com/loomchild/reload):
 
     reload ./puffin.py server
+
+### Update /etc/hosts
+
+To access applications from localhost, you need to update your /etc/hosts file, by adding the following lines:
+
+    127.0.1.1 ghost.loomchild.localhost
+    127.0.1.1 rocket.chat.loomchild.localhost
+    127.0.1.1 owncloud.loomchild.localhost
+    127.0.1.1 redmine.loomchild.localhost
+    127.0.1.1 wordpress.loomchild.localhost
+
+Each line corresponds to an application, add more if you want to try more applications if needed. 
+
+In production environment you need to configure wildacard DNS record to point to your domain.
 
 ## Configuration
 
