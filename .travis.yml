@@ -4,9 +4,10 @@ services:
   - docker
 
 before_script:
+  - docker-compose run main true
   - docker-compose run main pip install -r requirements-dev.txt
   - docker-compose run main ./puffin.py db create
   - docker-compose run main ./puffin.py db upgrade
 
-script: docker-compose run py.test
+script: docker-compose run main py.test
  
