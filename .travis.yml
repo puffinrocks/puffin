@@ -3,7 +3,11 @@ python:
   - "3.4"
 
 addons:
-  postgresql: "9.4"
+  - postgresql: "9.4"
+
+env:
+  - DB_PORT=5432
+
 before_script:
   - ./puffin.py db create
 
