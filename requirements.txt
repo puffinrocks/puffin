@@ -15,3 +15,8 @@ PyYAML              >= 3.11, < 3.12
 docker-py           >= 1.6, < 1.7
 docker-compose      >= 1.5, < 1.6
 requests            >= 2.8, < 2.9
+
+pytest              >= 2.8, < 3.0
+pytest-cov          >= 2.2, < 3.0
+ipython             >= 4.0, < 5.0
+reload              >= 0.4, < 1.0

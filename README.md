@@ -63,9 +63,9 @@ and activate it:
     
     . env/bin/activate
 
-Next you can install runtime and development dependencies:
+Next you can install the dependencies:
     
-    pip install -r requirements-dev.txt
+    pip install -r requirements.txt
 
 You might have some problems in the last step, most likely due to missing libraries on your system. 
 Read the message carefully and install the development versions of offending library (lib&lt;name&gt;-dev on debian).
