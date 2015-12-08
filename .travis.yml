@@ -1,15 +1,16 @@
+sudo: required
+
+services:
+  - docker
+
 language: python
 python:
   - "3.4"
 
-addons:
-  - postgresql: "9.4"
-
-env:
-  - DB_PORT=5432
-
 before_script:
+  - docker-compose run main true
   - ./puffin.py db create
+  - ./puffin.py db upgrade
 
 install: "pip install -r requirements-dev.txt"
 
