@@ -7,12 +7,12 @@ language: python
 python:
   - "3.4"
 
+install: "pip install -r requirements-dev.txt"
+
 before_script:
   - docker-compose run deps
   - ./puffin.py db create
   - ./puffin.py db upgrade
-
-install: "pip install -r requirements-dev.txt"
 
 script: py.test
  
