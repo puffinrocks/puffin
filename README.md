@@ -63,9 +63,9 @@ and activate it:
     
     . env/bin/activate
 
-Next you can install the dependencies:
+Next you can install runtime and development dependencies:
     
-    pip install -r requirements.txt
+    pip install -r requirements-dev.txt
 
 You might have some problems in the last step, most likely due to missing libraries on your system. 
 Read the message carefully and install the development versions of offending library (lib&lt;name&gt;-dev on debian).
@@ -74,7 +74,7 @@ Read the message carefully and install the development versions of offending lib
 
 Run only dependencies:
 
-    docker-compose run main true
+    docker-compose run deps
 
 #### Configure dependencies
 

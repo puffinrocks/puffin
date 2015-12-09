@@ -15,6 +15,13 @@ main:
         - MAIL_PORT=1025
     command: sh entrypoint.sh
 
+deps:
+    image: busybox
+    links:
+        - db
+        - mail
+    command: "true"
+
 db:
     image: postgres
     ports:
