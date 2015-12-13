@@ -32,7 +32,7 @@ def create_database(name):
 manager.add_command('db', MigrateCommand)
 
 
-machine = Manager()
+machine = Manager(usage="Perform hosting server operations")
 
 manager.add_command("machine", machine)
 
