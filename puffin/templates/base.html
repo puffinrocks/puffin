@@ -6,7 +6,7 @@
 
 {% block head %}
 {{ super() }}
-<link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.ico') }}" type="image/x-icon">
+<link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.png') }}" type="image/png">
 <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}" type="image/x-icon">
 {% endblock %}
 
@@ -19,6 +19,7 @@
 
 {% block scripts %}
 {{ super() }}
+<script src="{{url_for('static', filename='scripts/puffin.js')}}"></script>
 {% endblock %}
 
 
