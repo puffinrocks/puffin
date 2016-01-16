@@ -22,8 +22,6 @@ please report it via [GitHub Issues](https://github.com/loomchild/puffin/issues)
 For core project organisation we use [Trello](https://trello.com/b/ov1cHTtu). 
 If you'd like to contribute code, feel free to open a [Github Issue](https://github.com/loomchild/puffin/issues) 
 and send us a pull request.
-To contact project members directly, please send an email to [puffin@puffin.rocks](mailto:puffin@puffin.rocks). 
-We are in the process of setting up a discussion forum / mailing list / chat.
 
 ## Running your own Puffin
 
@@ -39,6 +37,11 @@ Keep in mind the software is in early alpha development stage, so it should be u
 ## Server
 
 You can donate your own server to host other people's containers. This option is not available yet. 
+
+## Contact
+
+If you'd like to contact us please send an email to [puffin@puffin.rocks](mailto:puffin@puffin.rocks).
+We are in the process of setting up a discussion forum / mailing list / chat.
 
 ## Donations
 
