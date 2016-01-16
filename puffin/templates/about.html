@@ -21,7 +21,7 @@
             <h2><span class="glyphicon glyphicon-headphones"></span> Developer</h2>
             <p>
                 You can add your applications to Puffin, which will help you reach wider user audience. 
-                It's easy because Puffin uses popular Docker container technology.
+                It's easy because Puffin uses popular Docker containerisation technology.
             </p>
             <p><a class="btn btn-default" href="#about-dev" role="button">Learn more &raquo;</a></p>
         </div>
@@ -41,6 +41,26 @@
 
 
 {% block page %}
+
+    <div>
+
+        <div>
+            <a name="about-user"></a>
+            <h1>User</a></h1>
+            <p>
+                In order to get started you need to <a href="{{ url_for('security.register') }}">Register</a>. Afterwards you can choose an application you'd like to use from the <a href="{{ url_for('index') }}">list</a> and Install it. Once the application is ready you can click Open and begin configuring it. After you finish your application will be available on the internet - you can access and share it via it's address in browser address bar. Keep in mind that this is a demo platform and all data and applications will be regularly deleted. If you have any questions feel free to contact us on Forum.
+            </p>
+        </div>
+
+        <div>
+            <a name="about-dev"></a>
+            <h1>Developer</h1>
+            <p>
+                To submit your application simply fork our repository and send us a pull request - see <a href="https://github.com/loomchild/puffin/blob/master/CONTRIBUTING.md">CONTRIBUTING.md</a> for details. You can also help in Puffin core development via <a href="https://github.com/loomchild/puffin">Github</a>. Puffin is written in <a href="https://www.python.org/">Python</a> and is based on <a href="https://www.docker.com/">Docker</a>.
+            </p>
+        </div>
+
+    </div>
 
 {% endblock %}
 
