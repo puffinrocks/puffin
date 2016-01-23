@@ -100,9 +100,20 @@ If you want to automatically reload the server on any code change, I recommend u
 
     reload ./puffin.py server
 
-### Update /etc/hosts
+### Set-up DNS
 
-To access applications from localhost, you need to update your /etc/hosts file, by adding the following lines:
+To access applications from localhost you need to set-up DNS. There are two alternative solutions to this problem.
+In production environment you need to configure wildacard DNS record to point to your domain.
+
+#### Use dnsmasq
+
+Update you /etc/resolv.conf to add:
+
+    nameserver 127.0.0.1
+
+#### Update /etc/hosts
+
+Update your /etc/hosts file, by adding the following lines:
 
     127.0.1.1 ghost.loomchild.localhost
     127.0.1.1 rocket.chat.loomchild.localhost
@@ -111,8 +122,6 @@ To access applications from localhost, you need to update your /etc/hosts file, 
     127.0.1.1 wordpress.loomchild.localhost
 
 Each line corresponds to an application, add more if you want to try more applications if needed. 
-
-In production environment you need to configure wildacard DNS record to point to your domain.
 
 ## Configuration
 
