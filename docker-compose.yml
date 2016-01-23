@@ -20,7 +20,6 @@ deps:
     links:
         - db
         - mail
-        - dns
     command: "true"
 
 db:
@@ -33,13 +32,4 @@ mail:
     ports: 
         - "1025:1025"
         - "8025:8025"
-
-dns:
-    image: andyshinn/dnsmasq
-    command: -A /localhost/127.0.0.1
-    ports:
-        - "53:53"
-        - "53:53/udp"
-    cap_add:
-        - NET_ADMIN
 

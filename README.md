@@ -107,7 +107,13 @@ In production environment you need to configure wildacard DNS record to point to
 
 #### Use dnsmasq
 
-Update you /etc/resolv.conf to add:
+Install dnsmasq and add the following to its config file: 
+    
+    address=/localhost/127.0.0.1
+
+Configure your nameservers in resolv.conf to include this line at the beginning 
+(caution - this file is often overwritten by other programs, NetworkManager among others - 
+refer to their documentation on how to preserve this setting):
 
     nameserver 127.0.0.1
 
@@ -115,11 +121,11 @@ Update you /etc/resolv.conf to add:
 
 Update your /etc/hosts file, by adding the following lines:
 
-    127.0.1.1 ghost.loomchild.localhost
-    127.0.1.1 rocket.chat.loomchild.localhost
-    127.0.1.1 owncloud.loomchild.localhost
-    127.0.1.1 redmine.loomchild.localhost
-    127.0.1.1 wordpress.loomchild.localhost
+    127.0.1.1 ghost.<your-login>.localhost
+    127.0.1.1 rocket.chat.<your-login>.localhost
+    127.0.1.1 owncloud.<your-login>.localhost
+    127.0.1.1 redmine.<your-login>.localhost
+    127.0.1.1 wordpress.<your-login>.localhost
 
 Each line corresponds to an application, add more if you want to try more applications if needed. 
 
