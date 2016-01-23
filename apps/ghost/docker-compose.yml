@@ -1,6 +1,4 @@
 main:
-    image: ghost:latest
+    image: loomchild/ghost:latest
     ports: 
         - 2368
-
-
