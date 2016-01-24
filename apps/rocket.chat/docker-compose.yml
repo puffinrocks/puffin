@@ -6,6 +6,6 @@ main:
         - 3000
 
 db:
-    image: mongo
+    build: ../_mongo
 
 

@@ -6,6 +6,6 @@ main:
         - 80
 
 db:
-    image: mariadb
+    build: ../_mariadb
     environment:
         MYSQL_ROOT_PASSWORD: example

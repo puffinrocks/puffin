@@ -1,0 +1,3 @@
+name: mongo
+compose: docker-compose.yml
+
