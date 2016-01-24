@@ -1,6 +1,8 @@
 #!/bin/bash
 set -e
 
+echo "$*" > /input.txt
+
 if [[ "$*" == npm*start* ]]; then
 	for dir in "$GHOST_SOURCE/content"/*/; do
 		targetDir="$GHOST_CONTENT/$(basename "$dir")"
@@ -9,14 +11,6 @@ if [[ "$*" == npm*start* ]]; then
 			tar -c --one-file-system -C "$dir" . | tar xC "$targetDir"
 		fi
 	done
-
-    sed -r "
-        s/127\.0\.0\.1/0.0.0.0/g;
-        s/localhost:2368/$VIRTUAL_HOST/g;
-        s!path.join\(__dirname, (.)/content!path.join(process.env.GHOST_CONTENT, \1!g;
-    " "$GHOST_SOURCE/config.example.js" > "$GHOST_CONTENT/config.js"
-
-	ln -sf "$GHOST_CONTENT/config.js" "$GHOST_SOURCE/config.js"
 
 	chown -R user "$GHOST_CONTENT"
 

@@ -44,6 +44,8 @@ def create_application_task(client, user_id, application):
 
 def create_application_do(client, user, application):
     project = get_project(client, user, application)
+    # This creates new image, but doesn't cost much because it uses cache
+    project.build()
     project.up()
         
 def delete_application(client, user, application, async=True):
