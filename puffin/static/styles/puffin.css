@@ -15,6 +15,10 @@ body {
   overflow-y: scroll;
 }
 
+.navbar-brand a {
+    text-decoration: none;
+}
+
 .footer {
   position: absolute;
   bottom: 0;
