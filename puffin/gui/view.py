@@ -1,10 +1,11 @@
 from ..util import to_uuid
 from ..core.db import db
 from ..core.model import User, ApplicationStatus
+from ..core.security import update_user
 from ..core.applications import APPLICATION_HOME, get_application, get_application_list
 from ..core.docker import get_client, create_application, delete_application, get_application_domain, get_application_status
 from .. import app
-from .form import ApplicationForm
+from .form import ApplicationForm, ProfileForm
 
 from flask import redirect, render_template, request, url_for, flash, abort, send_file, send_from_directory, jsonify
 from flask_security.core import current_user
@@ -24,6 +25,27 @@ def index():
 @app.route('/about.html', methods=['GET'])
 def about():
     return render_template('about.html')
+
+@app.route('/profile.html', methods=['GET'])
+@login_required
+def my_profile():
+    return redirect(url_for('profile', login=current_user.login))
+
+@app.route('/profile/<login>.html', methods=['GET', 'POST'])
+@login_required
+def profile(login):
+    if current_user.login != login:
+        abort(403, "You are not allowed to view this profile") 
+    
+    user = current_user
+    
+    form = ProfileForm(obj=user)
+    if form.validate_on_submit():
+        user.name = form.name.data
+        update_user(user)
+        return redirect(url_for('profile', login=login))
+
+    return render_template('profile.html', user=current_user, form=form)
 
 @app.route('/application/<application_id>.html', methods=['GET', 'POST'])
 def application(application_id):

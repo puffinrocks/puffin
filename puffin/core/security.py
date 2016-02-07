@@ -20,6 +20,9 @@ def init():
 
     app.config['SECURITY_REGISTERABLE'] = True
     app.config['SECURITY_CONFIRMABLE'] = True
+    app.config['SECURITY_CHANGEABLE'] = True
+    app.config['SECURITY_SEND_PASSWORD_CHANGE_EMAIL'] = False
+    app.config['SECURITY_POST_CHANGE_VIEW'] = "profile.html"
     app.config['SECURITY_PASSWORD_HASH'] = "bcrypt"
     app.config['SECURITY_MSG_CONFIRMATION_REQUIRED'] = (
             Markup('Email requires confirmation. <a href="/confirm">Resend confirmation instructions</a>.'), 
@@ -88,8 +91,7 @@ def create_user(login):
     user = security.datastore.create_user(login=login, name=login.capitalize(), 
         email=login + "@" + server_name, password=encrypt_password(login),
         confirmed=True)
-    db.session.add(user)
-    db.session.commit()
+    update_user(user)
 
 def get_all_users():
     return db.session.query(User).order_by(User.login).all()
@@ -97,14 +99,16 @@ def get_all_users():
 def activate_user(login):
     user = db.session.query(User).filter_by(login=login).first()
     result = security.datastore.activate_user(user)
-    db.session.add(user)
-    db.session.commit()
+    update_user(user)
     return result
 
 def deactivate_user(login):
     user = db.session.query(User).filter_by(login=login).first()
     result = security.datastore.deactivate_user(user)
+    update_user(user)
+    return result
+
+def update_user(user):
     db.session.add(user)
     db.session.commit()
-    return result
 
