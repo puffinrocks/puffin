@@ -1,25 +1,28 @@
 {% extends "base.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
 
-{% block title %}Register{% endblock %}
+{% block title %}Puffin | Register{% endblock %}
 
 {% block page %}
-<div class="page-header">
-	<h1>Register</h1>
-</div>
-<div class="col-md-6">
-	{% set form = register_user_form %}
-	<form class="form" method="post" role="form" action="">
-	  {{ form.hidden_tag() }}
-	  {{ wtf.form_errors(form, hiddens="only") }}
+<div class="row">
+    <div class="page-header">
+        <h1>Register</h1>
+    </div>
+    <div class="col-md-6">
+        {% set form = register_user_form %}
+        <form class="form" method="post" role="form" action="">
+          {{ form.hidden_tag() }}
+          {{ wtf.form_errors(form, hiddens="only") }}
 
-	  {{ wtf.form_field(form.email) }}
-	  {{ wtf.form_field(form.password) }}
-	  {{ wtf.form_field(form.password_confirm) }}
-	  {{ wtf.form_field(form.login) }}
-	  {{ wtf.form_field(form.name) }}
-	  {{ wtf.form_field(form.submit) }}
-	</form>
+          {{ wtf.form_field(form.login) }}
+          {{ wtf.form_field(form.email) }}
+          {{ wtf.form_field(form.name) }}
+          {{ wtf.form_field(form.password) }}
+          {{ wtf.form_field(form.password_confirm) }}
+
+          {{ wtf.form_field(form.submit) }}
+        </form>
+    </div>
 </div>
 {% endblock %}
 
