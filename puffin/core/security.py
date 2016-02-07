@@ -21,7 +21,7 @@ def init():
     app.config['SECURITY_REGISTERABLE'] = True
     app.config['SECURITY_CONFIRMABLE'] = True
     app.config['SECURITY_CHANGEABLE'] = True
-    app.config['SECURITY_SEND_PASSWORD_CHANGE_EMAIL'] = False
+    app.config['SECURITY_SEND_PASSWORD_CHANGE_EMAIL'] = True
     app.config['SECURITY_POST_CHANGE_VIEW'] = "profile.html"
     app.config['SECURITY_PASSWORD_HASH'] = "bcrypt"
     app.config['SECURITY_MSG_CONFIRMATION_REQUIRED'] = (
