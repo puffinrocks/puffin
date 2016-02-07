@@ -2,6 +2,7 @@ from uuid import UUID
 from flask_security import Security
 from flask_security.datastore import SQLAlchemyDatastore, UserDatastore
 from flask_security.forms import LoginForm, RegisterForm
+from flask_security.utils import encrypt_password
 from flask import Markup
 from wtforms import StringField
 from wtforms.validators import Required, Length, Regexp
@@ -81,3 +82,29 @@ class CustomRegisterForm(RegisterForm):
 
 def send_security_mail(message):
     send(message=message)
+
+def create_user(login):
+    server_name = app.config["SERVER_NAME"] or "localhost"
+    user = security.datastore.create_user(login=login, name=login.capitalize(), 
+        email=login + "@" + server_name, password=encrypt_password(login),
+        confirmed=True)
+    db.session.add(user)
+    db.session.commit()
+
+def get_all_users():
+    return db.session.query(User).order_by(User.login).all()
+
+def activate_user(login):
+    user = db.session.query(User).filter_by(login=login).first()
+    result = security.datastore.activate_user(user)
+    db.session.add(user)
+    db.session.commit()
+    return result
+
+def deactivate_user(login):
+    user = db.session.query(User).filter_by(login=login).first()
+    result = security.datastore.deactivate_user(user)
+    db.session.add(user)
+    db.session.commit()
+    return result
+

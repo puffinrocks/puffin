@@ -1,16 +1,20 @@
 from ..util import truncate
 from flask.ext.security import UserMixin
 from enum import Enum
+from datetime import datetime
 
 
 class User(UserMixin):
     
-    def __init__(self, login, name, email, password, active, roles):
+    def __init__(self, login, name, email, password, active, roles, 
+            confirmed=False):
         self.login = login
         self.name = name
         self.email = email
         self.password = password
         self.active = active
+        if confirmed:
+            self.confirmed_at = datetime.now()
     
     @property
     def id(self):
@@ -23,6 +27,10 @@ class User(UserMixin):
     @roles.setter
     def roles(self, role):
         pass
+
+    @property
+    def confirmed(self):
+        return self.confirmed_at != None
 
 class SystemUser:
     
