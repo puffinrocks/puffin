@@ -11,6 +11,7 @@ from compose import config
 from compose.project import Project
 
 import requests
+from requests.exceptions import RequestException
 from time import time, sleep
 
 # How long to wait after creating an app, to allow dependencies startup
@@ -115,9 +116,12 @@ def get_container(client, name):
 def wait_until_up(url, timeout=APPLICATION_CREATE_TIMEOUT):
     start_time = time()
     while True:
-        r = requests.get(url)
-        if r.status_code == 200:
-            break
+        try:
+            r = requests.get(url)
+            if r.status_code == 200:
+                break
+        except RequestException:
+            pass
         if start_time + timeout <= time():
             break
         sleep(1)
