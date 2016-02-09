@@ -1,3 +1,5 @@
+#!/usr/local/bin/dumb-init /bin/sh
+
 # wait for database startup
 sleep 1
 

@@ -13,7 +13,7 @@ main:
         - DB_NAME=puffin
         - MAIL_SERVER=mail
         - MAIL_PORT=1025
-    command: sh entrypoint.sh
+    command: [./entrypoint.sh]
 
 deps:
     image: busybox
