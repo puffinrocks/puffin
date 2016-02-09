@@ -1,8 +1,6 @@
 #!/bin/bash
 set -e
 
-echo "$*" > /input.txt
-
 if [[ "$*" == npm*start* ]]; then
 	for dir in "$GHOST_SOURCE/content"/*/; do
 		targetDir="$GHOST_CONTENT/$(basename "$dir")"
