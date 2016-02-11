@@ -1,0 +1,6 @@
+name: Gogs
+logo: logo.png
+description: |
+    A painless, self-hosted Git service.
+compose: docker-compose.yml
+

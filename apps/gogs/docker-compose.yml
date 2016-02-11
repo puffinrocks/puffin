@@ -1,0 +1,6 @@
+main:
+    build: .
+    ports: 
+        - 3000
+
+
