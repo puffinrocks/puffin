@@ -62,7 +62,8 @@ def delete_application_task(client, user_id, application):
 def delete_application_do(client, user, application):
     project = get_project(client, user, application)
     project.stop()
-    project.remove_stopped()
+    # Do not remove to avoid losing the data
+    # project.remove_stopped()
 
 def get_application_status(client, user, application):
     name = get_container_name(user, application.application_id)
