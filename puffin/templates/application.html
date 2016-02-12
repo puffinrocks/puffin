@@ -22,12 +22,12 @@
                     {{ form.hidden_tag() }}
                     {{ wtf.form_errors(form, hiddens="only") }}
                 {% if application_status == ApplicationStatus.CREATED %}
-                    <a class="btn btn-primary" role="button" href="{{ "http://" + application_domain }}" target="_blank">Open</a>
-                    {{ wtf.form_field(form.uninstall, button_map={'uninstall': 'danger'}) }}
+                    <a class="btn btn-primary" role="button" href="{{ "http://" + application_domain }}" target="_blank"><span class="glyphicon glyphicon-share-alt"></span> Open</a>
+                    <button type="submit" name="stop" value="Stop" class="btn btn-danger"><span class="glyphicon glyphicon-stop"></span> Stop</button>
                 {% elif application_status == ApplicationStatus.DELETED %}
-                    {{ wtf.form_field(form.install, button_map={'install': 'success'}) }}
+                    <button type="submit" name="start" value="Start" class="btn btn-success"><span class="glyphicon glyphicon-play"></span> Run</button>
                 {% elif application_status == ApplicationStatus.UPDATING %}
-                    <button type="button" class="btn btn-warning blinking">Updating</button>
+                    <button type="button" class="btn btn-warning blinking"><span class="glyphicon glyphicon-refresh"></span> Updating</button>
                     <script>
                         function check_status() {
                             $.get("{{ url_for('application_status', application_id=application.application_id) }}", function(data) {
@@ -39,7 +39,7 @@
                         setInterval(check_status, 2500);
                     </script>
                 {% else %}
-                    <button type="button" class="btn btn-warning">Error</button>
+                    <button type="button" class="btn btn-warning"><span class="glyphicon glyphicon-fire"></span> Error</button>
                 {% endif %}
                 </form>
             {% else %}

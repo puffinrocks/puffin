@@ -60,10 +60,10 @@ def application(application_id):
         form = ApplicationForm()
         
         if form.validate_on_submit():
-            if form.install.data:
+            if form.start.data:
                 create_application(client, current_user, application)
             
-            if form.uninstall.data:
+            if form.stop.data:
                 delete_application(client, current_user, application)
             return redirect(url_for('application', application_id=application_id))
         

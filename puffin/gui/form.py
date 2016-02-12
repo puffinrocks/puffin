@@ -5,8 +5,8 @@ from ..core.db import db
 from ..core.model import User
 
 class ApplicationForm(Form):
-    install = SubmitField('Install')
-    uninstall = SubmitField('Uninstall')
+    start = SubmitField('Start')
+    stop = SubmitField('Stop')
 
 class ProfileForm(Form):
     login = StringField('Login')
