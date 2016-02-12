@@ -1,5 +1,5 @@
 name: WordPress
-logo: logo.png
+subtitle: blog tool, publishing platform, and CMS
+website: https://wordpress.org/
 description: |
-    WordPress is a free and open source blogging tool and a content management system.
-compose: docker-compose.yml
+    WordPress is web software you can use to create a beautiful website, blog, or app. 

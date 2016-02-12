@@ -1,6 +1,6 @@
 name: Rocket.Chat
-logo: logo.png
+subtitle: web chat platform
+website: https://rocket.chat/
 description: |
-    Rocket.Chat is a Web Chat Server.
-    It is a great solution for communities and companies wanting to privately host their own chat service or for developers looking forward to build and evolve their own chat platforms.
-compose: docker-compose.yml
+    Rocket.Chat is the ultimate web chat platform.
+    From group messages and video calls all the way to helpdesk killer features.

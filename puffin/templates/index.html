@@ -33,7 +33,7 @@
       <a href="{{ url_for('application', application_id=application.application_id) }}"><img src="{{ application.logo_url }}" alt="{{ application.name }}"></a>
       <div class="caption">
         <h3><a href="{{ url_for('application', application_id=application.application_id) }}">{{ application.name }}</a></h3>
-        <p>{{ application.short_description }}</p>
+        <h4>{{ application.subtitle }}</h4>
       </div>
     </div>
   </div>

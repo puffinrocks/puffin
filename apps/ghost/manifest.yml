@@ -1,5 +1,5 @@
 name: ghost
-logo: logo.png
+subtitle: simple blogging platform for individuals
+website: https://ghost.org/
 description: |
-    Ghost is a blogging platform designed to simplify the process of online publishing for individuals.
-compose: docker-compose.yml
+    Ghost is a platform dedicated to one thing: Publishing. It's beautifully designed, completely customisable and completely Open Source. Ghost allows you to write and publish your own blog, giving you the tools to make it easy and even fun to do.

@@ -1,6 +1,7 @@
 name: ownCloud 
-logo: logo.png
+subtitle: file sync and share server
+website: https://owncloud.org/
 description: |
-    ownCloud is a self-hosted file sync and share server.
-compose: docker-compose.yml
+    A safe home for all your data. 
+    Access & share your files, calendars, contacts, mail & more from any device, on your terms.
 

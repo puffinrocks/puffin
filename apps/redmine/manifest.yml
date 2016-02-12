@@ -1,6 +1,6 @@
 name: Redmine 
-logo: logo.png
+subtitle: project management and issue tracking tool
+website: http://www.redmine.org/
 description: |
     Redmine is a web-based project management and issue tracking tool.
-compose: docker-compose.yml
 

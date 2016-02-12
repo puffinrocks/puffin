@@ -42,21 +42,15 @@ PUFFIN_USER = SystemUser("puffin")
 
 class Application:
     
-    def __init__(self, application_id, path, name, logo, description, compose):
+    def __init__(self, application_id, path, name, logo, subtitle, website, description, compose):
         self.application_id = application_id
         self.path = path
         self.name = name
         self.logo = logo
+        self.subtitle = subtitle
+        self.website = website
         self.description = description
         self.compose = compose
-
-    @property
-    def short_description(self):
-        short_description = self.description
-        index = self.description.find('\n')
-        if index >= 0:
-            short_description = short_description[0:index]
-        return short_description
 
     @property
     def logo_url(self):

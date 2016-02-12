@@ -41,11 +41,14 @@ def load_application(application_id):
     with open(join(path, "manifest.yml")) as manifest_file:    
         manifest = yaml.load(manifest_file)
 
-        name = manifest["name"]
-        logo = manifest.get("logo", "")
+        name = manifest.get("name", application_id)
+        logo = manifest.get("logo", "logo.png")
+        subtitle = manifest.get("subtitle", "")
+        website = manifest.get("website", "")
         description = manifest.get("description", "")
-        compose = manifest.get("compose")
+        compose = manifest.get("compose", "docker-compose.yml")
 
-        application = Application(application_id, path, name, logo, description, compose)
+        application = Application(application_id, path, name, logo, subtitle, 
+            website, description, compose)
         return application
 
