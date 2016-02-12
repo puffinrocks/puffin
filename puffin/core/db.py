@@ -2,14 +2,15 @@ import uuid
 from flask.ext.sqlalchemy import SQLAlchemy
 from sqlalchemy import create_engine
 from sqlalchemy.orm import mapper
-from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.dialects.postgresql import UUID, JSON
 from flask.ext.migrate import Migrate
 
 from .. import app
-from .model import User
+from .model import User, ApplicationSettings
 
 
 db = SQLAlchemy()
+
 
 user_table = db.Table('user',
     db.Column('user_id', UUID(as_uuid=True), primary_key=True, default=uuid.uuid4),
@@ -25,6 +26,19 @@ db.Index('idx_user_login', user_table.c.login, unique=True)
 db.Index('idx_user_email', user_table.c.email, unique=True)
 
 mapper(User, user_table)
+
+
+application_settings_table = db.Table('application_settings',
+    db.Column('application_settings_id', UUID(as_uuid=True), primary_key=True, default=uuid.uuid4),
+    db.Column('user_id', UUID(as_uuid=True), nullable=False),
+    db.Column('application_id', db.String(64), nullable=False),
+    db.Column('settings', JSON, nullable=False),
+)
+
+db.Index('idx_application_settings', application_settings_table.c.user_id,
+    application_settings_table.c.application_id, unique=True)
+
+mapper(ApplicationSettings, application_settings_table)
 
 
 def init():

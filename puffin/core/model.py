@@ -64,6 +64,14 @@ class ApplicationStatus(Enum):
     ERROR = 90
 
 
+class ApplicationSettings:
+    
+    def __init__(self, user_id, application_id, settings):
+        self.user_id = user_id
+        self.application_id = application_id
+        self.settings = settings
+
+
 class Machine:
     
     def __init__(self, base_url, tls_config=None):
