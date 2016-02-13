@@ -2,8 +2,10 @@ from ..util import to_uuid
 from ..core.db import db
 from ..core.model import User, ApplicationStatus, ApplicationSettings
 from ..core.security import update_user
-from ..core.applications import APPLICATION_HOME, get_application, get_application_list, get_application_settings, update_application_settings
-from ..core.docker import get_client, create_application, delete_application, get_application_domain, get_application_status
+from ..core.applications import APPLICATION_HOME, get_application, \
+    get_application_list, get_application_settings, update_application_settings, \
+    get_application_domain, get_default_application_domain
+from ..core.docker import get_client, create_application, delete_application, get_application_status
 from .. import app
 from .form import ApplicationForm, ApplicationSettingsForm, ProfileForm
 
@@ -95,10 +97,7 @@ def application_settings(application_id):
     application = get_application(application_id)
     
     application_settings = get_application_settings(user.user_id, application_id)
-    if application_settings == None:
-        application_settings = ApplicationSettings(user.user_id, application.application_id, {})
-    
-    default_domain = get_application_domain(user, application)
+    default_domain = get_default_application_domain(user, application)
 
     form = ApplicationSettingsForm()
     if form.validate_on_submit():
@@ -108,9 +107,10 @@ def application_settings(application_id):
         else:
             application_settings.settings.pop("domain", None)
         update_application_settings(application_settings)
-        return redirect(url_for('application_settings', application_id=application_id))
+        flash("Settings have been updated, but the changes will take effect once you restart the application")
+        return redirect(url_for('application', application_id=application_id))
 
-    form.domain.data = application_settings.settings.get("domain", default_domain)
+    form.domain.data = get_application_domain(user, application)
 
     return render_template('application_settings.html', application=application, 
         application_settings=application_settings, form=form)

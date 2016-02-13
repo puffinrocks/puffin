@@ -1,6 +1,8 @@
 from . model import Application, ApplicationSettings
 from ..util.homer import HOME
 from .db import db, update_model_with_json
+from .config import get_server_name
+from .. import app
 
 from cachetools import cached, TTLCache
 
@@ -53,10 +55,27 @@ def load_application(application_id):
             website, description, compose)
         return application
 
+def get_default_application_domain(user, application):
+    return application.application_id + "." + user.login + "." + get_server_name()
+
+def get_application_domain(user, application):
+    application_settings = \
+        get_application_settings(user.user_id, application.application_id)
+    default_domain = get_default_application_domain(user, application)
+    domain = application_settings.settings.get("domain", default_domain)
+    return domain
+
 def get_application_settings(user_id, application_id):
     application_settings = db.session.query(ApplicationSettings).filter_by(
         user_id=user_id, application_id=application_id).first()
+    if application_settings == None:
+        application_settings = ApplicationSettings(user_id, application_id, {})
     return application_settings
 
 def update_application_settings(application_settings):
-    update_model_with_json(application_settings)
+    if application_settings.settings:
+        update_model_with_json(application_settings)
+        db.session.commit()
+    elif application_settings.application_settings_id:
+        db.session.delete(application_settings)
+        db.session.commit()

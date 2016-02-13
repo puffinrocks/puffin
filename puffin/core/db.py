@@ -101,5 +101,4 @@ def update_model_with_json(model):
             flag_modified(model, column.name)
     
     db.session.add(model)
-    db.session.commit()
 

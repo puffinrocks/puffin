@@ -92,3 +92,5 @@ def validate():
     if app.config["SECRET_KEY"] == DefaultConfig.SECRET_KEY:
         app.logger.warning("No SECRET_KEY provided, using the default one.")
 
+def get_server_name():
+    return app.config["SERVER_NAME"] or "localhost"

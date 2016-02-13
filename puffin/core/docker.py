@@ -1,5 +1,5 @@
 from .machine import get_machine
-from .applications import get_application
+from .applications import get_application, get_application_domain
 from .queue import task, task_exists
 from .model import User, Application, ApplicationStatus, PUFFIN_USER
 from .db import db
@@ -74,10 +74,6 @@ def get_application_status(client, user, application):
         return ApplicationStatus.CREATED
     else:
         return ApplicationStatus.DELETED
-
-def get_application_domain(user, application):
-    domain = app.config["SERVER_NAME"] or "localhost"
-    return application.application_id + "." + user.login + "." + domain
 
 def get_project(client, user, application):
     name = get_container_name(user, application.application_id)
