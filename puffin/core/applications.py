@@ -1,5 +1,6 @@
-from . model import Application
+from . model import Application, ApplicationSettings
 from ..util.homer import HOME
+from .db import db, update_model_with_json
 
 from cachetools import cached, TTLCache
 
@@ -52,3 +53,10 @@ def load_application(application_id):
             website, description, compose)
         return application
 
+def get_application_settings(user_id, application_id):
+    application_settings = db.session.query(ApplicationSettings).filter_by(
+        user_id=user_id, application_id=application_id).first()
+    return application_settings
+
+def update_application_settings(application_settings):
+    update_model_with_json(application_settings)

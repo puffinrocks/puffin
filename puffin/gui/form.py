@@ -8,6 +8,10 @@ class ApplicationForm(Form):
     start = SubmitField('Start')
     stop = SubmitField('Stop')
 
+class ApplicationSettingsForm(Form):
+    domain = StringField('Domain', description="If you change it then make sure you also configure it with your DNS provider")
+    submit = SubmitField('Update')
+
 class ProfileForm(Form):
     login = StringField('Login')
     email = StringField('Email')

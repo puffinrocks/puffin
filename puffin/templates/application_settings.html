@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+
+{% block title %}Puffin | {{ application.name }} settings{% endblock %}
+
+
+{% block page %}
+
+<div class="row">
+
+    <div class="page-header">
+        <h1>{{ application.name }} settings</h1>
+    </div>
+    <div class="col-md-6">
+
+        <form class="form" method="post" role="form" action="">
+            {{ form.hidden_tag() }}
+            {{ wtf.form_errors(form, hiddens="only") }}
+
+	        {{ wtf.form_field(form.domain) }}
+            
+            {{ wtf.form_field(form.submit) }}
+        </form>
+        
+    </div>
+
+
+<div>
+
+{% endblock %}
+

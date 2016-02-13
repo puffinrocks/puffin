@@ -1,7 +1,8 @@
 import uuid
 from flask.ext.sqlalchemy import SQLAlchemy
 from sqlalchemy import create_engine
-from sqlalchemy.orm import mapper
+from sqlalchemy.orm import mapper, object_mapper
+from sqlalchemy.orm.attributes import flag_modified
 from sqlalchemy.dialects.postgresql import UUID, JSON
 from flask.ext.migrate import Migrate
 
@@ -91,4 +92,14 @@ def get_url(user, password, host, port, name):
 
     return string
 
+
+def update_model_with_json(model):
+    # Needed for JSON fields, see https://bashelton.com/2014/03/updating-postgresql-json-fields-via-sqlalchemy/
+    mapper = object_mapper(model)
+    for column in mapper.columns.values():
+        if isinstance(column.type, JSON):
+            flag_modified(model, column.name)
+    
+    db.session.add(model)
+    db.session.commit()
 

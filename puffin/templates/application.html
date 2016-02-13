@@ -24,8 +24,10 @@
                 {% if application_status == ApplicationStatus.CREATED %}
                     <a class="btn btn-primary" role="button" href="{{ "http://" + application_domain }}" target="_blank"><span class="glyphicon glyphicon-share-alt"></span> Open</a>
                     <button type="submit" name="stop" value="Stop" class="btn btn-danger"><span class="glyphicon glyphicon-stop"></span> Stop</button>
+                    <a class="btn btn-info" role="button" href="{{ url_for("application_settings", application_id=application.application_id) }}"><span class="glyphicon glyphicon-cog"></span> Settings</a>
                 {% elif application_status == ApplicationStatus.DELETED %}
                     <button type="submit" name="start" value="Start" class="btn btn-success"><span class="glyphicon glyphicon-play"></span> Run</button>
+                    <a class="btn btn-info" role="button" href="{{ url_for("application_settings", application_id=application.application_id) }}"><span class="glyphicon glyphicon-cog"></span> Settings</a>
                 {% elif application_status == ApplicationStatus.UPDATING %}
                     <button type="button" class="btn btn-warning blinking"><span class="glyphicon glyphicon-refresh"></span> Updating</button>
                     <script>
@@ -45,7 +47,7 @@
             {% else %}
                 <a href="{{ url_for('security.login', next=request.path) }}">Log In</a> or 
                 <a href="{{ url_for('security.register', next=request.path) }}">Register</a>
-                to Install application.
+                to run application.
             {% endif %}
         </div>
     </div>
