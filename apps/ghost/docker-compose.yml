@@ -2,3 +2,11 @@ main:
     build: .
     ports: 
         - 2368
+    volumes_from: 
+        - main_data
+
+main_data:
+    image: tianon/true
+    volumes:
+        - /var/lib/ghost
+    

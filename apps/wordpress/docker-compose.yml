@@ -4,8 +4,22 @@ main:
         - db:mysql
     ports:
         - 80
+    volumes_from: 
+        - main_data
+
+main_data:
+    image: tianon/true
+    volumes:
+        - /var/www/html
 
 db:
     build: ../_mariadb
     environment:
         MYSQL_ROOT_PASSWORD: example
+    volumes_from: 
+        - db_data
+
+db_data:
+    image: tianon/true
+    volumes:
+        - /var/lib/mysql

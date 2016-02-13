@@ -2,5 +2,13 @@ main:
     build: .
     ports: 
         - 3000
+    volumes_from: 
+        - main_data
+
+main_data:
+    image: tianon/true
+    volumes:
+        - /data
+    
 
 

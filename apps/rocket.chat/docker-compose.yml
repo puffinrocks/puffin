@@ -4,8 +4,21 @@ main:
         - db
     ports:
         - 3000
+    volumes_from: 
+        - main_data
+
+main_data:
+    image: tianon/true
+    volumes:
+        - /app/uploads
 
 db:
     build: ../_mongo
+    volumes_from: 
+        - db_data
 
-
+db_data:
+    image: tianon/true
+    volumes:
+        - /data/db 
+        - /data/configdb

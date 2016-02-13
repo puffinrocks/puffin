@@ -1,3 +1,2 @@
 name: mariadb
-compose: docker-compose.yml
 

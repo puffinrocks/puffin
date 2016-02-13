@@ -2,5 +2,10 @@ main:
     image: owncloud:latest
     ports: 
         - 80
+    volumes_from: 
+        - main_data
 
-
+main_data:
+    image: tianon/true
+    volumes:
+        - /var/www/html
