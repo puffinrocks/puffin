@@ -1,4 +1,4 @@
-from . model import Application, ApplicationSettings
+from . model import Application, ApplicationSettings, SystemUser
 from ..util.homer import HOME
 from .db import db, update_model_with_json
 from .. import app
@@ -58,9 +58,11 @@ def get_default_application_domain(user, application):
     return application.application_id + "." + user.login + "." + app.config["SERVER_NAME_FULL"]
 
 def get_application_domain(user, application):
+    default_domain = get_default_application_domain(user, application)
+    if isinstance(user, SystemUser):
+        return default_domain
     application_settings = \
         get_application_settings(user.user_id, application.application_id)
-    default_domain = get_default_application_domain(user, application)
     domain = application_settings.settings.get("domain", default_domain)
     return domain
 
