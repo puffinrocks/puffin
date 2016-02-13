@@ -9,7 +9,7 @@ from wtforms.validators import Required, Length, Regexp
 from .. import app
 from .model import User
 from .db import db
-from .config import DefaultConfig, get_server_name
+from .config import DefaultConfig
 from .mail import send
  
 
@@ -88,7 +88,7 @@ def send_security_mail(message):
 
 def create_user(login):
     user = security.datastore.create_user(login=login, name=login.capitalize(), 
-        email=login + "@" + get_server_name(), password=encrypt_password(login),
+        email=login + "@" + app.config["SERVER_NAME_FULL"], password=encrypt_password(login),
         confirmed=True)
     update_user(user)
 

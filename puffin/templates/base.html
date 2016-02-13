@@ -42,6 +42,11 @@
             </span>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+            {% for link in links %}
+                <li><a href="{{ link[1] }}">{{ link[0] }}</a></li>
+            {% endfor %}
+            </ul>
             <ul class="nav navbar-nav navbar-right">
                 {% if current_user.is_authenticated() %}
                 <li><a href="{{ url_for('profile', login=current_user.login) }}">{{ current_user.name }}</a></li>

@@ -1,7 +1,6 @@
 from . model import Application, ApplicationSettings
 from ..util.homer import HOME
 from .db import db, update_model_with_json
-from .config import get_server_name
 from .. import app
 
 from cachetools import cached, TTLCache
@@ -56,7 +55,7 @@ def load_application(application_id):
         return application
 
 def get_default_application_domain(user, application):
-    return application.application_id + "." + user.login + "." + get_server_name()
+    return application.application_id + "." + user.login + "." + app.config["SERVER_NAME_FULL"]
 
 def get_application_domain(user, application):
     application_settings = \

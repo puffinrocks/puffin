@@ -56,12 +56,19 @@ class DefaultConfig:
     # This is used for simple usage statistics, no tracking cookies, etc.
     TRACKING_URL = None
 
+    # Extra links that will appear in the main menu
+    LINK_1 = None
+    LINK_2 = None
+    LINK_3 = None
+
 def init():
     app.config.from_object("puffin.core.config.DefaultConfig")
     
     app.config.update(get_env_vars())
     
     app.config['VERSION'] = get_version()
+    app.config['SERVER_NAME_FULL'] = get_server_name_full()
+    app.config['LINKS'] = get_links()
 
     validate()
 
@@ -92,5 +99,13 @@ def validate():
     if app.config["SECRET_KEY"] == DefaultConfig.SECRET_KEY:
         app.logger.warning("No SECRET_KEY provided, using the default one.")
 
-def get_server_name():
+def get_server_name_full():
     return app.config["SERVER_NAME"] or "localhost"
+
+def get_links():
+    links = []
+    for key in ("LINK_1", "LINK_2", "LINK_3"):
+        value = app.config.get(key)
+        if value:
+            links.append(value.split())
+    return links

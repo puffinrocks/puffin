@@ -3,7 +3,7 @@ from wtforms import StringField, IntegerField, PasswordField, SubmitField, Selec
 from wtforms.validators import Required, Length, Regexp
 from ..core.db import db
 from ..core.model import User
-from ..core.config import get_server_name
+from .. import app
 
 class ApplicationForm(Form):
     start = SubmitField('Start')
@@ -19,7 +19,7 @@ class ApplicationSettingsForm(Form):
             return False
 
         if self.domain.data:
-            server_name = get_server_name()
+            server_name = app.config["SERVER_NAME_FULL"]
             if server_name != "localhost" and self.domain.data.endswith(server_name):
                 self.domain.errors.append('Invalid domain, cannot end with ' + server_name)
                 return False
