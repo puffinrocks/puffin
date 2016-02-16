@@ -85,10 +85,10 @@ def application_status(application_id):
     status = get_application_status(client, current_user, application).name
     return jsonify(status=status)
 
-@app.route('/static/applications/<path:path>')
-def application_static(path):
+@app.route('/media/<path:path>')
+def media(path):
     if not path[-3:] in ("png", "jpg"):
-        raise Exception("Unsupported file")
+        raise Exception("Unsupported media file format")
     return send_from_directory(APPLICATION_HOME, path)
 
 @app.route('/application/<application_id>/settings.html', methods=['GET', 'POST'])

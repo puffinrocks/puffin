@@ -6,7 +6,7 @@ from .. import app
 from cachetools import cached, TTLCache
 
 from os import listdir
-from os.path import join
+from os.path import join, exists, isdir, isfile
 import yaml
 
 APPLICATION_HOME = join(HOME, "apps")
@@ -44,15 +44,24 @@ def load_application(application_id):
         manifest = yaml.load(manifest_file)
 
         name = manifest.get("name", application_id)
-        logo = manifest.get("logo", "logo.png")
+        logo = join(application_id, manifest.get("logo", "logo.png"))
         subtitle = manifest.get("subtitle", "")
         website = manifest.get("website", "")
         description = manifest.get("description", "")
         compose = manifest.get("compose", "docker-compose.yml")
+        screenshots = load_screenshots(application_id, 
+            manifest.get("screenshots", "screenshots/"))
 
         application = Application(application_id, path, name, logo, subtitle, 
-            website, description, compose)
+            website, description, compose, screenshots)
         return application
+
+def load_screenshots(application_id, screenshot_dir):
+    path = join(APPLICATION_HOME, application_id, screenshot_dir)
+    if not isdir(path):
+        return []
+    screenshots = [join(application_id, screenshot_dir, f) for f in listdir(path) if isfile(join(path, f))]
+    return screenshots
 
 def get_default_application_domain(user, application):
     return application.application_id + "." + user.login + "." + app.config["SERVER_NAME_FULL"]

@@ -42,7 +42,7 @@ PUFFIN_USER = SystemUser("puffin")
 
 class Application:
     
-    def __init__(self, application_id, path, name, logo, subtitle, website, description, compose):
+    def __init__(self, application_id, path, name, logo, subtitle, website, description, compose, screenshots):
         self.application_id = application_id
         self.path = path
         self.name = name
@@ -51,10 +51,7 @@ class Application:
         self.website = website
         self.description = description
         self.compose = compose
-
-    @property
-    def logo_url(self):
-        return "/static/applications/" + self.application_id + "/" + self.logo
+        self.screenshots = screenshots
 
 
 class ApplicationStatus(Enum):

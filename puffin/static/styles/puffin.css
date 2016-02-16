@@ -29,11 +29,11 @@ body {
 }
 
 /* Application thumbnails */
-.thumbnail {
+.app.thumbnail {
     height: 335px;
 }
 
-.thumbnail a {
+.app.thumbnail a {
     color: black;
 }
 

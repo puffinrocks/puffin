@@ -9,7 +9,7 @@
 	
 <div class="row">
 
-    <div class="pull-right"><img class="logo" src="{{ application.logo_url }}" alt="{{ application.name }}"></div>
+    <div class="pull-right"><img class="logo" src="{{ url_for('media', path=application.logo) }}" alt="{{ application.name }}"></div>
   
     <div>
         <h1>{{ application.name }}</h1>
@@ -50,6 +50,20 @@
                 to run application.
             {% endif %}
         </div>
+        
+        <div class="clearfix"></div>
+
+        {% if application.screenshots %}
+        <div class="row">
+            {% for screenshot in application.screenshots %}
+                <div class="col-sm-8 col-md-5">
+                    <div class="thumbnail">
+                        <a href="{{ url_for('media', path=screenshot) }}"><img class="img-responsive" src="{{ url_for('media', path=screenshot) }}"></a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        {% endif %}
     </div>
     
 </div>
