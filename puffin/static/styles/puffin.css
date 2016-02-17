@@ -37,6 +37,10 @@ body {
     color: black;
 }
 
+.screenshots {
+    margin-top: 20px;
+}
+
 .blinking {
   animation: blinker 1.5s cubic-bezier(.5, 0, 1, 1) infinite alternate;  
 }
