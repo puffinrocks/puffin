@@ -1,0 +1,30 @@
+main:
+    build: .
+    links:
+        - db
+    ports: 
+        - 80
+    volumes_from: 
+        - main_data
+
+main_data:
+    image: tianon/true
+    volumes:
+        - /var/www/html
+
+db:
+    build: ../_mariadb
+    ports: 
+        - 3306
+    environment:
+        MYSQL_ROOT_PASSWORD: root
+        MYSQL_DATABASE: flarum
+        MYSQL_USER: flarum
+        MYSQL_PASSWORD: flarum
+    volumes_from: 
+        - db_data
+
+db_data:
+    image: tianon/true
+    volumes:
+        - /var/lib/mysql
