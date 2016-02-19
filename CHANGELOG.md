@@ -7,7 +7,7 @@
 
 * Application settings, custom domain
 * User profile, change password
-* Allow building dependencies to use optimized packages
+* Allow building dependencies to use optimized images
 * Preserve volumes between restarts via data-only containers
 * Add Gogs Git hosting app
 * Handle signals via dumb-init, graceful shutdown
