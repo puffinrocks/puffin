@@ -1,0 +1,11 @@
+{% macro application_thumbnail(application) %}
+    <div class="col-sm-4 col-md-3">
+    <div class="app thumbnail">
+      <a href="{{ url_for('application', application_id=application.application_id) }}"><img src="{{ url_for('media', path=application.logo) }}" alt="{{ application.name }}"></a>
+      <div class="caption">
+        <h3><a href="{{ url_for('application', application_id=application.application_id) }}">{{ application.name }}</a></h3>
+        <h4>{{ application.subtitle }}</h4>
+      </div>
+    </div>
+  </div>
+{% endmacro %}

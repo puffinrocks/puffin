@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% from 'macros.html' import application_thumbnail %}
+
+
+{% block title %}Puffin | My Applications{% endblock %}
+
+
+{% block page %}
+
+<h1>My Applications</h1>
+	
+<div class="row apps">
+{% for application in applications %}
+    {{ application_thumbnail(application) }}
+{% else %}
+    No running applications. Go to the <a href="{{url_for("index")}}">catalog</a> to run some.
+{% endfor %}
+</div>
+
+{% endblock %}
+

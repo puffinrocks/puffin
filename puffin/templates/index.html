@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% from 'macros.html' import application_thumbnail %}
 
 
 {% block title %}Puffin{% endblock %}
@@ -25,19 +26,9 @@
 
 {% block applications %}
 
-<div class="row">
+<div class="row apps">
 {% for application in applications %}
-
-    <div class="col-sm-4 col-md-3">
-    <div class="app thumbnail">
-      <a href="{{ url_for('application', application_id=application.application_id) }}"><img src="{{ url_for('media', path=application.logo) }}" alt="{{ application.name }}"></a>
-      <div class="caption">
-        <h3><a href="{{ url_for('application', application_id=application.application_id) }}">{{ application.name }}</a></h3>
-        <h4>{{ application.subtitle }}</h4>
-      </div>
-    </div>
-  </div>
-
+    {{ application_thumbnail(application) }}
 {% endfor %}
 </div>
 

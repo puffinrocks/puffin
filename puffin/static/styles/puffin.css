@@ -28,6 +28,11 @@ body {
   height: 60px;
 }
 
+/* Application list */
+.apps {
+    margin-top: 30px;
+}
+
 /* Application thumbnails */
 .app.thumbnail {
     height: 335px;

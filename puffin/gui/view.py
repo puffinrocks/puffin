@@ -5,7 +5,8 @@ from ..core.security import update_user
 from ..core.applications import APPLICATION_HOME, get_application, \
     get_application_list, get_application_settings, update_application_settings, \
     get_application_domain, get_default_application_domain
-from ..core.docker import get_client, create_application, delete_application, get_application_status
+from ..core.docker import get_client, create_application, delete_application, \
+    get_application_status, get_application_statuses
 from ..core.config import get_links
 from .. import app
 from .form import ApplicationForm, ApplicationSettingsForm, ProfileForm
@@ -84,6 +85,14 @@ def application_status(application_id):
     client = get_client()
     status = get_application_status(client, current_user, application).name
     return jsonify(status=status)
+
+@app.route('/applications', methods=['GET'])
+@login_required
+def applications():
+    client = get_client()
+    application_statuses = get_application_statuses(client, current_user)
+    applications = [a[0] for a in application_statuses if a[1] == ApplicationStatus.CREATED]
+    return render_template('applications.html', applications=applications)
 
 @app.route('/media/<path:path>')
 def media(path):

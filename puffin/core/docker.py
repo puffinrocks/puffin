@@ -1,5 +1,5 @@
 from .machine import get_machine
-from .applications import get_application, get_application_domain
+from .applications import get_application, get_application_domain, get_application_list
 from .queue import task, task_exists
 from .model import User, Application, ApplicationStatus, PUFFIN_USER
 from .db import db
@@ -67,13 +67,28 @@ def delete_application_do(client, user, application):
 
 def get_application_status(client, user, application):
     name = get_container_name(user, application.application_id)
+    containers = get_containers(client)
+    return _get_application_status(containers, name)
+
+def get_application_statuses(client, user):
+    applications = get_application_list()
+    containers = get_containers(client)
+    application_statuses = []
+    for application in applications:
+        name = get_container_name(user, application.application_id)
+        status = _get_application_status(containers, name)
+        application_statuses.append((application, status))
+    return application_statuses
+
+def _get_application_status(containers, name):
     if task_exists(name):
         return ApplicationStatus.UPDATING
-    container = get_container(client, name)
+    container = get_container(containers, name)
     if container:
         return ApplicationStatus.CREATED
     else:
         return ApplicationStatus.DELETED
+    
 
 def get_project(client, user, application):
     name = get_container_name(user, application.application_id)
@@ -102,8 +117,7 @@ def get_container_name(user, application_id):
 def get_containers(client):
     return client.containers()
  
-def get_container(client, name):
-    containers = get_containers(client)
+def get_container(containers, name):
     container = [c for c in containers if "/" + name in c["Names"]]
     if len(container) > 0:
         return container
