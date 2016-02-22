@@ -46,7 +46,9 @@
                 </form>
             {% else %}
                 <a href="{{ url_for('security.login', next=request.path) }}">Log In</a> or 
-                <a href="{{ url_for('security.register', next=request.path) }}">Register</a>
+                {% if config.SECURITY_REGISTERABLE %}
+                    <a href="{{ url_for('security.register', next=request.path) }}">Register</a>
+                {% endif %}
                 to run application.
             {% endif %}
         </div>

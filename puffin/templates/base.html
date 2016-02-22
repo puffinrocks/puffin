@@ -54,7 +54,9 @@
                 <li><a href="{{ url_for('security.logout') }}">Log Out</a></li>
                 {% else %}
                 <li><a href="{{ url_for('security.login') }}">Log In</a></li>
-                <li><a href="{{ url_for('security.register') }}">Register</a></li>
+                    {% if config.SECURITY_REGISTERABLE %}
+                    <li><a href="{{ url_for('security.register') }}">Register</a></li>
+                    {% endif %}
                 {% endif %}
             </ul>
         </div>

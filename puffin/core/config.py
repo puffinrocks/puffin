@@ -40,6 +40,10 @@ class DefaultConfig:
     MAIL_USERNAME = None
     MAIL_PASSWORD = None
     MAIL_DEFAULT_SENDER = "puffin <puffin@localhost>"
+    MAIL_SUPPRESS_SEND = False
+
+    # Account registration
+    SECURITY_REGISTERABLE = True
 
     # Docker machine settings. 
     # For local docker instance use the following settings:
@@ -91,9 +95,17 @@ def get_env_vars():
     for name in (n for n in dir(DefaultConfig) if not n.startswith("_")):
         value = os.environ.get(name)
         if value != None:
-            #TODO: cast to the same type as in DeaultConfig
-            env_vars[name] = value
+            default_value = getattr(DefaultConfig, name)
+            env_vars[name] = cast_str(value, type(default_value))
     return env_vars
+
+def cast_str(value, typ):
+    if typ is bool:
+        return value.lower() in ("true", "1", "yes")
+    if typ is int:
+        return int(value)
+    else:
+        return value
 
 def validate():
     if app.config["SECRET_KEY"] == DefaultConfig.SECRET_KEY:

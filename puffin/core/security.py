@@ -17,16 +17,16 @@ security = None
 
 def init():
     global security
-
-    app.config['SECURITY_REGISTERABLE'] = True
-    app.config['SECURITY_CONFIRMABLE'] = True
+    
+    app.config['SECURITY_CONFIRMABLE'] = not app.config['MAIL_SUPPRESS_SEND']
     app.config['SECURITY_CHANGEABLE'] = True
-    app.config['SECURITY_SEND_PASSWORD_CHANGE_EMAIL'] = True
+    app.config['SECURITY_SEND_PASSWORD_CHANGE_EMAIL'] = not app.config['MAIL_SUPPRESS_SEND']
     app.config['SECURITY_POST_CHANGE_VIEW'] = "profile.html"
     app.config['SECURITY_PASSWORD_HASH'] = "bcrypt"
     app.config['SECURITY_MSG_CONFIRMATION_REQUIRED'] = (
             Markup('Email requires confirmation. <a href="/confirm">Resend confirmation instructions</a>.'), 
             'error')
+    # This comes from config: app.config['SECURITY_REGISTERABLE']
 
     # Update all salts with SECRET_KEY if they are not set
     secret_key = app.config['SECRET_KEY']
@@ -41,6 +41,7 @@ def init():
 
     security = Security(app, CustomUserDatastore(), 
             login_form=CustomLoginForm,
+            register_form=CustomRegisterForm,
             confirm_register_form=CustomRegisterForm)
 
     security.send_mail_task(send_security_mail)
