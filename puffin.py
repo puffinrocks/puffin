@@ -52,7 +52,11 @@ manager.add_command("user", user)
 @user.command
 def create(login):
     "Create a user"
-    security.create_user(login)
+    user = security.get_user(login)
+    if not user:
+        security.create_user(login)
+    else:
+        print("User {} already exists".format(login))
 
 @user.command
 def activate(login):

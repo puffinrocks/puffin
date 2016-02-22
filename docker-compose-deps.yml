@@ -4,14 +4,16 @@ main:
         service: puffin
     links:
         - db
-    environment:
-        - VIRTUAL_HOST=localhost
-        - VIRTUAL_PORT=8080
-        - SECURITY_REGISTERABLE=false
-        - MAIL_SUPPRESS_SEND=true
+        - mail
+    command: []
 
 db:
     extends:
         file: docker-compose-common.yml
         service: db
+
+mail:
+    extends:
+        file: docker-compose-common.yml
+        service: mail
 

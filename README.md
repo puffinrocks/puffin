@@ -21,18 +21,14 @@ Live demo is available at [puffin.rocks](http://puffin.rocks)
 
 The easiest way to deploy Puffin and start playing with it is to use Docker.
 
-Create docker machine:
-
-	docker-machine create -d virtualbox dev
-	eval "$(docker-machine env dev)"
-
 Deploy Puffin and its dependencies:
 
 	docker-compose up -d
 
 Go to [http://localhost:8080](http://localhost:8080) to acces Puffin and 
 [http://localhost:8025](http://localhost:8025) to access the emails. 
-The first things you need to do in Puffin is to register and confirm your email.
+After that you should be able to log as user puffin, password puffin.
+Alternatively you can register your new user and confirm email.
 
 Update docker images:
 
@@ -72,23 +68,9 @@ Read the message carefully and install the development versions of offending lib
 
 #### Run dependencies
 
-Run only dependencies:
+Run only dependencies and configure them:
 
-    docker-compose run deps
-
-#### Configure dependencies
-
-Create database:
-
-    ./puffin.py db create
-
-Populate database:
-
-    ./puffin.py db upgrade
-
-Start app proxy:
-
-    ./puffin.py machine proxy
+    docker-compose -f docker-compose-deps.yml up -d
 
 #### Run Puffin
 
@@ -128,6 +110,31 @@ Update your /etc/hosts file, by adding the following lines:
     127.0.1.1 wordpress.<your-login>.localhost
 
 Each line corresponds to an application, add more if you want to try more applications if needed. 
+
+### Deploying on a server
+
+If you can't use docker directly on your system or would like to deploy 
+Puffin on a remote server, you can use Docker Machine.
+
+For example to create a Boot2Docker virtual machine:
+
+	docker-machine create -d virtualbox dev
+	eval "$(docker-machine env dev)"
+
+After that you should be able to start Puffin using docker. 
+Keep in mind that you'll need to use IP address of the machine to access it, 
+instead of locahost.
+
+### Single-user deployment
+
+To deploy Puffin for a single user, you can use an alternative 
+Docker Compose file:
+
+    docker-compose -f docker-compose-single.yml up -d
+
+There is no email configured and there is no registration required. 
+If you want to run it on a remote server, make sure to change the default
+password.
 
 ## Configuration
 

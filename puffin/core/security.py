@@ -87,6 +87,9 @@ class CustomRegisterForm(RegisterForm):
 def send_security_mail(message):
     send(message=message)
 
+def get_user(login):
+    return security.datastore.get_user(login)
+
 def create_user(login):
     user = security.datastore.create_user(login=login, name=login.capitalize(), 
         email=login + "@" + app.config["SERVER_NAME_FULL"], password=encrypt_password(login),

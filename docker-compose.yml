@@ -1,34 +1,24 @@
 main:
-    build: .
+    extends:
+        file: docker-compose-common.yml
+        service: puffin
+    links:
+        - db
+        - mail
     ports: 
         - "8080:8080"
-    links:
-        - db
-        - mail
-    volumes: 
-        - /var/run/docker.sock:/var/run/docker.sock
-    environment:
-        - DB_HOST=db
-        - DB_PORT=5432
-        - DB_NAME=puffin
-        - MAIL_SERVER=mail
-        - MAIL_PORT=1025
-    command: [./entrypoint.sh]
-
-deps:
-    image: busybox
-    links:
-        - db
-        - mail
-    command: "true"
 
 db:
-    image: postgres
+    extends:
+        file: docker-compose-common.yml
+        service: db
     ports:
         - "15432:5432"
 
 mail:
-    image: mailhog/mailhog
+    extends:
+        file: docker-compose-common.yml
+        service: mail
     ports: 
         - "1025:1025"
         - "8025:8025"

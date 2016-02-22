@@ -1,0 +1,20 @@
+puffin:
+    build: .
+    volumes: 
+        - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+        - DB_HOST=db
+        - DB_PORT=5432
+        - DB_NAME=puffin
+        - MAIL_SERVER=mail
+        - MAIL_PORT=1025
+    ports: 
+        - "8080"
+
+db:
+    image: postgres
+
+mail:
+    image: mailhog/mailhog
+
+
