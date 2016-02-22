@@ -1,0 +1,21 @@
+main:
+    build: .
+    ports: 
+        - "8080"
+    links:
+        - db
+    volumes: 
+        - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+        - DB_HOST=db
+        - DB_PORT=5432
+        - DB_NAME=puffin
+        - VIRTUAL_HOST=localhost
+        - VIRTUAL_PORT=8080
+        - SECURITY_REGISTERABLE=false
+        - MAIL_SUPPRESS_SEND=true
+    command: [./entrypoint.sh]
+
+db:
+    image: postgres
+
