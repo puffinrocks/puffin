@@ -11,6 +11,8 @@ db:
     extends:
         file: docker-compose-common.yml
         service: db
+    ports:
+        - "15432:5432"
 
 mail:
     extends:

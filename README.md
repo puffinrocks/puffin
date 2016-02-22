@@ -25,10 +25,13 @@ Deploy Puffin and its dependencies:
 
 	docker-compose up -d
 
-Go to [http://localhost:8080](http://localhost:8080) to acces Puffin and 
-[http://localhost:8025](http://localhost:8025) to access the emails. 
+Go to [http://localhost:8080](http://localhost:8080) to acces Puffin.
+Alternatively, you should be able to drop the port number, 
+once the proxy starts up. 
+
 After that you should be able to log as user puffin, password puffin.
 Alternatively you can register your new user and confirm email.
+[http://localhost:8025](http://localhost:8025) to access the emails. 
 
 Update docker images:
 
@@ -130,11 +133,16 @@ instead of locahost.
 To deploy Puffin for a single user, you can use an alternative 
 Docker Compose file:
 
+    export SERVER_NAME=<host>
     docker-compose -f docker-compose-single.yml up -d
 
 There is no email configured and there is no registration required. 
 If you want to run it on a remote server, make sure to change the default
 password.
+
+Unfortunately setting SERVER_NAME environment variable to localhost is 
+required, at least until the new version of Docker Compose is released 
+which contains [this PR](https://github.com/docker/compose/pull/2734).
 
 ## Configuration
 
