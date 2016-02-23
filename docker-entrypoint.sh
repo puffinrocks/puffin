@@ -1,7 +1,7 @@
 #!/usr/local/bin/dumb-init /bin/bash
 
 # wait for database startup
-sleep 1
+sleep 3
 
 python3 -u puffin.py db create
 python3 -u puffin.py db upgrade

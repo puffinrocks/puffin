@@ -10,10 +10,7 @@ python:
 install: "pip install -r requirements-dev.txt"
 
 before_script:
-  - docker-compose run deps
-  - sleep 5
-  - ./puffin.py db create
-  - ./puffin.py db upgrade
+  - docker-compose -f docker-compose-deps.yml up -d
 
 script: py.test
  
