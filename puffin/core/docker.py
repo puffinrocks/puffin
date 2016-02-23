@@ -139,11 +139,16 @@ def wait_until_up(url, timeout=APPLICATION_CREATE_TIMEOUT):
         sleep(1)
 
 def install_proxy():
+    return _install("_proxy")
+
+def install_mail():
+    return _install("_mail")
+
+def _install(name):
     client = get_client()
     user = get_user("puffin")
-    application = get_application("_proxy")
+    application = get_application(name)
     if get_application_status(client, user, application) != ApplicationStatus.DELETED:
         return False
     create_application_do(client, user, application)
     return True
-

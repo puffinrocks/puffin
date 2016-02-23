@@ -44,6 +44,12 @@ def proxy():
     if docker.install_proxy():
         print("Installed docker proxy on machine")
 
+@machine.command
+def mail():
+    "Install docker mail"
+    if docker.install_mail():
+        print("Installed docker mail on machine")
+
 
 user = Manager(usage="Manage users")
 
