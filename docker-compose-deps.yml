@@ -5,7 +5,7 @@ main:
     links:
         - db
         - mail
-    command: []
+    command: [""]
 
 db:
     extends:
