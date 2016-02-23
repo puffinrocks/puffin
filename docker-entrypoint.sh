@@ -1,14 +1,14 @@
 #!/usr/local/bin/dumb-init /bin/bash
 
 # wait for database startup
-sleep 3
+sleep 6
 
 python3 -u puffin.py db create
 python3 -u puffin.py db upgrade
-python3 -u puffin.py machine proxy
 python3 -u puffin.py user create puffin
+python3 -u puffin.py machine proxy
 
-if [[ $# -ne 0 ]]; then
+if [[ "$@" != "" ]]; then
     python3 -u puffin.py "$@"
 fi
 
