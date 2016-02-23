@@ -13,6 +13,8 @@ puffin:
 
 db:
     image: postgres
+    ports:
+         - "5432"
 
 mail:
     image: mailhog/mailhog

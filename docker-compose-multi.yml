@@ -8,11 +8,18 @@ main:
         - SERVER_NAME=localhost
         - VIRTUAL_HOST=localhost
         - SECRET_KEY=puffin
-        - SECURITY_REGISTERABLE=false
-        - MAIL_SUPPRESS_SEND=true
+        - MAIL_SERVER=<smtp-server>
+        - MAIL_PORT=<smtp-port>
+        - MAIL_USERNAME=<smtp-login>
+        - MAIL_PASSWORD=<smtp-password>
+        - MAIL_DEFAULT_SENDER=Puffin <sender-address>
+        - MAIL_USE_TLS=False
+        - MAIL_USE_SSL=False
 
 db:
     extends:
         file: docker-compose-common.yml
         service: db
+
+
 

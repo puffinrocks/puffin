@@ -17,7 +17,7 @@ Live demo is available at [puffin.rocks](http://puffin.rocks)
 
 ## Deployment
 
-### Using Docker 
+### Demo deployment
 
 The easiest way to deploy Puffin and start playing with it is to use Docker.
 
@@ -37,7 +37,35 @@ Update docker images:
 
 	docker-compose pull
 
-### Deploying directly on host system
+### Single-user deployment
+
+To deploy Puffin for a single user, you can use docker-compose-single.yml 
+file as a template. In an initial form it will deploy on locahost:
+
+    docker-compose -f docker-compose-single.yml up -d
+ 
+You need to copy it and change SERVER_NAME, VIRTUAL_HOST and SECRET_KEY
+environment variables.
+
+There is no email server configured and you can't register new users. 
+If you want to run it on a public server, make sure to change the default
+password.
+
+### Multi-user deployment
+
+To deploy Puffin for many users and allow registration, 
+you can use docker-compose-multi.yml file as a template. 
+In an initial form it will deploy on locahost:
+
+    docker-compose -f docker-compose-multi.yml up -d
+ 
+You need to copy it and change SERVER_NAME, VIRTUAL_HOST and SECRET_KEY
+and MAIL_* environment variables.
+
+Default user is created, so if you want to run it on a public server 
+make sure to change the default password.
+
+### Development deployment directly on host system
 
 During development it may be more convenient to run Puffin in virtualenv. 
 All the dependencies can be run via Docker, but the program itself can be run locally.
@@ -114,35 +142,19 @@ Update your /etc/hosts file, by adding the following lines:
 
 Each line corresponds to an application, add more if you want to try more applications if needed. 
 
-### Deploying on a server
+### Docker Machine
 
 If you can't use docker directly on your system or would like to deploy 
 Puffin on a remote server, you can use Docker Machine.
 
-For example to create a Boot2Docker virtual machine:
+For example to create a local Boot2Docker virtual machine, run:
 
 	docker-machine create -d virtualbox dev
 	eval "$(docker-machine env dev)"
 
-After that you should be able to start Puffin using docker. 
-Keep in mind that you'll need to use IP address of the machine to access it, 
-instead of locahost.
-
-### Single-user deployment
-
-To deploy Puffin for a single user, you can use an alternative 
-Docker Compose file:
-
-    export SERVER_NAME=<host>
-    docker-compose -f docker-compose-single.yml up -d
-
-There is no email configured and there is no registration required. 
-If you want to run it on a remote server, make sure to change the default
-password.
-
-Unfortunately setting SERVER_NAME environment variable to localhost is 
-required, at least until the new version of Docker Compose is released 
-which contains [this PR](https://github.com/docker/compose/pull/2734).
+After that you should be able to start Puffin. 
+Keep in mind that you'll need to use IP address or hostnmae of the machine 
+to access it, instead of locahost.
 
 ## Configuration
 
