@@ -32,14 +32,6 @@ class User(UserMixin):
     def confirmed(self):
         return self.confirmed_at != None
 
-class SystemUser:
-    
-    def __init__(self, login):
-        self.login = login
-
-PUFFIN_USER = SystemUser("puffin")
-
-
 class Application:
     
     def __init__(self, application_id, path, name, logo, subtitle, website, description, compose, screenshots):

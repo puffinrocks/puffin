@@ -1,7 +1,8 @@
 from .machine import get_machine
 from .applications import get_application, get_application_domain, get_application_list
 from .queue import task, task_exists
-from .model import User, Application, ApplicationStatus, PUFFIN_USER
+from .model import User, Application, ApplicationStatus
+from .security import get_user
 from .db import db
 from .. import app
 
@@ -139,7 +140,7 @@ def wait_until_up(url, timeout=APPLICATION_CREATE_TIMEOUT):
 
 def install_proxy():
     client = get_client()
-    user = PUFFIN_USER
+    user = get_user("puffin")
     application = get_application("_proxy")
     if get_application_status(client, user, application) != ApplicationStatus.DELETED:
         return False
