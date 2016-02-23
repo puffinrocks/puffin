@@ -24,7 +24,7 @@ their or their friends' applications.
 
 Live demo is available at [puffin.rocks](http://puffin.rocks)
 
-![Puffin Front Page](/doc/screenshot.png?raw=true)
+[![Puffin Front Page](/doc/screenshot.png?raw=true)](http://puffin.rocks)
 
 ## Deployment
 
