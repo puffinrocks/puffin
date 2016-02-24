@@ -31,7 +31,7 @@ Live demo is available at [puffin.rocks](http://puffin.rocks)
 ### Demo deployment
 
 The easiest way to deploy Puffin and start playing with it to use 
-Docker Compose:
+[Docker Compose](https://docs.docker.com/compose/):
 
 	docker-compose up -d
 
@@ -56,8 +56,9 @@ set SERVER_NAME, VIRTUAL_HOST and SECRET_KEY environment variables.
 
 In this configuration users can't register themselves and no confirmation 
 email will be sent. Log in as user "puffin", password "puffin" (make sure to change the password
-after you login). You can create new users using Puffin console. 
-First enter the container:
+after you login). 
+
+You can create new users using Puffin console. First enter the container:
     
     docker exec -it puffin_main_1 bash
 
@@ -137,7 +138,7 @@ On public server you need to configure wildacard DNS record to point to your dom
 On localhost there are two alternative solutions to this problem: 
 set up a local DNS server or update /etc/hosts file.
 
-#### Local DNS server using dnsmasq
+#### Set-up local DNS server using dnsmasq
 
 First install dnsmasq and use the following configuration file 
 (on Debian create a new file in /etc/dnsmasq.d/): 
@@ -166,7 +167,7 @@ Each line corresponds to an application and user, add more if you want to try mo
 ### Docker Machine
 
 If you can't use docker directly on your system or would like to deploy 
-Puffin on a remote server, Docker Machine comes in handy.
+Puffin on a remote server, [Docker Machine](https://docs.docker.com/machine/) comes in handy.
 
 For example to create and activate a local virtual machine, run:
 
