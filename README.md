@@ -30,8 +30,8 @@ Live demo is available at [puffin.rocks](http://puffin.rocks)
 
 ### Demo deployment
 
-The easiest way to deploy Puffin and start playing with it is to run it using 
-Docker Compose. To deploy Puffin and its dependencies run:
+The easiest way to deploy Puffin and start playing with it to use 
+Docker Compose:
 
 	docker-compose up -d
 
@@ -40,34 +40,44 @@ Log In as user "puffin", password "puffin". Alternatively you can register
 your own user and confirm the email address via 
 [http://localhost:8025](http://localhost:8025). 
 
-Update docker images:
+To rebuild the code:
 
-	docker-compose pull
+    docker-compose build
 
-### Single-user deployment
+### Private deployment
 
-To deploy Puffin for a single user use docker-compose-single.yml file. 
-In an initial form it will deploy on locahost:
+To deploy Puffin for private needs, for a single user or a limited number of users, 
+use docker-compose-single.yml file. In an initial form it will deploy on locahost:
 
     docker-compose -f docker-compose-single.yml up -d
  
-There is no email server configured and you can't register new users. 
-Log in as user "puffin", password "puffin".
+If you want to run it on a server then copy the configuration file and
+set SERVER_NAME, VIRTUAL_HOST and SECRET_KEY environment variables.
 
-If you want to run it on a public server copy the configuration file and 
-set SERVER_NAME, VIRTUAL_HOST and SECRET_KEY environment variables and 
-make sure to change the default password.
+In this configuration users can't register themselves and no confirmation 
+email will be sent. Log in as user "puffin", password "puffin" (make sure to change the password
+after you login). You can create new users using Puffin console. 
+First enter the container:
+    
+    docker exec -it puffin_main_1 bash
 
-### Multi-user deployment
+then execute puffin command:
 
-To deploy Puffin for many users and allow registering new ones use 
+    ./puffin.py user create \<login>
+
+The initial password is the same as login, so it should be changed
+by the account owner.
+
+### Public deployment
+
+To deploy Puffin for public use, so anyone can register to access it, use 
 docker-compose-multi.yml file. In an initial form it will deploy on locahost:
 
     docker-compose -f docker-compose-multi.yml up -d
  
-If you want to run it on a public server copy the configuration file and 
-set SERVER_NAME, VIRTUAL_HOST, SECRET_KEY and MAIL\_\* environment variables 
-and make sure to change the default password.
+If you want to run it on a server then copy the configuration file and
+set SERVER_NAME, VIRTUAL_HOST, SECRET_KEY and MAIL\_\* environment variables.
+Also make sure to change the default "puffin" user password.
 
 ### Development deployment directly on host system
 
