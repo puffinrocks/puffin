@@ -33,13 +33,13 @@ and send us a pull request.
 ## Running your own Puffin
 
 You can run your own Puffin for yourself and your friends. 
-First you need to do is to is to install Docker on your server. 
-The easiest way is via Docker Machine [in the cloud](https://docs.docker.com/machine/get-started-cloud/) 
-or on [your own server](http://loomchild.net/2015/09/20/your-own-docker-machine/).
 
-Next you need to run Puffin. To do that follow the instructions in README file for 
-[Private Deployment](README.md#private-deployment). Keep in mind the software is in early alpha 
-development stage, so for the moment it should be used for experimentation only.
+First you need to do is to is to install Docker on your server - the easiest way to
+achieve that is via [Docker Machine](README.md#docker-machine). 
+Next you need to run Puffin as a [Private Deployment](README.md#private-deployment). 
+
+Keep in mind the software is in early alpha development stage, so for the moment it should be used for 
+experimentation only.
 
 ## Donations
 

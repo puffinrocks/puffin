@@ -178,7 +178,10 @@ Each line corresponds to an application and user, add more if you want to try mo
 If you can't use docker directly on your system or would like to deploy 
 Puffin on a remote server, [Docker Machine](https://docs.docker.com/machine/) comes in handy.
 
-For example to create and activate a local virtual machine, run:
+You can easily install Docker [in the cloud](https://docs.docker.com/machine/get-started-cloud/) 
+or on [your own server](http://loomchild.net/2015/09/20/your-own-docker-machine/).
+
+To create and activate a local Docker virtual machine, run:
 
 	docker-machine create -d virtualbox dev
 	eval "$(docker-machine env dev)"
