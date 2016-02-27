@@ -206,6 +206,10 @@ For a full list of configuration options see [puffin/core/config.py](puffin/core
 
 See [CONTRIBUTING.md](CONTRIBUTING.md).
 
+# Changelog
+
+See [CHANGELOG.md](CHANGELOG.md).
+
 # License
 
 AGPL, see [LICENSE.txt](LICENSE.txt) for detais.
