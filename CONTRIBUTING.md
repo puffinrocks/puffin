@@ -1,21 +1,28 @@
 # Contributing
 
-There are many ways you can contribute to Puffin project. 
-I hope that everyone will find something for themselves.
+There are many ways you can contribute to Puffin project, I hope that everyone will find something for themselves.
 
-## Adding new applications
+## Discussion and Contact
 
-First see how other applications are configured in [apps/](apps/) directory. 
-To add your application simply fork puffin repository and submit a Pull Request with your changes.
+If you would like to discuss any subject related to Puffin please visit our [Forum](http://forum.puffin.rocks/).
 
-There are no clear rules which applications will be accepted as of yet,
-but the main conditions are free / open source license and relatively low memory footprint 
-(this will be improved in the near future by using optimized database dependency container images).
+If you'd like to contact us directly, please send an email to [puffin@puffin.rocks](mailto:puffin@puffin.rocks).
 
 ## Issues
 
 If you find an bug in Puffin, or would like to propose an enhancement, 
 please report it via [GitHub Issues](https://github.com/loomchild/puffin/issues).
+
+## Adding new applications to the catalog
+
+First see how other applications are configured in [apps/](apps/) directory. 
+To add your application simply fork puffin repository and submit a Pull Request with your changes.
+
+If you run into any trouble, or would like to propose adding a new app, but don't know how to do it, 
+please visit the [Forum Apps Section](http://forum.puffin.rocks/t/apps).
+
+There are no clear policy which applications will be accepted to the Puffin catalog yet,
+but the main conditions are free / open source license and relatively low memory footprint.
 
 ## Development
 
@@ -25,23 +32,14 @@ and send us a pull request.
 
 ## Running your own Puffin
 
-You can run your own clone of puffin for yourself and your friends. 
-First you need to do is to is to install Docker on your server.
+You can run your own Puffin for yourself and your friends. 
+First you need to do is to is to install Docker on your server. 
 The easiest way is via Docker Machine [in the cloud](https://docs.docker.com/machine/get-started-cloud/) 
 or on [your own server](http://loomchild.net/2015/09/20/your-own-docker-machine/).
 
-Next you need to run Puffin. To do that follow the instructions in [README](README.md#using-docker).
-For security reasons make sure to change the SECRET_KEY. 
-Keep in mind the software is in early alpha development stage, so it should be used for experimentation only.
-
-## Server
-
-You can donate your own server to host other people's containers. This option is not available yet. 
-
-## Contact
-
-If you'd like to contact us please send an email to [puffin@puffin.rocks](mailto:puffin@puffin.rocks).
-We are in the process of setting up a discussion forum / mailing list / chat.
+Next you need to run Puffin. To do that follow the instructions in README file for 
+[Private Deployment](README.md#private-deployment). Keep in mind the software is in early alpha 
+development stage, so for the moment it should be used for experimentation only.
 
 ## Donations
 
