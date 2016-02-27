@@ -58,3 +58,29 @@ body {
     font-size: 16px;
     color: #9d9d9d; 
 }
+
+.about div {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.about .intro {
+    background-color: #ffffff;
+}
+
+.about .catalog {
+    background-color: #dadbdb;
+}
+
+.about .hosting {
+    background-color: #f5d4cf;
+}
+
+.about .start {
+    background-color: #feedd5;
+}
+
+.about .status {
+    background-color: #ffffff;
+}
+

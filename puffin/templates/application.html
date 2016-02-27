@@ -9,10 +9,13 @@
 	
 <div class="row">
 
+    <div class="page-header">
+        <h1>{{ application.name }}</h1>
+    </div>
+
     <div class="pull-right"><img class="logo" src="{{ url_for('media', path=application.logo) }}" alt="{{ application.name }}"></div>
   
     <div>
-        <h1>{{ application.name }}</h1>
         <a href="{{ application.website }}">{{ application.website }}</a>
         <p>{{ application.description }}</p>
         

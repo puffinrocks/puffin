@@ -4,64 +4,73 @@
 {% block title %}Puffin | About{% endblock %}
 
 
-{% block hero %}
+{% block content %}
 
-    <div class="row">
+<div class="container-fluid about">
+
+    <div class="row intro">
+        <div class="container">
+            <h2>Introduction</h2>
+            <p class="lead">
+                Puffin lets you simply run web applications, such as blog, forum, chat, file sharing, news reader 
+                and many others, which will be always reachable from any location or device.
+            </p>
+        </div>
+    </div>
+
+    <div class="row catalog">
+        <div class="container">
+            <h2>Getting Started</h2>
+            <p class="lead">
+                First you need to <a href="{{ url_for('security.login') }}">login</a>
+                {% if config.SECURITY_REGISTERABLE %}
+                    or <a href="{{ url_for('security.register') }}">register</a>
+                {%- endif %}.
+                Afterwards you can run any application from the <a href="{{ url_for('index') }}">catalog</a>. 
+                Once started, your application will be available under your domain. 
+                If you have any questions, please ask on <a href="http://forum.puffin.rocks/">Forum</a>.
+            </p>
+        </div>
+    </div>
+
+    <div class="row hosting">
+        <div class="container">
+            <h2>Application Catalog</h2>
+            <p class="lead">
+                Puffin contains ever growing web application catalog.
+                Adding new ones is easy thanks to popular 
+                <a href="https://www.docker.com/">Docker</a> containerization technology -
+                learn more how to add <a href="https://github.com/loomchild/puffin/blob/master/CONTRIBUTING.md#adding-new-applications-to-the-catalog">your own application</a>. 
+            </p>
+        </div>
+    </div>
+
+    <div class="row start">
+        <div class="container">
+            <h2>Hosting</h2>
+            <p class="lead">
+                You can run applications on a managed platform - service is free and no setup is required.
+                Alternatively you can choose to launch Puffin on <a href="https://github.com/loomchild/puffin/blob/master/CONTRIBUTING.md#running-your-own-puffin">your own server</a> 
+                and let your friends run their applications on it.
+            </p>
         
-        <div class="col-md-4">
-            <h2><span class="glyphicon glyphicon-user"></span> User</h2>
-            <p>
-                Puffin lets you simply run web applications written by developers from around the world. 
-                They will be always running and be reachable from any location.
-            </p>
-            <p><a class="btn btn-default" href="#about-user" role="button">Learn more &raquo;</a></p>
         </div>
-
-        <div class="col-md-4">
-            <h2><span class="glyphicon glyphicon-headphones"></span> Developer</h2>
-            <p>
-                You can add your applications to Puffin, which will help you reach wider user audience. 
-                It's easy because Puffin uses popular Docker containerisation technology.
-            </p>
-            <p><a class="btn btn-default" href="#about-dev" role="button">Learn more &raquo;</a></p>
-        </div>
-
-        <div class="col-md-4">
-            <h2><span class="glyphicon glyphicon-wrench"></span> Sysadmin</h2>
-            <p>
-                If you have a spare server and would like to let other people run their applications on it, let us know. 
-                You can also keep it private to run your own applications.
-            </p>
-            <p><a class="btn btn-default" href="#" role="button" disabled="disabled">Not available yet</a></p>
-        </div>
-
     </div>
 
-{% endblock %}
-
-
-{% block page %}
-
-    <div>
-
-        <div>
-            <a name="about-user"></a>
-            <h1>User</a></h1>
-            <p>
-                In order to get started you need to Login or Register.
-                Afterwards you can choose an application you'd like to use from the <a href="{{ url_for('index') }}">list</a> and Install it. Once the application is ready you can click Open and begin configuring it. After you finish your application will be available on the internet - you can access and share it via it's address in browser address bar. Keep in mind that this is a demo platform and all data and applications will be regularly deleted. If you have any questions send an email to <a href="mailto:puffin@puffin.rocks">puffin@puffin.rocks</a> or create an <a href="https://github.com/loomchild/puffin/issues">Issue</a> on Github.
+    <div class="row status">
+        <div class="container">
+            <h2>Status</h2>
+            <p class="lead">
+                Keep in mind that this is a demo platform and all data and applications will be regularly deleted.
+                Puffin software is still in alpha development stage, so it might be unstable 
+                - you can track the project progress on the <a href="http://blog.puffin.rocks/">Blog</a>.
             </p>
         </div>
-
-        <div>
-            <a name="about-dev"></a>
-            <h1>Developer</h1>
-            <p>
-                To submit your application simply fork our repository and send us a pull request - see <a href="https://github.com/loomchild/puffin/blob/master/CONTRIBUTING.md">CONTRIBUTING.md</a> for details. You can also help in Puffin core development via <a href="https://github.com/loomchild/puffin">Github</a>. Puffin is written in <a href="https://www.python.org/">Python</a> using <a href="http://flask.pocoo.org/">Flask</a>, is based on <a href="https://www.docker.com/">Docker</a> and stores data in <a href="http://www.postgresql.org/">PostgreSQL</a>.
-            </p>
-        </div>
-
     </div>
+
+</div>
+
+{{ self.footer() }}
 
 {% endblock %}
 
