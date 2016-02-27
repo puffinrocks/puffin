@@ -38,6 +38,8 @@ First you need to do is to is to install Docker on your server - the easiest way
 achieve that is via [Docker Machine](README.md#docker-machine). 
 Next you need to run Puffin as a [Private Deployment](README.md#private-deployment). 
 
+If you run into any trouble, please visit the [Forum Hosting Section](http://forum.puffin.rocks/t/hosting).
+
 Keep in mind the software is in early alpha development stage, so for the moment it should be used for 
 experimentation only.
 
