@@ -3,28 +3,37 @@
 
 ## Introduction
 
-The goal of the project is to allow average, tech-oriented users to run 
-their own web applications, without worrying about maintaining a server. 
-The ultimate aim is to achieve greater decentralization of federated 
-services, such as social networks, file sharing, blog or email.
+The goal of the project is to allow average, tech-oriented user to run 
+web applications with ease. The ultimate aim is to achieve greater decentralization 
+of web services, such as social networks, file sharing, blog or email.
 
 While many other tools are looking at containers as a way to run massive 
-applications, automatically scaling to millions of users, 
-Puffin allows running lightweight applications serving just a single user or 
-a handful of users.
+applications, Puffin concentrates on lightweight ones, each serving just a handful of people.
 
-In the inital form Puffin is essentially a web application catalog for Docker, 
-with easy to use interface à la app store. 
-Security will be managed through automatic software updates. 
-Beginners will be able to run containers for free on hardware provided by volunteers, 
-while more demanding users will be able to connect their own machine to run 
-their or their friends' applications.
+You can chose to host the applications on Puffin managed platform or on your own server.
 
 ## Demo
 
-Live demo is available at [puffin.rocks](http://puffin.rocks)
+Live demo platform is available at [puffin.rocks](http://puffin.rocks)
 
 [![Puffin Front Page](/doc/screenshot.png?raw=true)](http://puffin.rocks)
+
+## Architecture
+ 
+Puffin consists of two main components - application catalog and interface that provides 
+means to run the applications. Any of them can be used independently - you 
+can run the applications from the catalog directly, and you can use the 
+interface to run your own applications that are not present in the catalog.
+
+## Technology
+
+Puffin is based on [Docker](https://www.docker.com/) containers and 
+for orchestration is uses [Docker Compose](https://docs.docker.com/compose/).
+
+Software is written in [Python 3](https://www.python.org/), 
+using [Flask](http://flask.pocoo.org/) web microframework. 
+[PosttgreSQL](http://www.postgresql.org/) database is used to store the data.
+[Nginx](http://nginx.org/) is used as a reverse proxy.
 
 ## Deployment
 
