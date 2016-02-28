@@ -23,7 +23,7 @@
             <h2>Getting Started</h2>
             <p class="lead">
                 First you need to <a href="{{ url_for('security.login') }}">login</a>
-                {% if config.SECURITY_REGISTERABLE %}
+                {%- if config.SECURITY_REGISTERABLE %}
                     or <a href="{{ url_for('security.register') }}">register</a>
                 {%- endif %}.
                 Once done, you can run any application from the <a href="{{ url_for('index') }}">catalog</a>. 
