@@ -4,9 +4,9 @@
 * Application screenshots
 * List of user applications
 * Allow to disable registration and emails
-* Always reate default Puffin user
-* Single and Multiple Puffin installation config and description
-* Update user and developer documentation
+* Always create default Puffin user
+* Single and multiple Puffin installation config and description
+* Rewrite user and update developer documentation
 
 0.3
 
