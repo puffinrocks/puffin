@@ -5,6 +5,19 @@
 {% block title %}Puffin{% endblock %}
 
 
+{% block head %}
+{{ super() }}
+<meta property="og:title" content="Puffin" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="http://puffin.rocks" />
+<meta property="og:image" content="http://puffin.rocks/static/images/puffin-scaled.png" />
+<meta property="og:image:url" content="http://puffin.rocks/static/images/puffin-scaled.png" />
+<meta property="og:image:type" content="image/png" />
+<meta property="og:description" content="Puffin is a webapp store. It's the easiest way to run software on the net." />
+<meta property="og:site_name" content="Puffin" />
+{% endblock %}
+
+
 {% block hero %}
 
 <div class="pull-right"><img src="{{ url_for('static', filename='images/puffin-scaled.png') }}"></img></div>
