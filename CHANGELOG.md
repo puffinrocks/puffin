@@ -2,6 +2,11 @@
 
 * Add Flarum forum app, configure as Puffin forum
 * Application screenshots
+* List of user applications
+* Allow to disable registration and emails
+* Always reate default Puffin user
+* Single and Multiple Puffin installation config and description
+* Update user and developer documentation
 
 0.3
 
