@@ -78,14 +78,14 @@ def init():
 
 
 def get_version():
-    version = "Unknown"
+    version = (None, None)
     try:
         description = subprocess.check_output(
             ["git", "describe", "--long",  "--match", "[0-9].*"], 
             stderr=subprocess.STDOUT, cwd=HOME, universal_newlines=True)
         m = re.match(r"([\w\.]+)-\d+-g(\w+)", description)
         if m:
-            version = m.group(1) + "-" + m.group(2)
+            version = (m.group(1), m.group(2))
     except subprocess.CalledProcessError:
         pass 
     return version
