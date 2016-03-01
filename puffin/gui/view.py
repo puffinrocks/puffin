@@ -8,6 +8,7 @@ from ..core.applications import APPLICATION_HOME, get_application, \
 from ..core.docker import get_client, create_application, delete_application, \
     get_application_status, get_application_statuses
 from ..core.config import get_links
+from ..core.stats import get_stats
 from .. import app
 from .form import ApplicationForm, ApplicationSettingsForm, ProfileForm
 
@@ -20,7 +21,8 @@ import time
 @app.context_processor
 def utility_processor():
     return dict(current_user=current_user, tracking_url=app.config.get("TRACKING_URL"), 
-        version=app.config.get("VERSION"), links=app.config.get("LINKS", []), ApplicationStatus=ApplicationStatus)
+        version=app.config.get("VERSION"), links=app.config.get("LINKS", []), ApplicationStatus=ApplicationStatus,
+        stats=get_stats())
 
 @app.route('/', methods=['GET'])
 def index():

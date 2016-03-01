@@ -16,4 +16,5 @@ def init():
     applications.init()
     machine.init()
     docker.init()
+    stats.init()
 
