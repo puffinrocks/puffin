@@ -13,7 +13,7 @@ main_data:
         - /app/uploads
 
 db:
-    build: ../_mongo
+    image: loomchild/mongo
     volumes_from: 
         - db_data
 

@@ -1,5 +1,5 @@
 main:
-    build: .
+    image: loomchild/flarum
     links:
         - db
     ports: 
@@ -13,7 +13,7 @@ main_data:
         - /var/www/html
 
 db:
-    build: ../_mariadb
+    image: loomchild/mariadb
     ports: 
         - 3306
     environment:

@@ -1,5 +1,5 @@
 main:
-    build: .
+    image: loomchild/gogs
     ports: 
         - 3000
     volumes_from: 

@@ -1,5 +1,5 @@
 main:
-    build: .
+    image: loomchild/ghost
     ports: 
         - 2368
     volumes_from: 

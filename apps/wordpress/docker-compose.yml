@@ -13,7 +13,7 @@ main_data:
         - /var/www/html
 
 db:
-    build: ../_mariadb
+    image: loomchild/mariadb
     environment:
         MYSQL_ROOT_PASSWORD: example
     volumes_from: 
