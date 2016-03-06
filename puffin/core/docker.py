@@ -1,5 +1,6 @@
-from .machine import get_machine
-from .applications import get_application, get_application_domain, get_application_list
+from .machine import get_machine, get_tls_config
+from .compose import compose_start, compose_stop
+from .applications import get_application, get_application_domain, get_application_list, get_application_name
 from .queue import task, task_exists
 from .model import User, Application, ApplicationStatus
 from .security import get_user
@@ -7,9 +8,6 @@ from .db import db
 from .. import app
 
 from docker import Client
-
-from compose import config
-from compose.project import Project
 
 import requests
 from requests.exceptions import RequestException
@@ -27,47 +25,35 @@ def init():
 
 def get_client():
     machine = get_machine()
-    client = Client(base_url=machine.base_url, tls=machine.tls_config, version="auto")
+    client = Client(base_url=machine.url, tls=get_tls_config(machine), version="auto")
     client.ping()
     return client
 
 def create_application(client, user, application):
     if get_application_status(client, user, application) != ApplicationStatus.DELETED:
         raise RuntimeError("Application already installed or updating, user: {}, application: {}".format(user.login, application.application_id))
-    name = get_container_name(user, application.application_id)
-    task(name, create_application_task, client, user.user_id, application)
+    name = get_application_name(user, application)
+    task(name, create_application_task, user.user_id, application)
 
-def create_application_task(client, user_id, application):
+def create_application_task(user_id, application):
     user = db.session.query(User).get(user_id)
-    create_application_do(client, user, application)
+    compose_start(get_machine(), user, application)
     application_url = "http://" + get_application_domain(user, application)
     sleep(APPLICATION_SLEEP_AFTER_CREATE)
     wait_until_up(application_url)
 
-def create_application_do(client, user, application):
-    project = get_project(client, user, application)
-    # This creates new image, but doesn't cost much because it uses cache
-    project.build()
-    project.up()
-        
 def delete_application(client, user, application, async=True):
     if get_application_status(client, user, application) != ApplicationStatus.CREATED:
         raise RuntimeError("Application not installed or updating, user: {}, application: {}".format(user.login, application.application_id))
-    name = get_container_name(user, application.application_id)
-    task(name, delete_application_task, client, user.user_id, application)
+    name = get_application_name(user, application)
+    task(name, delete_application_task, user.user_id, application)
 
-def delete_application_task(client, user_id, application):
+def delete_application_task(user_id, application):
     user = db.session.query(User).get(user_id)
-    delete_application_do(client, user, application)
-
-def delete_application_do(client, user, application):
-    project = get_project(client, user, application)
-    project.stop()
-    # Do not remove to avoid losing the data
-    # project.remove_stopped()
+    compose_stop(get_machine(), user, application)
 
 def get_application_status(client, user, application):
-    name = get_container_name(user, application.application_id)
+    name = get_application_name(user, application)
     containers = get_containers(client)
     return _get_application_status(containers, name)
 
@@ -76,7 +62,7 @@ def get_application_statuses(client, user):
     containers = get_containers(client)
     application_statuses = []
     for application in applications:
-        name = get_container_name(user, application.application_id)
+        name = get_application_name(user, application)
         status = _get_application_status(containers, name)
         application_statuses.append((application, status))
     return application_statuses
@@ -90,36 +76,12 @@ def _get_application_status(containers, name):
     else:
         return ApplicationStatus.DELETED
     
-
-def get_project(client, user, application):
-    name = get_container_name(user, application.application_id)
-    config_details = config.find(application.path, [application.compose])
-    project_config = config.load(config_details)
-
-    project = Project.from_dicts(name, project_config, client, False, None)
-
-    service = project.get_service("main")
-    
-    ports = service.options.get("ports", [])
-    
-    service.options["container_name"] = name
-
-    environment = service.options.get("environment", {})
-    service.options["environment"] = environment
-    environment["VIRTUAL_HOST"] = get_application_domain(user, application)
-    if ports:
-        environment["VIRTUAL_PORT"] = ports[0]
-
-    return project
-
-def get_container_name(user, application_id):
-    return user.login + "_" + application_id
-
 def get_containers(client):
     return client.containers()
  
 def get_container(containers, name):
-    container = [c for c in containers if "/" + name in c["Names"]]
+    main_name = "/" + name + "_main_1"
+    container = [c for c in containers if main_name in c["Names"]]
     if len(container) > 0:
         return container
     else:
@@ -150,5 +112,5 @@ def _install(name):
     application = get_application(name)
     if get_application_status(client, user, application) != ApplicationStatus.DELETED:
         return False
-    create_application_do(client, user, application)
+    compose_start(get_machine(), user, application)
     return True

@@ -5,6 +5,7 @@ from . import queue
 from . import security
 from . import applications
 from . import machine
+from . import compose
 from . import docker
 
 def init():
@@ -15,6 +16,7 @@ def init():
     security.init()
     applications.init()
     machine.init()
+    compose.init()
     docker.init()
     stats.init()
 

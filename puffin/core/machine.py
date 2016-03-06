@@ -11,12 +11,23 @@ def get_machine():
     url = app.config["MACHINE_URL"]
     path = app.config["MACHINE_PATH"]
 
-    tls_config = None
-    if path:
-        tls_config = TLSConfig(
-            client_cert=(path + 'cert.pem', path + 'key.pem'),
-            verify=path + 'ca.pem'
-        )
+    return Machine(url, path)
 
-    return Machine(url, tls_config)
 
+def get_tls_config(machine):
+    if not machine.path:
+        return None
+
+    return TLSConfig(
+        client_cert=(machine.cart, machine.key),
+        verify=machine.ca,
+        assert_hostname = False
+    )
+
+def get_env_vars(machine):
+    env = dict(DOCKER_HOST=machine.url)
+    
+    if machine.path:
+        env.update(dict(DOCKER_TLS_VERIFY="1", DOCKER_CERT_PATH=machine.path))
+
+    return env

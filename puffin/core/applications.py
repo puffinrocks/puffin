@@ -73,6 +73,10 @@ def get_application_domain(user, application):
     domain = application_settings.settings.get("domain", default_domain)
     return domain
 
+def get_application_name(user, application):
+    # docker-compose sanitizes project name, see https://github.com/docker/compose/issues/2119
+    return user.login + "x" + application.application_id
+
 def get_application_settings(user_id, application_id):
     application_settings = db.session.query(ApplicationSettings).filter_by(
         user_id=user_id, application_id=application_id).first()

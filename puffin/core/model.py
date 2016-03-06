@@ -63,9 +63,19 @@ class ApplicationSettings:
 
 class Machine:
     
-    def __init__(self, base_url, tls_config=None):
-        self.base_url = base_url
-        if tls_config:
-            tls_config.assert_hostname = False
-        self.tls_config = tls_config
+    def __init__(self, url, path):
+        self.url = url
+        self.path = path
+
+    @property
+    def cert(self):
+        return self.path + 'cert.pem' if self.path else None
+    
+    @property
+    def key(self):
+        return self.path + 'key.pem' if self.path else None
+    
+    @property
+    def ca(self):
+        return self.path + 'ca.pem' if self.path else None
 

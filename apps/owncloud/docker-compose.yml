@@ -4,6 +4,9 @@ main:
         - 80
     volumes_from: 
         - main_data
+    environment:
+        - VIRTUAL_HOST
+        - VIRTUAL_PORT=80
 
 main_data:
     image: tianon/true
