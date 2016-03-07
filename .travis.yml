@@ -7,6 +7,9 @@ language: python
 python:
   - "3.4"
 
+before_install:
+    - sudo apt-get upgrade docker-engine
+
 install: "pip install -r requirements-dev.txt"
 
 before_script:
