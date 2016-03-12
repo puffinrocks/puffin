@@ -114,3 +114,15 @@ def _install(name):
         return False
     compose_start(get_machine(), user, application)
     return True
+
+def create_networks():
+    #TODO: replace with running _network app and remove prefix once custom network names supported
+    client = get_client()
+    networks = client.networks(names=("network_front", "network_back"))
+    if len(networks) == 2:
+        return False
+    client.create_network("network_front")
+    client.create_network("network_back")
+    return True
+
+

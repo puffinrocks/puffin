@@ -39,16 +39,22 @@ machine = Manager(usage="Perform hosting server operations")
 manager.add_command("machine", machine)
 
 @machine.command
+def network():
+    "Create Docker networks"
+    if docker.create_networks():
+        print("Created Docker networks on machine")
+
+@machine.command
 def proxy():
-    "Install docker proxy"
+    "Install Docker proxy"
     if docker.install_proxy():
-        print("Installed docker proxy on machine")
+        print("Installed Docker proxy on machine")
 
 @machine.command
 def mail():
-    "Install docker mail"
+    "Install Docker mail"
     if docker.install_mail():
-        print("Installed docker mail on machine")
+        print("Installed Docker mail on machine")
 
 
 user = Manager(usage="Manage users")
