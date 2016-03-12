@@ -1,15 +1,20 @@
-main:
-    image: loomchild/ghost
-    ports: 
-        - 2368
-    volumes_from: 
-        - main_data
-    environment:
-        - VIRTUAL_HOST
-        - VIRTUAL_PORT=2368
+version: '2'
 
-main_data:
-    image: tianon/true
-    volumes:
-        - /var/lib/ghost
-    
+services:
+ 
+    main:
+        image: loomchild/ghost
+        ports: 
+            - 2368
+        volumes_from: 
+            - main_data
+        environment:
+            - VIRTUAL_HOST
+            - VIRTUAL_PORT=2368
+        network_mode: "bridge"
+
+    main_data:
+        image: tianon/true
+        volumes:
+            - /var/lib/ghost
+

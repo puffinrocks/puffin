@@ -1,27 +1,33 @@
-main:
-    image: rocket.chat:latest
-    links:
-        - db
-    ports:
-        - 3000
-    volumes_from: 
-        - main_data
-    environment:
-        - VIRTUAL_HOST
-        - VIRTUAL_PORT=3000
+version: '2'
 
-main_data:
-    image: tianon/true
-    volumes:
-        - /app/uploads
+services:
 
-db:
-    image: loomchild/mongo
-    volumes_from: 
-        - db_data
+    main:
+        image: rocket.chat:latest
+        links:
+            - db
+        ports:
+            - 3000
+        volumes_from: 
+            - main_data
+        environment:
+            - VIRTUAL_HOST
+            - VIRTUAL_PORT=3000
+        network_mode: "bridge"
 
-db_data:
-    image: tianon/true
-    volumes:
-        - /data/db 
-        - /data/configdb
+    main_data:
+        image: tianon/true
+        volumes:
+            - /app/uploads
+
+    db:
+        image: loomchild/mongo
+        volumes_from: 
+            - db_data
+        network_mode: "bridge"
+
+    db_data:
+        image: tianon/true
+        volumes:
+            - /data/db 
+            - /data/configdb

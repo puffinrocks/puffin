@@ -1,17 +1,22 @@
-main:
-    image: loomchild/gogs
-    ports: 
-        - 3000
-    volumes_from: 
-        - main_data
-    environment:
-        - VIRTUAL_HOST
-        - VIRTUAL_PORT=3000
+version: '2'
 
-main_data:
-    image: tianon/true
-    volumes:
-        - /data
+services:
+
+    main:
+        image: loomchild/gogs
+        ports: 
+            - 3000
+        volumes_from: 
+            - main_data
+        environment:
+            - VIRTUAL_HOST
+            - VIRTUAL_PORT=3000
+        network_mode: "bridge"
+
+    main_data:
+        image: tianon/true
+        volumes:
+            - /data
     
 
 

@@ -1,33 +1,40 @@
-main:
-    image: loomchild/flarum
-    links:
-        - db
-    ports: 
-        - 80
-    volumes_from: 
-        - main_data
-    environment:
-        - VIRTUAL_HOST
-        - VIRTUAL_PORT=80
+version: '2'
 
-main_data:
-    image: tianon/true
-    volumes:
-        - /var/www/html
+services:
+ 
+    main:
+        image: loomchild/flarum
+        links:
+            - db
+        ports: 
+            - 80
+        volumes_from: 
+            - main_data
+        environment:
+            - VIRTUAL_HOST
+            - VIRTUAL_PORT=80
+        network_mode: "bridge"
 
-db:
-    image: loomchild/mariadb
-    ports: 
-        - 3306
-    environment:
-        MYSQL_ROOT_PASSWORD: root
-        MYSQL_DATABASE: flarum
-        MYSQL_USER: flarum
-        MYSQL_PASSWORD: flarum
-    volumes_from: 
-        - db_data
+    main_data:
+        image: tianon/true
+        volumes:
+            - /var/www/html
 
-db_data:
-    image: tianon/true
-    volumes:
-        - /var/lib/mysql
+    db:
+        image: loomchild/mariadb
+        ports: 
+            - 3306
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_DATABASE: flarum
+            MYSQL_USER: flarum
+            MYSQL_PASSWORD: flarum
+        volumes_from: 
+            - db_data
+        network_mode: "bridge"
+
+    db_data:
+        image: tianon/true
+        volumes:
+            - /var/lib/mysql
+

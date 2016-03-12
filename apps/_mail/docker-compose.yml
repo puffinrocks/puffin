@@ -1,10 +1,15 @@
-main:
-    image: alterrebe/postfix-relay
-    environment:
-       - EXT_RELAY_HOST=${MAIL_SERVER}
-       - EXT_RELAY_PORT=${MAIL_PORT}
-       - SMTP_LOGIN=${MAIL_USERNAME}
-       - SMTP_PASSWORD=${MAIL_PASSWORD}
-       - USE_TLS=yes
-    ports:
-        - 25
+version: '2'
+
+services:
+ 
+    main:
+        image: alterrebe/postfix-relay
+        environment:
+           - EXT_RELAY_HOST=${MAIL_SERVER}
+           - EXT_RELAY_PORT=${MAIL_PORT}
+           - SMTP_LOGIN=${MAIL_USERNAME}
+           - SMTP_PASSWORD=${MAIL_PASSWORD}
+           - USE_TLS=yes
+        ports:
+            - 25
+        network_mode: "bridge"
