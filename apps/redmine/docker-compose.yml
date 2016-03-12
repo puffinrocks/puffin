@@ -6,14 +6,12 @@ services:
         image: redmine:latest
         ports: 
             - 3000
-        volumes_from: 
-            - main_data
+        volumes: 
+            - main_data:/usr/src/redmine/files
         environment:
             - VIRTUAL_HOST
             - VIRTUAL_PORT=3000
         network_mode: "bridge"
 
+volumes:
     main_data:
-        image: tianon/true
-        volumes:
-            - /usr/src/redmine/files

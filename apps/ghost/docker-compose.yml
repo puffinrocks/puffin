@@ -6,15 +6,12 @@ services:
         image: loomchild/ghost
         ports: 
             - 2368
-        volumes_from: 
-            - main_data
+        volumes: 
+            - main_data:/var/lib/ghost
         environment:
             - VIRTUAL_HOST
             - VIRTUAL_PORT=2368
         network_mode: "bridge"
 
+volumes:
     main_data:
-        image: tianon/true
-        volumes:
-            - /var/lib/ghost
-

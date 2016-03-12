@@ -8,26 +8,21 @@ services:
             - db
         ports:
             - 3000
-        volumes_from: 
-            - main_data
+        volumes: 
+            - main_data:/app/uploads
         environment:
             - VIRTUAL_HOST
             - VIRTUAL_PORT=3000
         network_mode: "bridge"
 
-    main_data:
-        image: tianon/true
-        volumes:
-            - /app/uploads
-
     db:
         image: loomchild/mongo
-        volumes_from: 
-            - db_data
+        volumes: 
+            - db_data_db:/data/db
+            - db_data_configdb:/data/configdb
         network_mode: "bridge"
 
-    db_data:
-        image: tianon/true
-        volumes:
-            - /data/db 
-            - /data/configdb
+volumes:
+    main_data:
+    db_data_db:
+    db_data_configdb:
