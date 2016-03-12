@@ -4,7 +4,7 @@ services:
 
     main:
         image: rocket.chat:latest
-        links:
+        depends_on:
             - db
         ports:
             - 3000
@@ -13,16 +13,22 @@ services:
         environment:
             - VIRTUAL_HOST
             - VIRTUAL_PORT=3000
-        network_mode: "bridge"
+        networks:
+            - front
+            - default
 
     db:
         image: loomchild/mongo
         volumes: 
             - db_data_db:/data/db
             - db_data_configdb:/data/configdb
-        network_mode: "bridge"
 
 volumes:
     main_data:
     db_data_db:
     db_data_configdb:
+
+networks:
+    front:
+        external:
+            name: "network_front"

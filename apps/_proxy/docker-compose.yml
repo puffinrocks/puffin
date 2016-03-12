@@ -3,10 +3,15 @@ version: '2'
 services:
 
     main:
-        image: jwilder/nginx-proxy
+        image: loomchild/nginx-proxy
         volumes: 
             - /var/run/docker.sock:/tmp/docker.sock:ro
         ports:
             - "80:80"
-        network_mode: "bridge"
+        networks:
+            - front
 
+networks:
+    front:
+        external:
+            name: "network_front"

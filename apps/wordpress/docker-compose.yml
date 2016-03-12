@@ -4,8 +4,8 @@ services:
 
     main:
         image: wordpress
-        links:
-            - db:mysql
+        depends_on:
+            - db
         ports:
             - 80
         volumes: 
@@ -13,16 +13,24 @@ services:
         environment:
             - VIRTUAL_HOST
             - VIRTUAL_PORT=80
-        network_mode: "bridge"
+            - WORDPRESS_DB_HOST=db
+            - WORDPRESS_DB_PASSWORD=wordpress
+        networks:
+            - front
+            - default
     
     db:
         image: loomchild/mariadb
         environment:
-            MYSQL_ROOT_PASSWORD: example
+            MYSQL_ROOT_PASSWORD: wordpress
         volumes: 
             - db_data:/var/lib/mysql
-        network_mode: "bridge"
 
 volumes:
     main_data:
     db_data:
+
+networks:
+    front:
+        external:
+            name: "network_front"

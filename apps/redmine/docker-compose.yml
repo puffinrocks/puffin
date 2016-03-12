@@ -11,7 +11,14 @@ services:
         environment:
             - VIRTUAL_HOST
             - VIRTUAL_PORT=3000
-        network_mode: "bridge"
+        networks:
+            - front
+            - default
 
 volumes:
     main_data:
+
+networks:
+    front:
+        external:
+            name: "network_front"
