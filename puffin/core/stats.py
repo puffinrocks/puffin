@@ -22,7 +22,7 @@ def get_stats():
     return stats    
 
 def get_users():
-    return len(get_all_users())
+    return len([u for u in get_all_users() if u.confirmed])
 
 def get_containers():
     return len(docker.get_containers(docker.get_client()))
