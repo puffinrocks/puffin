@@ -1,18 +1,22 @@
-main:
-    extends:
-        file: docker-compose-common.yml
-        service: puffin
-    links:
-        - db
-    environment:
-        - SERVER_NAME=localhost
-        - VIRTUAL_HOST=localhost
-        - SECRET_KEY=puffin
-        - SECURITY_REGISTERABLE=false
-        - MAIL_SUPPRESS_SEND=true
+version: '2'
 
-db:
-    extends:
-        file: docker-compose-common.yml
-        service: db
+services:
+
+    main:
+        extends:
+            file: docker-compose-common.yml
+            service: puffin
+        depends_on:
+            - db
+        environment:
+            - SERVER_NAME=localhost
+            - VIRTUAL_HOST=localhost
+            - SECRET_KEY=puffin
+            - SECURITY_REGISTERABLE=false
+            - MAIL_SUPPRESS_SEND=true
+
+    db:
+        extends:
+            file: docker-compose-common.yml
+            service: db
 

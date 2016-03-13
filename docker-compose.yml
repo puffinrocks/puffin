@@ -1,22 +1,31 @@
-main:
-    extends:
-        file: docker-compose-common.yml
-        service: puffin
-    links:
-        - db
-        - mail
-    ports: 
-        - "8080:8080"
+version: '2'
 
-db:
-    extends:
-        file: docker-compose-common.yml
-        service: db
-    ports:
-        - "15432:5432"
+services:
 
-mail:
-    extends:
-        file: docker-compose-common.yml
-        service: mail
+    main:
+        extends:
+            file: docker-compose-common.yml
+            service: puffin
+        depends_on:
+            - db
+            - mail
+        ports: 
+            - "8080:8080"
+    
+    db:
+        extends:
+            file: docker-compose-common.yml
+            service: db
+        ports:
+            - "15432:5432"
 
+    mail:
+        extends:
+            file: docker-compose-common.yml
+            service: mail
+
+    dns:
+        image: loomchild/dns
+        depends_on:
+            - main
+        network_mode: "service:main"

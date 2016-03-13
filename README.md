@@ -164,8 +164,9 @@ refer to their documentation on how to preserve this setting):
 
 Update your /etc/hosts file, by adding the following lines:
 
+    127.0.1.1 flarum.puffin.localhost
     127.0.1.1 ghost.puffin.localhost
-    127.0.1.1 rocket.chat.puffin.localhost
+    127.0.1.1 rocketchat.puffin.localhost
     127.0.1.1 owncloud.puffin.localhost
     127.0.1.1 redmine.puffin.localhost
     127.0.1.1 wordpress.puffin.localhost

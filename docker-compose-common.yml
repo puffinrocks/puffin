@@ -1,25 +1,29 @@
-puffin:
-    build: .
-    volumes: 
-        - /var/run/docker.sock:/var/run/docker.sock
-    environment:
-        - DB_HOST=db
-        - DB_PORT=5432
-        - DB_NAME=puffin
-        - MAIL_SERVER=mail
-        - MAIL_PORT=1025
-    ports: 
-        - "8080"
+version: '2'
 
-db:
-    image: postgres
-    ports:
-         - "5432"
+services:
 
-mail:
-    image: mailhog/mailhog
-    ports: 
-        - "1025:1025"
-        - "8025:8025"
+    puffin:
+        build: .
+        volumes: 
+            - /var/run/docker.sock:/var/run/docker.sock
+        environment:
+            - DB_HOST=db
+            - DB_PORT=5432
+            - DB_NAME=puffin
+            - MAIL_SERVER=mail
+            - MAIL_PORT=1025
+        ports: 
+            - "8080"
+
+    db:
+        image: postgres
+        ports:
+             - "5432"
+
+    mail:
+        image: mailhog/mailhog
+        ports: 
+            - "1025:1025"
+            - "8025:8025"
 
 
