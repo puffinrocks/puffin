@@ -1,0 +1,22 @@
+version: '2'
+
+services:
+
+    main:
+        image: loomchild/dns
+        ports: 
+            - 53
+        networks:
+            dns:
+                ipv4_address: 172.16.100.100
+            back:
+
+networks:
+    dns:
+        ipam:
+            config:
+                - subnet: 172.16.100.0/24
+    back:
+        external:
+            name: "network_back"
+
