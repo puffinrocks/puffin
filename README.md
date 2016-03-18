@@ -168,7 +168,7 @@ During testing you can use embedded test mail server, accesible via
 To really send emails from Puffin and the applications you need to configure few environment variables 
 before starting Puffin. It's probably easiest to register to an external email service to avoid 
 being classified as spammer. The variables are 
-(not all are obligatory, see [Configuration](#Configuration) for details):
+(not all are obligatory, see [Configuration](#configuration) for details):
 
     MAIL_SERVER
     MAIL_PORT
