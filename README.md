@@ -42,12 +42,10 @@ using [Flask](http://flask.pocoo.org/) web microframework.
 The easiest way to deploy Puffin and start playing with it to use 
 [Docker Compose](https://docs.docker.com/compose/):
 
-	docker-compose up -d
+	docker-compose up 
 
 Go to [http://localhost:8080](http://localhost:8080) to acces Puffin. 
-Log In as user "puffin", password "puffin". Alternatively you can register 
-your own user and confirm the email address via 
-[http://localhost:8025](http://localhost:8025). 
+Log In as user "puffin", password "puffin". 
 
 To rebuild the code:
 
@@ -125,7 +123,7 @@ Read the message carefully and install the development versions of offending lib
 
 #### Run dependencies
 
-Run dependencies, such as database and mail server, and configure them:
+Run dependencies, such as database server, mail server, DNS, and configure them:
 
     docker-compose -f docker-compose-deps.yml up -d
 
@@ -144,25 +142,14 @@ I recommend using [reload](https://github.com/loomchild/reload):
 
 To access applications from localhost you need to set-up DNS. 
 On public server you need to configure wildacard DNS record to point to your domain.
-On localhost there are two alternative solutions to this problem: 
-set up a local DNS server or update /etc/hosts file.
+On localhost there are many alternative solutions to this problem. 
 
-#### Set-up local DNS server using dnsmasq
+The easiest is to update your /etc/resolv.conf file to include the following line:
 
-First install dnsmasq and use the following configuration file 
-(on Debian create a new file in /etc/dnsmasq.d/): 
-    
-    address=/localhost/127.0.0.1
+    nameserver 172.16.100.100
 
-Next configure your nameservers in resolv.conf by adding the following line at the beginning 
-(caution - this file is often overwritten by other programs such as NetworkManager - 
-refer to their documentation on how to preserve this setting):
-
-    nameserver 127.0.0.1
-
-#### Update /etc/hosts
-
-Update your /etc/hosts file, by adding the following lines:
+Alternatively you can add the following to your /etc/hosts file (although this solution is less
+elegant and flexible, and email sending won't work):
 
     127.0.1.1 flarum.puffin.localhost
     127.0.1.1 ghost.puffin.localhost
@@ -171,8 +158,26 @@ Update your /etc/hosts file, by adding the following lines:
     127.0.1.1 redmine.puffin.localhost
     127.0.1.1 wordpress.puffin.localhost
     127.0.1.1 gogs.puffin.localhost
+    127.0.1.1 mailhog.puffin.localhost
 
-Each line corresponds to an application and user, add more if you want to try more applications. 
+### Email
+
+During testing you can use embedded test mail server, accesible via 
+[mailhog.puffin.localhost](http://mailhog.puffin.localhost).
+
+To really send emails from Puffin and the applications you need to configure few environment variables 
+before starting Puffin. It's probably easiest to register to an external email service to avoid 
+being classified as spammer. The variables are 
+(not all are obligatory, see [Configuration](#Configuration) for details):
+
+    MAIL_SERVER
+    MAIL_PORT
+    MAIL_USE_TLS
+    MAIL_USE_SSS
+    MAIL_USERNAME
+    MAIL_PASSWORD
+    MAIL_DEFAULT_SENDER
+    MAIL_SUPPRESS_SEND
 
 ### Docker Machine
 
