@@ -11,8 +11,10 @@ services:
             - VIRTUAL_HOST
             - VIRTUAL_PORT=8025
         networks:
-            - front
-            - back
+            front:
+            back:
+                aliases:
+                    - mailhog
 
 networks:
     front:
