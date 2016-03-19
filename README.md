@@ -144,9 +144,11 @@ To access applications from localhost you need to set-up DNS.
 On public server you need to configure wildacard DNS record to point to your domain.
 On localhost there are many alternative solutions to this problem. 
 
-The easiest is to update your /etc/resolv.conf file to include the following line:
+The easiest is to update your /etc/resolv.conf file to include the following line at the top:
 
-    nameserver 172.16.100.100
+    nameserver 127.0.0.1
+
+Make sure that you disable your local DNS server, such as dnsmasq, before running Puffin.
 
 Alternatively you can add the following to your /etc/hosts file (although this solution is less
 elegant and flexible, and email sending won't work):
