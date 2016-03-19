@@ -104,15 +104,25 @@ def install_proxy():
     return _install("_proxy")
 
 def install_mail():
-    return _install("_mail")
+    env = {
+        'MAIL_SERVER': app.config['MAIL_SERVER'], 
+        'MAIL_PORT': str(app.config['MAIL_PORT']),
+        'MAIL_USERNAME': app.config['MAIL_USERNAME'] or 'username',
+        'MAIL_PASSWORD': app.config['MAIL_PASSWORD'] or 'password',
+    }
+    
+    return _install("_mail", **env)
 
-def _install(name):
+def install_dns():
+    return _install("_dns")
+
+def _install(name, **environment):
     client = get_client()
     user = get_user("puffin")
     application = get_application(name)
     if get_application_status(client, user, application) != ApplicationStatus.DELETED:
         return False
-    compose_start(get_machine(), user, application)
+    compose_start(get_machine(), user, application, **environment)
     return True
 
 def create_networks():

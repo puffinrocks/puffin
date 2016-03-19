@@ -8,6 +8,7 @@ from cachetools import cached, TTLCache
 from os import listdir
 from os.path import join, exists, isdir, isfile
 import yaml
+import re
 
 APPLICATION_HOME = join(HOME, "apps")
 application_cache = TTLCache(maxsize=1, ttl=120)
@@ -75,7 +76,7 @@ def get_application_domain(user, application):
 
 def get_application_name(user, application):
     # docker-compose sanitizes project name, see https://github.com/docker/compose/issues/2119
-    return user.login + "x" + application.application_id
+    return re.sub(r'[^a-z0-9]', '', user.login + "x" + application.application_id).lower()
 
 def get_application_settings(user_id, application_id):
     application_settings = db.session.query(ApplicationSettings).filter_by(
