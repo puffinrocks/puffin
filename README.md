@@ -127,6 +127,13 @@ Run dependencies, such as database server, mail server, DNS, and configure them:
 
     docker-compose -f docker-compose-deps.yml up -d
 
+#### Set-up environment variables
+
+Set-up the following environment variables
+
+    export MAIL_SERVER=mailhog
+    export MAIL_PORT=1025
+
 #### Run Puffin
 
 Finally run Puffin:
@@ -147,6 +154,7 @@ On localhost there are many alternative solutions to this problem.
 The easiest is to update your /etc/resolv.conf file to include the following line at the top:
 
     nameserver 127.0.0.1
+    options ndots:0
 
 Make sure that you disable your local DNS server, such as dnsmasq, before running Puffin.
 
