@@ -33,8 +33,8 @@ class DefaultConfig:
     DB_PASSWORD = ""
 
     # SMTP connection settings used to send emails
-    MAIL_SERVER = "localhost"
-    MAIL_PORT = 1025
+    MAIL_SERVER = "mail"
+    MAIL_PORT = 25
     MAIL_USE_TLS = False
     MAIL_USE_SSL = False
     MAIL_USERNAME = None

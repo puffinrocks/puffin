@@ -16,6 +16,7 @@ services:
             - "machine network" 
             - "machine proxy"
             - "machine dns"
+            - "machine mail"
             - "server"
         ports: 
             - "8080:8080"
@@ -26,9 +27,4 @@ services:
             service: db
         ports:
             - "15432:5432"
-
-    mail:
-        extends:
-            file: docker-compose-common.yml
-            service: mail
 

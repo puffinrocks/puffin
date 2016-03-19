@@ -8,13 +8,13 @@ services:
             service: puffin
         depends_on:
             - db
-            - mail
         command: 
             - "db create"
             - "db upgrade"
             - "user create puffin"
             - "machine network" 
             - "machine proxy"
+            - "machine mail"
             - "machine dns"
 
     db:
@@ -23,9 +23,4 @@ services:
             service: db
         ports:
             - "15432:5432"
-
-    mail:
-        extends:
-            file: docker-compose-common.yml
-            service: mail
 
