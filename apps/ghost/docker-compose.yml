@@ -13,6 +13,7 @@ services:
             - VIRTUAL_PORT=2368
         networks:
             - front
+            - back
             - default
 
 volumes:
@@ -22,4 +23,6 @@ networks:
     front:
         external: 
             name: "network_front"
-
+    back:
+        external:
+            name: "network_back"

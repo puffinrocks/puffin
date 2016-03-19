@@ -6,21 +6,14 @@ config = {
     development: {
         url: 'http://' + process.env.VIRTUAL_HOST,
         
-        // Example mail config
         // Visit http://support.ghost.org/mail for instructions
-        // ```
-        //  mail: {
-        //      transport: 'SMTP',
-        //      options: {
-        //          service: 'Mailgun',
-        //          auth: {
-        //              user: '', // mailgun username
-        //              pass: ''  // mailgun password
-        //          }
-        //      }
-        //  },
-        // ```
-        mail: {},
+        mail: {
+            transport: 'SMTP',
+            options: {
+                host: 'mail',
+                port: 25
+            },
+        },
         
         database: {
             client: 'sqlite3',
