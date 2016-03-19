@@ -46,6 +46,9 @@ def init():
     url = get_url(app.config["DB_USER"], app.config["DB_PASSWORD"], 
         app.config["DB_HOST"], app.config["DB_PORT"], app.config["DB_NAME"])
     app.config['SQLALCHEMY_DATABASE_URI'] = url
+   
+    # Track modifications of objects and emit signals, expensive, perhaps disable
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True  
     
     db.init_app(app)
     # See http://piotr.banaszkiewicz.org/blog/2012/06/29/flask-sqlalchemy-init_app/, option 2
