@@ -12,9 +12,7 @@ psycopg2            >= 2.6, < 2.7
 bcrypt              >= 2.0, < 2.1
 cachetools          >= 1.1, < 1.2
 PyYAML              >= 3.11, < 3.12
-#docker-py           >= 1.7, < 1.8
-git+https://github.com/docker/docker-py@7befe694bd21e3c54bb1d7825270ea4bd6864c13
-#docker-compose      >= 1.6.2, < 1.7
-git+https://github.com/docker/compose@94b1862579049585c48a9f4039f275c02ebeb234    
+docker-py           >= 1.7, < 1.8
+docker-compose      >= 1.6.2, < 1.7
 requests            >= 2.7, < 2.8
 dumb-init           >= 1.0, < 1.1
