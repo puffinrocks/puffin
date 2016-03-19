@@ -12,4 +12,12 @@ services:
            - USE_TLS=yes
         ports:
             - 25
-        network_mode: "bridge"
+        networks:
+            back:
+                aliases:
+                    - mail
+
+networks:
+    back:
+        external:
+            name: "network_back"
