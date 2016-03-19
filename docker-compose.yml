@@ -9,6 +9,14 @@ services:
         depends_on:
             - db
             - mail
+        command: 
+            - "db create"
+            - "db upgrade"
+            - "user create puffin"
+            - "machine network" 
+            - "machine proxy"
+            - "machine dns"
+            - "server"
         ports: 
             - "8080:8080"
     
@@ -24,8 +32,3 @@ services:
             file: docker-compose-common.yml
             service: mail
 
-    dns:
-        image: loomchild/dns
-        depends_on:
-            - main
-        network_mode: "service:main"

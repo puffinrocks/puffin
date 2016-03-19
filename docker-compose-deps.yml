@@ -9,7 +9,13 @@ services:
         depends_on:
             - db
             - mail
-        command: [""]
+        command: 
+            - "db create"
+            - "db upgrade"
+            - "user create puffin"
+            - "machine network" 
+            - "machine proxy"
+            - "machine dns"
 
     db:
         extends:
