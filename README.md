@@ -42,7 +42,7 @@ using [Flask](http://flask.pocoo.org/) web microframework.
 The easiest way to deploy Puffin and start playing with it to use 
 [Docker Compose](https://docs.docker.com/compose/):
 
-	docker-compose up 
+	docker-compose up
 
 Go to [http://localhost:8080](http://localhost:8080) to acces Puffin. 
 Log In as user "puffin", password "puffin". 
@@ -50,6 +50,9 @@ Log In as user "puffin", password "puffin".
 To rebuild the code:
 
     docker-compose build
+
+Before accessing the apps you also need to [set-up DNS](#set-up-dns)
+on your computer.
 
 ### Private deployment
 
@@ -125,14 +128,8 @@ Read the message carefully and install the development versions of offending lib
 
 Run dependencies, such as database server, mail server, DNS, and configure them:
 
-    docker-compose -f docker-compose-deps.yml up -d
-
-#### Set-up environment variables
-
-Set-up the following environment variables
-
-    export MAIL_SERVER=mailhog
-    export MAIL_PORT=1025
+    docker-compose up -d
+    docker stop puffin_main_1
 
 #### Run Puffin
 
@@ -158,32 +155,24 @@ The easiest is to update your /etc/resolv.conf file to include the following lin
 
 Make sure that you disable your local DNS server, such as dnsmasq, before running Puffin.
 
-Alternatively you can add the following to your /etc/hosts file (although this solution is less
-elegant and flexible, and email sending won't work):
-
-    127.0.1.1 flarum.puffin.localhost
-    127.0.1.1 ghost.puffin.localhost
-    127.0.1.1 rocketchat.puffin.localhost
-    127.0.1.1 owncloud.puffin.localhost
-    127.0.1.1 redmine.puffin.localhost
-    127.0.1.1 wordpress.puffin.localhost
-    127.0.1.1 gogs.puffin.localhost
-    127.0.1.1 mailhog.puffin.localhost
-
 ### Email
 
-During testing you can use embedded test mail server, accesible via 
-[mailhog.puffin.localhost](http://mailhog.puffin.localhost).
+During testing you can use embedded test mail server which is accessible via 
+[http://localhost:8025](http://localhost:8025).
+
+When running natively, set the following environment variables before starting Puffin:
+
+    export MAIL_SERVER=mailhog
+    export MAIL_PORT=1025
 
 To really send emails from Puffin and the applications you need to configure few environment variables 
 before starting Puffin. It's probably easiest to register to an external email service to avoid 
-being classified as spammer. The variables are 
-(not all are obligatory, see [Configuration](#configuration) for details):
+being classified as spammer. The variables are (not all are obligatory, see [Configuration](#configuration) for details):
 
     MAIL_SERVER
     MAIL_PORT
     MAIL_USE_TLS
-    MAIL_USE_SSS
+    MAIL_USE_SSL
     MAIL_USERNAME
     MAIL_PASSWORD
     MAIL_DEFAULT_SENDER
