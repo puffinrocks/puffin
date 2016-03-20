@@ -56,12 +56,6 @@ def mail():
     if docker.install_mail():
         print("Installed Docker mail on machine")
 
-@machine.command
-def dns():
-    "Install Docker DNS"
-    if docker.install_dns():
-        print("Installed Docker DNS server on machine at 172.16.100.100")
-
 
 user = Manager(usage="Manage users")
 
