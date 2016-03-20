@@ -7,6 +7,7 @@ from . import applications
 from . import machine
 from . import compose
 from . import docker
+from . import stats
 
 def init():
     config.init()
