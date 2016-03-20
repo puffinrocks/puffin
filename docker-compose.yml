@@ -20,9 +20,6 @@ services:
             - "machine mail"
             - "machine dns"
             - "server"
-        environment:
-            - MAIL_SERVER=mailhog
-            - MAIL_PORT=1025
         networks:
             - front
             - back

@@ -160,11 +160,6 @@ Make sure that you disable your local DNS server, such as dnsmasq, before runnin
 During testing you can use embedded test mail server which is accessible via 
 [http://localhost:8025](http://localhost:8025).
 
-When running natively, set the following environment variables before starting Puffin:
-
-    export MAIL_SERVER=mailhog
-    export MAIL_PORT=1025
-
 To really send emails from Puffin and the applications you need to configure few environment variables 
 before starting Puffin. It's probably easiest to register to an external email service to avoid 
 being classified as spammer. The variables are (not all are obligatory, see [Configuration](#configuration) for details):
