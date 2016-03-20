@@ -54,11 +54,8 @@ services:
     mailhog:
         image: mailhog/mailhog
         ports: 
-            - 8025
+            - "8025:8025"
             - 1025
-        environment:
-            - VIRTUAL_HOST=mailhog.puffin.localhost
-            - VIRTUAL_PORT=8025
         networks:
             front:
             back:
