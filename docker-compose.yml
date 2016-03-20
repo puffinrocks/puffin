@@ -8,26 +8,64 @@ services:
             - /var/run/docker.sock:/var/run/docker.sock
         depends_on:
             - db
+            - dns
+            - mailhog
         ports: 
             - "8080:8080"
         command: 
             - "db create"
             - "db upgrade"
             - "user create puffin"
-            - "machine network" 
             - "machine proxy"
-            - "machine dns"
             - "machine mail"
+            - "machine dns"
             - "server"
         environment:
-            - DB_HOST=db
-            - DB_PORT=5432
-            - DB_NAME=puffin
             - MAIL_SERVER=mailhog
             - MAIL_PORT=1025
+        networks:
+            - front
+            - back
+            - default
     
     db:
         image: postgres
         ports:
-            - "15432:5432"
+            - 5432
+        networks:
+            back:
+                aliases:
+                    - db
+    
+    dns:
+        image: loomchild/dns
+        ports: 
+            - 53:53/udp
+        networks:
+            back:
+                aliases:
+                    - dns
 
+    dnsfix:
+        image: sequenceiq/alpine-dig
+        entrypoint: ["/bin/sh", "-c", "echo nameserver `dig +short dns` > /etc/resolv.conf"]
+        network_mode: "service:main"
+
+    mailhog:
+        image: mailhog/mailhog
+        ports: 
+            - 8025
+            - 1025
+        environment:
+            - VIRTUAL_HOST=mailhog.puffin.localhost
+            - VIRTUAL_PORT=8025
+        networks:
+            front:
+            back:
+                aliases:
+                    - mailhog
+
+networks:
+    
+    front:
+    back:
