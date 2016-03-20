@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/local/bin/dumb-init /bin/bash
 set -e
 
 HOST=`/sbin/ip route|awk '/default/ { print $3 }'`
