@@ -128,11 +128,9 @@ def _install(name, **environment):
 def create_networks():
     #TODO: replace with running _network app and remove prefix once custom network names supported
     client = get_client()
-    networks = client.networks(names=("network_front", "network_back"))
+    networks = client.networks(names=("puffin_front", "puffin_back"))
     if len(networks) == 2:
         return False
-    client.create_network("network_front")
-    client.create_network("network_back")
+    client.create_network("puffin_front")
+    client.create_network("puffin_back")
     return True
-
-

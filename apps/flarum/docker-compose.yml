@@ -36,4 +36,4 @@ volumes:
 networks:
     front:
         external:
-            name: "network_front"
+            name: "puffin_front"

@@ -22,7 +22,7 @@ volumes:
 networks:
     front:
         external: 
-            name: "network_front"
+            name: "puffin_front"
     back:
         external:
-            name: "network_back"
+            name: "puffin_back"

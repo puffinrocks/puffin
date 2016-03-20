@@ -20,4 +20,4 @@ services:
 networks:
     back:
         external:
-            name: "network_back"
+            name: "puffin_back"
