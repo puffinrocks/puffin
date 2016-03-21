@@ -26,7 +26,7 @@ class DefaultConfig:
     SECRET_KEY = b"puffin"
     
     # Postgres database connection settings
-    DB_HOST = "db"
+    DB_HOST = "puffindb"
     DB_PORT = "5432"
     DB_NAME = "puffin"
     DB_USER = "postgres"

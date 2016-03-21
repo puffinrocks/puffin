@@ -7,7 +7,7 @@ services:
         volumes: 
             - /var/run/docker.sock:/var/run/docker.sock
         depends_on:
-            - db
+            - puffindb
             - dns
             - mailhog
         ports: 
@@ -25,14 +25,12 @@ services:
             - back
             - default
     
-    db:
+    puffindb:
         image: postgres
         ports:
             - 5432
         networks:
             back:
-                aliases:
-                    - db
     
     dns:
         image: loomchild/dns
@@ -40,8 +38,6 @@ services:
             - 53:53/udp
         networks:
             back:
-                aliases:
-                    - dns
 
     dnsfix:
         image: sequenceiq/alpine-dig
@@ -56,8 +52,6 @@ services:
         networks:
             front:
             back:
-                aliases:
-                    - mailhog
 
 networks:
     
