@@ -3,7 +3,7 @@ version: '2'
 services:
 
     main:
-        image: wordpress
+        image: loomchild/wordpress
         depends_on:
             - db
         ports:
@@ -17,6 +17,7 @@ services:
             - WORDPRESS_DB_PASSWORD=wordpress
         networks:
             - front
+            - back
             - default
     
     db:
@@ -34,3 +35,6 @@ networks:
     front:
         external:
             name: "puffin_front"
+    back:
+        external:
+            name: "puffin_back"
