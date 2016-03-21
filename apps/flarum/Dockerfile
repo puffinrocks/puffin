@@ -8,6 +8,7 @@ RUN apt-get update && apt-get install -y \
         libgd-dev \
         libjpeg62-turbo-dev \
         libpng12-dev \
+        mysql-client \
     && docker-php-ext-install -j$(nproc) mbstring zip pdo pdo_mysql json dom fileinfo mcrypt \
     && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
     && docker-php-ext-install -j$(nproc) gd
@@ -33,7 +34,7 @@ RUN mkdir -p /usr/src/flarum \
     && cd /usr/src/flarum \
     && composer create-project flarum/flarum . --stability=beta
 
-COPY config.php /usr/src/flarum
+COPY config.* /usr/src/flarum/
 
 COPY docker-entrypoint.sh /entrypoint.sh
 

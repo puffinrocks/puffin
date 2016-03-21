@@ -15,6 +15,7 @@ services:
             - VIRTUAL_PORT=80
         networks:
             - front
+            - back
             - default
 
     db:
@@ -37,3 +38,6 @@ networks:
     front:
         external:
             name: "puffin_front"
+    back:
+        external:
+            name: "puffin_back"
