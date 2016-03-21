@@ -3,7 +3,7 @@ version: '2'
 services:
 
     main:
-        image: owncloud:latest
+        image: loomchild/owncloud
         ports: 
             - 80
         volumes: 
@@ -13,6 +13,7 @@ services:
             - VIRTUAL_PORT=80
         networks:
             - front
+            - back
             - default
 
 volumes:
@@ -22,3 +23,6 @@ networks:
     front:
         external:
             name: "puffin_front"
+    back:
+        external:
+            name: "puffin_back"
