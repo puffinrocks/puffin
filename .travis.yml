@@ -13,7 +13,8 @@ before_install:
 install: "pip install -r requirements-dev.txt"
 
 before_script:
-  - docker-compose up -d
+  - docker-compose up -d --no-deps puffindb
+  - docker-compose up -d --no-deps main
   - sleep 15
   - docker stop puffin_main_1
 
