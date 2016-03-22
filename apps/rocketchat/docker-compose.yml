@@ -13,8 +13,10 @@ services:
         environment:
             - VIRTUAL_HOST
             - VIRTUAL_PORT=3000
+            - MAIL_URL=smtp://mail:25
         networks:
             - front
+            - back
             - default
 
     db:
@@ -32,3 +34,6 @@ networks:
     front:
         external:
             name: "puffin_front"
+    back:
+        external:
+            name: "puffin_back"
