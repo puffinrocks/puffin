@@ -13,7 +13,8 @@ before_install:
 install: "pip install -r requirements-dev.txt"
 
 before_script:
-  - docker-compose -f docker-compose-deps.yml up -d
+  - docker-compose -f docker-compose.yml up -d
+  - docker stop puffin_main_1
 
 script: py.test
  
