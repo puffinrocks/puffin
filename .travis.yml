@@ -16,7 +16,7 @@ before_script:
   - docker-compose run -d --no-deps puffindb
   - docker-compose run -d --no-deps main
   - sleep 15
-  - docker stop puffin_main_1
+  - docker stop puffin_main_run_1
 
 script: py.test
  
