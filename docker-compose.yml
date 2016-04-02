@@ -12,14 +12,6 @@ services:
             - mailhog
         ports: 
             - "8080:8080"
-        command: 
-            - "db create"
-            - "db upgrade"
-            - "user create puffin"
-            - "machine proxy"
-            - "machine mail"
-            - "machine dns"
-            - "server"
         networks:
             - front
             - back
