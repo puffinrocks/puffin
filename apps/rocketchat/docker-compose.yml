@@ -1,5 +1,14 @@
 version: '2'
 
+labels:
+
+    rocks.puffin.name: Rocket.Chat 
+    rocks.puffin.subtitle: web chat platform 
+    rocks.puffin.website: https://rocket.chat/ 
+    rocks.puffin.description: |
+        Rocket.Chat is the ultimate web chat platform.
+        From group messages and video calls all the way to helpdesk killer features.
+
 services:
 
     main:

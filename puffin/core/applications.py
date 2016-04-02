@@ -36,25 +36,31 @@ def get_applications():
     applications = {}
     for application_id in listdir(APPLICATION_HOME):
         application = load_application(application_id)
-        applications[application_id] = application
+        if application:
+            applications[application_id] = application
     return applications
         
 def load_application(application_id):
     path = join(APPLICATION_HOME, application_id)
-    with open(join(path, "manifest.yml")) as manifest_file:    
-        manifest = yaml.load(manifest_file)
 
-        name = manifest.get("name", application_id)
-        logo = join(application_id, manifest.get("logo", "logo.png"))
-        subtitle = manifest.get("subtitle", "")
-        website = manifest.get("website", "")
-        description = manifest.get("description", "")
-        compose = manifest.get("compose", "docker-compose.yml")
-        screenshots = load_screenshots(application_id, 
-            manifest.get("screenshots", "screenshots/"))
+    compose_path = join(path, "docker-compose.yml")
+    if not isfile(compose_path):
+        return None
+
+    with open(compose_path) as compose_file:    
+        compose = yaml.load(compose_file)
+        labels = compose.get("labels", {})
+
+        name = labels.get("rocks.puffin.name", application_id)
+        subtitle = labels.get("rocks.puffin.subtitle", "")
+        website = labels.get("rocks.puffin.website", "")
+        description = labels.get("rocks.puffin.description", "")
+        
+        logo = join(application_id, labels.get("rocks.puffin.logo", "logo.png"))
+        screenshots = load_screenshots(application_id, labels.get("rocks.puffin.screenshots", "screenshots/"))
 
         application = Application(application_id, path, name, logo, subtitle, 
-            website, description, compose, screenshots)
+            website, description, "docker-compose.yml", screenshots)
         return application
 
 def load_screenshots(application_id, screenshot_dir):

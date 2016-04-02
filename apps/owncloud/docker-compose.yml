@@ -1,5 +1,14 @@
 version: '2'
 
+labels:
+
+    rocks.puffin.name: ownCloud 
+    rocks.puffin.subtitle: file sync and share server
+    rocks.puffin.website: https://owncloud.org/ 
+    rocks.puffin.description: |
+        A safe home for all your data. 
+        Access & share your files, calendars, contacts, mail & more from any device, on your terms.
+
 services:
 
     main:

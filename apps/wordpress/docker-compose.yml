@@ -1,5 +1,13 @@
 version: '2'
 
+labels:
+
+    rocks.puffin.name: WordPress 
+    rocks.puffin.subtitle: blog tool, publishing platform, and CMS 
+    rocks.puffin.website: https://wordpress.org/ 
+    rocks.puffin.description: |
+        WordPress is web software you can use to create a beautiful website, blog, or app. 
+
 services:
 
     main:

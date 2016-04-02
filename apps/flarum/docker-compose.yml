@@ -1,5 +1,15 @@
 version: '2'
 
+labels:
+
+    rocks.puffin.name: Flarum
+    rocks.puffin.subtitle: forums made simple
+    rocks.puffin.website: http://flarum.org
+    rocks.puffin.description: |
+        Flarum is the next-generation forum software that makes online discussion fun. 
+        It's simple, fast, and free. 
+        Administrator username is 'admin' and password is 'password'.
+
 services:
  
     main:

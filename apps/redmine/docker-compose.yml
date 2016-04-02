@@ -1,5 +1,14 @@
 version: '2'
 
+labels:
+
+    rocks.puffin.name: Redmine 
+    rocks.puffin.subtitle: project management and issue tracking tool
+    rocks.puffin.website: http://www.redmine.org/ 
+    rocks.puffin.description: |
+        Redmine is a web-based project management and issue tracking tool.
+        Default username: admin, password: admin
+
 services:
 
     main:
