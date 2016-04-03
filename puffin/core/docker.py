@@ -1,9 +1,8 @@
 from .machine import get_machine, get_tls_config
 from .compose import compose_start, compose_stop
-from .applications import get_application, get_application_domain, get_application_list, get_application_name
+from .applications import Application, ApplicationStatus, get_application, get_application_domain, get_application_list, get_application_name
 from .queue import task, task_exists
-from .model import User, Application, ApplicationStatus
-from .security import get_user
+from .security import User, get_user
 from .db import db
 from .. import app
 

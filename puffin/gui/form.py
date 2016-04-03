@@ -2,7 +2,7 @@ from flask.ext.wtf import Form
 from wtforms import StringField, IntegerField, PasswordField, SubmitField, SelectField
 from wtforms.validators import Required, Length, Regexp
 from ..core.db import db
-from ..core.model import User
+from ..core.security import User
 from .. import app
 
 class ApplicationForm(Form):

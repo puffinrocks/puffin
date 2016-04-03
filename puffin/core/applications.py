@@ -1,7 +1,7 @@
-from . model import Application, ApplicationSettings
 from ..util.homer import HOME
 from .db import db, update_model_with_json
 from .. import app
+from enum import Enum
 
 from cachetools import cached, TTLCache
 
@@ -12,6 +12,36 @@ import re
 
 APPLICATION_HOME = join(HOME, "apps")
 application_cache = TTLCache(maxsize=1, ttl=120)
+
+
+class Application:
+    
+    def __init__(self, application_id, path, name, logo, subtitle, website, description, compose, screenshots):
+        self.application_id = application_id
+        self.path = path
+        self.name = name
+        self.logo = logo
+        self.subtitle = subtitle
+        self.website = website
+        self.description = description
+        self.compose = compose
+        self.screenshots = screenshots
+
+
+class ApplicationStatus(Enum):
+    DELETED = 0
+    CREATED = 10
+    UPDATING = 20
+    ERROR = 90
+
+
+class ApplicationSettings:
+    
+    def __init__(self, user_id, application_id, settings):
+        self.user_id = user_id
+        self.application_id = application_id
+        self.settings = settings
+
 
 def init():
     pass

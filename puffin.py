@@ -6,7 +6,7 @@ from flask.ext.migrate import MigrateCommand
 
 from puffin import app
 from puffin import core
-from puffin.core import model, db, queue, mail, security, docker
+from puffin.core import db, queue, mail, security, docker, applications, machine, compose
 
 manager = Manager(app, with_default_commands=False)
 
@@ -17,8 +17,9 @@ def server():
             threads=app.config["THREADS"])
 
 def make_shell_context():
-    return dict(app=app, db=db.db, model=model, queue=queue, mail=mail, 
-        security=security, docker=docker)
+    return dict(app=app, db=db.db, queue=queue, mail=mail, 
+        security=security, docker=docker, applications=applications,
+        machine=machine, compose=compose)
 manager.add_command("shell", Shell(make_context=make_shell_context))
 
 @MigrateCommand.command

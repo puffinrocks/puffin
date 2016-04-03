@@ -8,6 +8,8 @@ from . import machine
 from . import compose
 from . import docker
 from . import stats
+from . import db_tables
+
 
 def init():
     config.init()
@@ -20,4 +22,4 @@ def init():
     compose.init()
     docker.init()
     stats.init()
-
+    db_tables.init()

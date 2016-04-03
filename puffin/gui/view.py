@@ -1,10 +1,8 @@
 from ..util import to_uuid
-from ..core.db import db
-from ..core.model import User, ApplicationStatus, ApplicationSettings
-from ..core.security import update_user
-from ..core.applications import APPLICATION_HOME, get_application, \
-    get_application_list, get_application_settings, update_application_settings, \
-    get_application_domain, get_default_application_domain
+from ..core.security import User, update_user
+from ..core.applications import ApplicationStatus, ApplicationSettings, APPLICATION_HOME, \
+    get_application, get_application_list, get_application_settings, \
+    update_application_settings, get_application_domain, get_default_application_domain
 from ..core.docker import get_client, create_application, delete_application, \
     get_application_status, get_application_statuses
 from ..core.config import get_links

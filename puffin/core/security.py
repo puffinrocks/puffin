@@ -1,5 +1,6 @@
 from uuid import UUID
-from flask_security import Security
+from datetime import datetime
+from flask_security import Security, UserMixin
 from flask_security.datastore import SQLAlchemyDatastore, UserDatastore
 from flask_security.forms import LoginForm, RegisterForm
 from flask_security.utils import encrypt_password
@@ -7,10 +8,38 @@ from flask import Markup
 from wtforms import StringField
 from wtforms.validators import Required, Length, Regexp
 from .. import app
-from .model import User
 from .db import db
 from .config import DefaultConfig
 from .mail import send
+
+
+class User(UserMixin):
+    
+    def __init__(self, login, name, email, password, active, roles, 
+            confirmed=False):
+        self.login = login
+        self.name = name
+        self.email = email
+        self.password = password
+        self.active = active
+        if confirmed:
+            self.confirmed_at = datetime.now()
+    
+    @property
+    def id(self):
+        return self.user_id
+
+    @property
+    def roles(self):
+        return []
+
+    @roles.setter
+    def roles(self, role):
+        pass
+
+    @property
+    def confirmed(self):
+        return self.confirmed_at != None
  
 
 security = None
