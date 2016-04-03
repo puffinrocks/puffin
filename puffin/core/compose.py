@@ -18,8 +18,7 @@ def compose_stop(machine, user, application):
 
 def compose_run(machine, user, application, *arguments, **environment):
     name = get_application_name(user, application)
-    path = join(application.path, application.compose)
-    args = ["docker-compose", "-f", path, "-p", name]
+    args = ["docker-compose", "-f", application.compose, "-p", name]
     args += arguments
 
     domain = get_application_domain(user, application)

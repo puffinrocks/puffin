@@ -84,3 +84,10 @@ body {
     background-color: #ffffff;
 }
 
+.application div.actions {
+    margin-top: 20px;
+}
+
+.application img {
+    margin: 5px;
+}

@@ -3,12 +3,15 @@ from .db import db, update_model_with_json
 from .. import app
 from enum import Enum
 
+from flaskext.markdown import Markdown
+from flask_bleach import Bleach
+from bleach import ALLOWED_TAGS, ALLOWED_ATTRIBUTES
 from cachetools import cached, TTLCache
-
 from os import listdir
 from os.path import join, exists, isdir, isfile
 import yaml
 import re
+
 
 APPLICATION_HOME = join(HOME, "apps")
 application_cache = TTLCache(maxsize=1, ttl=120)
@@ -16,16 +19,15 @@ application_cache = TTLCache(maxsize=1, ttl=120)
 
 class Application:
     
-    def __init__(self, application_id, path, name, logo, subtitle, website, description, compose, screenshots):
+    def __init__(self, application_id, name, subtitle, description):
         self.application_id = application_id
-        self.path = path
         self.name = name
-        self.logo = logo
         self.subtitle = subtitle
-        self.website = website
         self.description = description
-        self.compose = compose
-        self.screenshots = screenshots
+        
+        self.path = join(APPLICATION_HOME, self.application_id)
+        self.compose = join(self.path, "docker-compose.yml")
+        self.logo = join(self.application_id, "logo.png") 
 
 
 class ApplicationStatus(Enum):
@@ -44,7 +46,10 @@ class ApplicationSettings:
 
 
 def init():
-    pass
+    Markdown(app)
+    app.config['BLEACH_ALLOWED_TAGS'] = ALLOWED_TAGS + ["p", "h1", "h2", "h3", "h4", "h5", "h6", "img"]
+    app.config['BLEACH_ALLOWED_ATTRIBUTES'] = dict(ALLOWED_ATTRIBUTES, img=["src"])
+    Bleach(app)
 
 def get_application(application_id):
     applications = get_applications()
@@ -69,36 +74,23 @@ def get_applications():
         if application:
             applications[application_id] = application
     return applications
-        
+
 def load_application(application_id):
     path = join(APPLICATION_HOME, application_id)
 
-    compose_path = join(path, "docker-compose.yml")
-    if not isfile(compose_path):
-        return None
+    readme = ""
+    if isfile(join(path, "README.md")):
+        with open(join(path, "README.md")) as readme_file:
+            readme = readme_file.read()
 
-    with open(compose_path) as compose_file:    
-        compose = yaml.load(compose_file)
-        labels = compose.get("labels", {})
-
-        name = labels.get("rocks.puffin.name", application_id)
-        subtitle = labels.get("rocks.puffin.subtitle", "")
-        website = labels.get("rocks.puffin.website", "")
-        description = labels.get("rocks.puffin.description", "")
-        
-        logo = join(application_id, labels.get("rocks.puffin.logo", "logo.png"))
-        screenshots = load_screenshots(application_id, labels.get("rocks.puffin.screenshots", "screenshots/"))
-
-        application = Application(application_id, path, name, logo, subtitle, 
-            website, description, "docker-compose.yml", screenshots)
-        return application
-
-def load_screenshots(application_id, screenshot_dir):
-    path = join(APPLICATION_HOME, application_id, screenshot_dir)
-    if not isdir(path):
-        return []
-    screenshots = [join(application_id, screenshot_dir, f) for f in listdir(path) if isfile(join(path, f))]
-    return screenshots
+    readme_lines = readme.split('\n', 2)
+    name = re.sub(r'\s*#\s*', '', readme_lines[0]) if len(readme) > 0 else application_id
+    subtitle = readme_lines[1].strip().strip("_") if len(readme_lines) > 1 else ""
+    description = "\n".join(readme_lines[1:]) if len(readme_lines) > 1 else ""
+    description = re.sub(r'([a-z0-9]+(/[a-z0-9-_]+)*\.(png|jpg))', '/media/' + application_id + r'/\1', description)
+   
+    application = Application(application_id, name, subtitle, description)
+    return application
 
 def get_default_application_domain(user, application):
     return application.application_id + "." + user.login + "." + app.config["SERVER_NAME_FULL"]
