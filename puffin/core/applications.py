@@ -76,6 +76,9 @@ def get_applications():
     return applications
 
 def load_application(application_id):
+    if application_id.startswith("."):
+        return None
+
     path = join(APPLICATION_HOME, application_id)
 
     readme = ""
