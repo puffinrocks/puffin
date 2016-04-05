@@ -11,7 +11,7 @@ If you'd like to contact us directly, please send an email to [puffin@puffin.roc
 ## Issues
 
 If you find an bug in Puffin, or would like to propose an enhancement, 
-please report it via [GitHub Issues](https://github.com/loomchild/puffin/issues).
+please report it via [GitHub Issues](https://github.com/puffinrocks/puffin/issues).
 
 ## Adding new applications to the catalog
 
@@ -27,7 +27,7 @@ but the main conditions are free / open source license and relatively low memory
 ## Development
 
 For core project organisation we use [Trello](https://trello.com/b/ov1cHTtu). 
-If you'd like to contribute code, feel free to open a [Github Issue](https://github.com/loomchild/puffin/issues) 
+If you'd like to contribute code, feel free to open a [Github Issue](https://github.com/puffinrocks/puffin/issues) 
 and send us a pull request.
 
 ## Running your own Puffin

@@ -25,7 +25,7 @@ services:
             back:
     
     dns:
-        image: loomchild/dns
+        image: puffinrocks/dns
         ports: 
             - 53:53/udp
         networks:
