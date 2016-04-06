@@ -1,5 +1,5 @@
 # Puffin
-[![Build Status](https://travis-ci.org/loomchild/puffin.svg?branch=master)](https://travis-ci.org/loomchild/puffin)
+[![Build Status](https://travis-ci.org/puffinrocks/puffin.svg?branch=master)](https://travis-ci.org/puffinrocks/puffin)
 
 ## Introduction
 
