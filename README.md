@@ -212,4 +212,4 @@ See [CHANGELOG.md](CHANGELOG.md).
 
 # License
 
-AGPL, see [LICENSE.txt](LICENSE.txt) for detais.
+AGPL, see [LICENSE.txt](LICENSE.txt) for details.
