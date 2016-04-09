@@ -1,3 +1,15 @@
+0.5
+
+* Convert docker-compose.yml files to version 2, new networking, volumes
+* Email support in all Apps
+* Get rid of App manifest.yml file, use README.md instead
+* Create puffinrocks organisation on Github on Dockerhub, move all projects there
+* Separate Apps into independent repositories - allows automatic image generation and maintenance
+* Dnsmasq for easier development
+* Always use docker images instead of building
+* puffin.rocks usability improvements (simple stats, OpenGraph)
+* Various bugfixes
+
 0.4
 
 * Add Flarum forum app, configure as Puffin forum
