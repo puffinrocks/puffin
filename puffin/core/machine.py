@@ -37,7 +37,7 @@ def get_tls_config(machine):
         return None
 
     return TLSConfig(
-        client_cert=(machine.cart, machine.key),
+        client_cert=(machine.cert, machine.key),
         verify=machine.ca,
         assert_hostname = False
     )
