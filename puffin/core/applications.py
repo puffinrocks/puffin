@@ -80,6 +80,8 @@ def load_application(application_id):
         return None
 
     path = join(APPLICATION_HOME, application_id)
+    if not isdir(path):
+        return None
 
     readme = ""
     if isfile(join(path, "README.md")):
