@@ -18,8 +18,8 @@ import time
 
 @app.context_processor
 def utility_processor():
-    return dict(current_user=current_user, tracking_url=app.config.get("TRACKING_URL"), 
-        version=app.config.get("VERSION"), links=app.config.get("LINKS", []), ApplicationStatus=ApplicationStatus,
+    return dict(current_user=current_user, version=app.config.get("VERSION"), 
+            links=app.config.get("LINKS", []), ApplicationStatus=ApplicationStatus,
         stats=get_stats())
 
 @app.route('/', methods=['GET'])

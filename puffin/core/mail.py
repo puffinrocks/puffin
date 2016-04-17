@@ -1,5 +1,5 @@
 from flask import render_template
-from flask.ext.mail import Mail, Message
+from flask_mail import Mail, Message
 from .. import app
 from .queue import task
 

@@ -9,6 +9,7 @@ Flask-Script        >= 2.0, < 2.1
 Flask-Mail          >= 0.9, < 0.10
 Flask-Markdown      >= 0.3, < 0.4
 Flask-Bleach        >= 0.0.2, < 0.1
+Flask-Analytics     >= 0.5, < 0.6
 waitress            >= 0.8, < 0.9
 psycopg2            >= 2.6, < 2.7
 bcrypt              >= 2.0, < 2.1

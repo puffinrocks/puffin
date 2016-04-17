@@ -20,6 +20,7 @@
 {% block scripts %}
 {{ super() }}
 <script src="{{url_for('static', filename='scripts/puffin.js')}}"></script>
+{{ analytics }}
 {% endblock %}
 
 
@@ -102,18 +103,9 @@
             Source code hosted on <a href="https://github.com/puffinrocks/puffin">Github</a>.
             Version <a href="https://github.com/puffinrocks/puffin/commit/{{ version[1] }}">{{ "-".join(version) }}</a>.
             Used by {{ stats.users }} users running {{ stats.containers }} containers.
-            {{ self.tracking() }}
         </p>
 	</div>
 </footer>
 
 {% endblock %}
 
-
-{% block tracking %}
-
-{% if tracking_url %}
-<img src="{{ tracking_url }}" />
-{% endif %}
-
-{% endblock %}
