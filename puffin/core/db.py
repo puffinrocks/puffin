@@ -1,9 +1,9 @@
-from flask.ext.sqlalchemy import SQLAlchemy
+from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import create_engine
 from sqlalchemy.orm import mapper, object_mapper
 from sqlalchemy.orm.attributes import flag_modified
 from sqlalchemy.dialects.postgresql import JSON
-from flask.ext.migrate import Migrate
+from flask_migrate import Migrate
 
 from .. import app
 

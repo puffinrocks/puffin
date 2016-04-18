@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 
 from waitress import serve
-from flask.ext.script import Manager, Shell
-from flask.ext.migrate import MigrateCommand
+from flask_script import Manager, Shell
+from flask_migrate import MigrateCommand
 
 from puffin import app
 from puffin import core
