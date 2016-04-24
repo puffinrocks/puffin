@@ -7,6 +7,7 @@
 * Separate Apps into independent repositories - allows automatic image generation and maintenance
 * Dnsmasq for easier development
 * Always use docker images instead of building
+* Update example Compose file
 * puffin.rocks usability improvements (simple stats, OpenGraph)
 * Various bugfixes
 
