@@ -15,13 +15,19 @@ please report it via [GitHub Issues](https://github.com/puffinrocks/puffin/issue
 
 ## Adding new applications to the catalog
 
-First see how other applications are configured in [apps/](apps/) directory. 
-To add your application simply fork puffin repository and submit a Pull Request with your changes.
+First check how other applications are configured in [apps/](https://github.com/puffinrocks/apps) repository. 
+All you need is a standard docker-compose.yml and README.md files - Puffin does not require any custom 
+application manifest.
 
-If you run into any trouble, or would like to propose adding a new app, but don't know how to do it, 
+To add your application contact us to create a repository for it under 
+[puffinrocks](https://github.com/puffinrocks) organisation or
+fork [apps](https://github.com/puffinrocks/apps) repository,
+add your own repository to it as a submodule and submit a Pull Request with your changes.
+
+If you run into any trouble, or would like to add an application to the wishlist,
 please visit the [Forum Apps Section](http://forum.puffin.rocks/t/apps).
 
-There are no clear policy which applications will be accepted to the Puffin catalog yet,
+There is no strict policy which applications will be accepted to the Puffin catalog yet,
 but the main conditions are free / open source license and relatively low memory footprint.
 
 ## Development
@@ -36,7 +42,7 @@ You can run your own Puffin for yourself and your friends.
 
 First you need to do is to is to install Docker on your server - the easiest way to
 achieve that is via [Docker Machine](README.md#docker-machine). 
-Next you need to run Puffin as a [Private Deployment](README.md#private-deployment). 
+Next you need to run Puffin [Production Deployment](README.md#production-deployment). 
 
 If you run into any trouble, please visit the [Forum Hosting Section](http://forum.puffin.rocks/t/hosting).
 

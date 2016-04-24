@@ -3,9 +3,10 @@
 
 ## Introduction
 
-The goal of the project is to allow average, tech-oriented user to run 
-web applications with ease. The ultimate aim is to achieve greater decentralization 
-of web services, such as social networks, file sharing, blog or email.
+The goal of the project is to allow average, tech-oriented user to run web applications with ease. 
+The idea is to create an easy to host, technology agnostic private cloud.
+The ultimate aim is to achieve greater decentralization of web services, such as social networks, 
+file sharing, blog or email.
 
 While many other tools are looking at containers as a way to run massive 
 applications, Puffin concentrates on lightweight ones, each serving just a handful of people.
@@ -42,7 +43,7 @@ using [Flask](http://flask.pocoo.org/) web microframework.
 The easiest way to deploy Puffin and start playing with it to use 
 [Docker Compose](https://docs.docker.com/compose/):
 
-	docker-compose up
+    docker-compose up
 
 Go to [http://localhost:8080](http://localhost:8080) to acces Puffin. 
 Log In as user "puffin", password "puffin". 
@@ -174,8 +175,8 @@ or on [your own server](http://loomchild.net/2015/09/20/your-own-docker-machine/
 
 To create and activate a local Docker virtual machine, run:
 
-	docker-machine create -d virtualbox dev
-	eval "$(docker-machine env dev)"
+    docker-machine create -d virtualbox dev
+    eval "$(docker-machine env dev)"
 
 After that all subsequent Docker commands will be executed in a virtual machine. 
 Keep in mind that you'll need to use IP address or hostname of the machine 
