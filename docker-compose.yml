@@ -16,7 +16,7 @@ services:
             - front
             - back
             - default
-    
+
     puffindb:
         image: postgres
         ports:

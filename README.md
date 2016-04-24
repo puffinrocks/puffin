@@ -54,41 +54,32 @@ To rebuild the code:
 Before accessing the apps you also need to [set-up DNS](#set-up-dns)
 on your computer.
 
-### Private deployment
+### Production deployment
 
 To deploy Puffin for private needs, for a single user or a limited number of users, 
-use docker-compose-single.yml file. In an initial form it will deploy on locahost:
+use docker-compose-example.yml file as a basis:
 
-    docker-compose -f docker-compose-single.yml up -d
- 
-If you want to run it on a server then copy the configuration file and
-set SERVER_NAME, VIRTUAL_HOST and SECRET_KEY environment variables.
+    cp docker-compose-example.yml docker-compose-production.yml
+    docker-compose -f docker-compose-production.yml up -d
 
-In this configuration users can't register themselves and no confirmation 
-email will be sent. Log in as user "puffin", password "puffin" (make sure to change the password
-after you login). 
+You need to change SERVER_NAME and VIRTUAL_HOST variables to point to your domain. 
+You also need to set SECRET_KEY variable to a random value. 
 
-You can create new users using Puffin console. First enter the container:
-    
+To send emails or to disable them completely take a look at [email configuration](#email).
+
+Initially only "puffin" user with "puffin" password will be created - make sure to change it. 
+Later you can either allow other users to register themselves on your platform 
+(SECURITY_REGISTERABLE = True) or create them manually:
+
     docker exec -it puffin_main_1 bash
+    ./puffin.py user create <login>
 
-then execute puffin command:
+(The password will be the same as login, so it should be changed 
+by the account owner.)
 
-    ./puffin.py user create \<login>
-
-The initial password is the same as login, so it should be changed
-by the account owner.
-
-### Public deployment
-
-To deploy Puffin for public use, so anyone can register to access it, use 
-docker-compose-multi.yml file. In an initial form it will deploy on locahost:
-
-    docker-compose -f docker-compose-multi.yml up -d
- 
-If you want to run it on a server then copy the configuration file and
-set SERVER_NAME, VIRTUAL_HOST, SECRET_KEY and MAIL\_\* environment variables.
-Also make sure to change the default "puffin" user password.
+You may also decide to run apps on a separate machine than Puffin itself.
+To achieve that take a look on MACHINE\_\* options. You also won't need network sections in
+Compose file, since they will be created automatically on the remote machine.
 
 ### Development deployment directly on host system
 

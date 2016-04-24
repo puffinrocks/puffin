@@ -7,16 +7,15 @@ services:
         volumes: 
             - /var/run/docker.sock:/var/run/docker.sock
         depends_on:
-            - db
+            - puffindb
         ports: 
-            - "8080"
+            - "8080:8080"
         environment:
-            - DB_HOST=db
-            - DB_PORT=5432
-            - DB_NAME=puffin
             - SERVER_NAME=localhost
             - VIRTUAL_HOST=localhost
             - SECRET_KEY=puffin
+            - SECURITY_REGISTERABLE=True
+            - MAIL_SUPPRESS_SEND=False
             - MAIL_SERVER=<smtp-server>
             - MAIL_PORT=<smtp-port>
             - MAIL_USERNAME=<smtp-login>
@@ -24,11 +23,16 @@ services:
             - MAIL_DEFAULT_SENDER=Puffin <sender-address>
             - MAIL_USE_TLS=False
             - MAIL_USE_SSL=False
+        networks:
+            - front
+            - default
 
-    db:
+    puffindb:
         image: postgres
         ports:
-             - "5432"
+            - 5432
 
-
-
+networks:
+    
+    front:
+    back:
