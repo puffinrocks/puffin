@@ -1,3 +1,8 @@
+0.6
+
+* Add apps: Tiny Tiny RSS, wallabag
+* Fix look of various pages on mobile
+
 0.5
 
 * Convert docker-compose.yml files to version 2, new networking, volumes
