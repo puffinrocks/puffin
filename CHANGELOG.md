@@ -1,6 +1,6 @@
 0.6
 
-* Add apps: Tiny Tiny RSS, wallabag
+* Add apps: Tiny Tiny RSS, wallabag, Piwik
 * Fix look of various pages on mobile
 
 0.5
