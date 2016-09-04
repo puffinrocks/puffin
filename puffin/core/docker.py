@@ -1,5 +1,6 @@
 from .machine import get_machine, get_tls_config
 from .compose import compose_start, compose_stop
+from .network import create_network
 from .applications import Application, ApplicationStatus, get_application, get_application_domain, get_application_list, get_application_name
 from .queue import task, task_exists
 from .security import User, get_user
@@ -36,6 +37,7 @@ def create_application(client, user, application):
 
 def create_application_task(user_id, application):
     user = db.session.query(User).get(user_id)
+    create_network(get_client(), get_application_name(user, application) + "_default")
     compose_start(get_machine(), user, application)
     application_url = "http://" + get_application_domain(user, application)
     sleep(APPLICATION_SLEEP_AFTER_CREATE)

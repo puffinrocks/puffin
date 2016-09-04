@@ -6,6 +6,7 @@ from . import security
 from . import applications
 from . import machine
 from . import compose
+from . import network
 from . import docker
 from . import stats
 from . import analytics
@@ -21,6 +22,7 @@ def init():
     applications.init()
     machine.init()
     compose.init()
+    network.init()
     docker.init()
     stats.init()
     analytics.init()
