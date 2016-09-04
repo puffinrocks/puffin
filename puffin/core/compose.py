@@ -14,7 +14,7 @@ def compose_start(machine, user, application, **environment):
     compose_run(machine, user, application, "up", "-d", **environment)
 
 def compose_stop(machine, user, application):
-    compose_run(machine, user, application, "stop")
+    compose_run(machine, user, application, "down")
 
 def compose_run(machine, user, application, *arguments, **environment):
     name = get_application_name(user, application)
