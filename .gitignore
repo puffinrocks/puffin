@@ -69,3 +69,5 @@ Session.vim
 .netrwhist
 *~
 
+### ctags ###
+tags
