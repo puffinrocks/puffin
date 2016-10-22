@@ -129,10 +129,10 @@ Finally run Puffin:
 
     ./puffin.py server
 
-If you want to automatically reload the server on any code change, 
-I recommend using [reload](https://github.com/loomchild/reload):
+If you want to automatically reload the server on any code change,
+add -r flag (based on [reload](https://github.com/loomchild/reload)):
 
-    reload ./puffin.py server
+    ./puffin.py server -r
 
 ### Set-up DNS
 

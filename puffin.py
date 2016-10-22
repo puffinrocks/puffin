@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 from waitress import serve
+from reload import reload_me
 from flask_script import Manager, Shell
 from flask_migrate import MigrateCommand
 
@@ -11,10 +12,15 @@ from puffin.core import db, queue, mail, security, docker, applications, machine
 manager = Manager(app, with_default_commands=False)
 
 @manager.command
-def server():
+@manager.option("-r", "--reload", action="store_true", 
+        help="Reload the server if any file changes")
+def server(reload=False):
     "Run the server"
-    serve(app, host=app.config["HOST"], port=app.config["PORT"], 
-            threads=app.config["THREADS"])
+    if reload:
+        reload_me(remove_arg="-r")
+    else:
+        serve(app, host=app.config["HOST"], port=app.config["PORT"], 
+                threads=app.config["THREADS"])
 
 def make_shell_context():
     return dict(app=app, db=db.db, queue=queue, mail=mail, 
