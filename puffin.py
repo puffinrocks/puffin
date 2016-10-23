@@ -11,6 +11,7 @@ from puffin import core
 from puffin.core import db, queue, mail, security, docker, applications, machine, compose
 
 from time import sleep
+import sys
 
 manager = Manager(app, with_default_commands=False)
 
@@ -134,8 +135,15 @@ manager.add_command("user", user)
 
 
 @manager.command
-def test():
-    pytest.main()
+@manager.option("-c", "--coverage", action="store_true", 
+        help="Report test code coverage")
+def test(coverage=False):
+    args = []
+
+    if coverage:
+        args.append("--cov=.")
+
+    pytest.main(args)
 
 
 @manager.command
