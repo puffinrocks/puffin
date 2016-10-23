@@ -14,4 +14,5 @@ before_install:
     - sudo apt-get -o Dpkg::Options::="--force-confnew" install -y docker-engine
 
 script:
-    - docker-compose run puffin test
+    - docker-compose run -d --no-deps puffindb
+    - docker-compose run --no-deps puffin test
