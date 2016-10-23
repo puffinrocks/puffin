@@ -43,8 +43,8 @@ using [Flask](http://flask.pocoo.org/) web microframework.
 #### Set-up DNS
 
 To access installed applications from localhost you need to set-up local DNS. 
-There are many alternative solutions to this problem, the easiest is to update 
-your /etc/resolv.conf file to include the following line at the top:
+There are many alternative solutions to this problem, the simplest one is to 
+add the following lines at the top of your /etc/resolv.conf file:
 
     nameserver 127.0.0.1
     options ndots:0
@@ -65,7 +65,8 @@ Emails sent from Puffin are accessible via embedded Mailhog server at
 
 Puffin server is automatically reloaded on every code change thanks 
 to [reload](https://github.com/loomchild/reload). 
-To rebuild the code after modifying dependencies, run:
+To rebuild the code after making more substantial change, such as modifying 
+dependencies, run:
 
     docker-compose build
 
@@ -92,7 +93,8 @@ For a full list of configuration options see [puffin/core/config.py](puffin/core
 
 To send emails from Puffin and the applications you need to configure few environment variables 
 before starting Puffin. It's probably easiest to register to an external email service to avoid 
-being classified as spammer. The variables are (not all are obligatory, see [Configuration](#configuration) for more details):
+being classified as spammer. The variables are (not all are obligatory, see 
+[puffin/core/config.py](puffin/core/config.py) for more details):
 
     MAIL_SERVER
     MAIL_PORT
@@ -106,7 +108,7 @@ being classified as spammer. The variables are (not all are obligatory, see [Con
 #### Set-up DNS
 
 On public server you need to configure wildacard DNS record to point to your 
-domain and all subdomains.
+root domain and all its subdomains.
 
 #### Docker Machine
 
@@ -126,21 +128,22 @@ Finally you can run Puffin:
 
 #### Configure users
 
-Initially only "puffin" user with "puffin" password will be created 
-- make sure to change the password before exposing puffin to the outside world. 
+Initially only "puffin" user with "puffin" password will be created - make 
+sure to change the password before exposing puffin to the outside world. 
 Later you can either allow other users to register themselves on your platform 
-(via SECURITY_REGISTERABLE=True) or create them manually:
+(via SECURITY_REGISTERABLE=True config setting) or create them manually:
 
     docker-compose run puffin user create [login]
 
-(The password will be the same as login, so it should be changed.)
+(The password will be the same as login, so it should be changed as soon as 
+possible.)
 
 #### Clustering
 
 Clustering is currently not supported, but you may run apps on a separate 
-machine than Puffin itself. To achieve that take a look on MACHINE\_\* options. 
-You also won't need network sections in docker-compose file, 
-since they will be created automatically on the remote machine.
+machine than Puffin server itself. To achieve that take a look on MACHINE\_\* options. 
+You also won't need network sections in your docker-compose file, 
+since the networks will be created automatically on the remote machine.
 
 # Contributing
 
