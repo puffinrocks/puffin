@@ -1,9 +1,8 @@
 version: '2'
 
 services:
-
-    main:
-        build: .
+    puffin:
+        image: puffinrocks/puffin
         volumes: 
             - /var/run/docker.sock:/var/run/docker.sock
         depends_on:
@@ -11,9 +10,9 @@ services:
         ports: 
             - "8080:8080"
         environment:
-            - SERVER_NAME=localhost
-            - VIRTUAL_HOST=localhost
-            - SECRET_KEY=puffin
+            - SERVER_NAME=<domain>
+            - VIRTUAL_HOST=<domain>
+            - SECRET_KEY=<generated-secret>
             - SECURITY_REGISTERABLE=True
             - MAIL_SUPPRESS_SEND=False
             - MAIL_SERVER=<smtp-server>
@@ -25,12 +24,15 @@ services:
             - MAIL_USE_SSL=False
         networks:
             - front
+            - back
             - default
 
     puffindb:
         image: postgres
         ports:
             - 5432
+        networks:
+            back:
 
 networks:
     
