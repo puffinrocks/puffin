@@ -2,14 +2,20 @@ version: '2'
 
 services:
 
-    main:
+    puffin:
         build: .
+        image: puffinrocks/puffin
         volumes: 
             - /var/run/docker.sock:/var/run/docker.sock
+            - .:/usr/src/app
         depends_on:
             - puffindb
             - dns
             - mailhog
+        command: ["up", "-r"]
+        environment:
+            - VIRTUAL_HOST=puffin.localhost
+            - VIRTUAL_PORT=8080
         ports: 
             - "8080:8080"
         networks:
@@ -34,13 +40,16 @@ services:
     dnsfix:
         image: sequenceiq/alpine-dig
         entrypoint: ["/bin/sh", "-c", "echo nameserver `dig +short dns` > /etc/resolv.conf"]
-        network_mode: "service:main"
+        network_mode: "service:puffin"
 
     mailhog:
         image: mailhog/mailhog
         ports: 
             - "8025:8025"
             - 1025
+        environment:
+            - VIRTUAL_HOST=mailhog.localhost
+            - VIRTUAL_PORT=8025
         networks:
             front:
             back:
