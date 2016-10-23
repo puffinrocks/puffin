@@ -17,7 +17,7 @@ manager = Manager(app, with_default_commands=False)
 def server(reload=False):
     "Run the server"
     if reload:
-        reload_me(remove_arg="-r")
+        reload_me("server")
     else:
         serve(app, host=app.config["HOST"], port=app.config["PORT"], 
                 threads=app.config["THREADS"])
