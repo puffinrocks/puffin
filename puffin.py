@@ -4,6 +4,7 @@ from waitress import serve
 from reload import reload_me
 from flask_script import Manager, Shell
 from flask_migrate import MigrateCommand, upgrade as db_upgrade
+import pytest
 
 from puffin import app
 from puffin import core
@@ -130,6 +131,11 @@ def user_list():
                 user.active, user.confirmed))
 
 manager.add_command("user", user)
+
+
+@manager.command
+def test():
+    pytest.main()
 
 
 @manager.command

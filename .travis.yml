@@ -6,10 +6,6 @@ git:
 services:
   - docker
 
-language: python
-python:
-  - "3.4"
-
 before_install:
     - sed -i 's/git@github.com:/https:\/\/github.com\//' .gitmodules
     - git submodule update --init
@@ -17,12 +13,5 @@ before_install:
     - git submodule update --init --recursive
     - sudo apt-get -o Dpkg::Options::="--force-confnew" install -y docker-engine
 
-install: "pip install -r requirements.txt"
-
-before_script:
-  - docker-compose run -d --no-deps puffindb
-  - docker-compose run -d --no-deps main
-  - sleep 15
-  - docker stop puffin_main_run_1
-
-script: py.test
+script:
+    - docker-compose run puffin test
