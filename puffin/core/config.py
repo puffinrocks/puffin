@@ -60,6 +60,9 @@ class DefaultConfig:
     ANALYTICS_PIWIK_BASE_URL = None
     ANALYTICS_PIWIK_SITE_ID = None
 
+    # Extra notifications for administrator
+    NEW_USER_NOTIFICATION = False
+
     # Extra links that will appear in the main menu
     LINK_1 = None
     LINK_2 = None

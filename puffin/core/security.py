@@ -4,6 +4,7 @@ from flask_security import Security, UserMixin
 from flask_security.datastore import SQLAlchemyDatastore, UserDatastore
 from flask_security.forms import LoginForm, RegisterForm
 from flask_security.utils import encrypt_password
+from flask_security.signals import user_confirmed
 from flask import Markup
 from wtforms import StringField
 from wtforms.validators import Required, Length, Regexp
@@ -75,6 +76,9 @@ def init():
 
     security.send_mail_task(send_security_mail)
 
+    if app.config['SECURITY_CONFIRMABLE'] and app.config['NEW_USER_NOTIFICATION']:
+        user_confirmed.connect(new_user_notification, app)
+
 
 class CustomUserDatastore(SQLAlchemyDatastore, UserDatastore):
     
@@ -115,6 +119,11 @@ class CustomRegisterForm(RegisterForm):
 
 def send_security_mail(message):
     send(message=message)
+
+def new_user_notification(sender, user):
+    admin = get_user("puffin")
+    if admin and admin.email:
+        send(recipient=admin.email, subject="New Puffin user: " + user.login, template="new_user", user=user)
 
 def get_user(login):
     return security.datastore.get_user(login)

@@ -1,0 +1,6 @@
+A new user has succesfully registered to Puffin:
+
+Name:  {{ user.name }}
+Login: {{ user.login }}
+Email: {{ user.email }}
+
