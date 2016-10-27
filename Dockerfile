@@ -1,5 +1,6 @@
 FROM python:3-onbuild
 
-ENTRYPOINT ["python3", "-u", "puffin.py"]
+ENV PYTHONUNBUFFERED=1
+ENTRYPOINT ["python3", "puffin.py"]
 CMD ["up"]
 
