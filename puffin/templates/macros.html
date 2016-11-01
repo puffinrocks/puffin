@@ -9,3 +9,15 @@
     </div>
   </div>
 {% endmacro %}
+
+{% macro new_application_thumbnail() %}
+    <div class="col-sm-4 col-md-3">
+    <div class="app thumbnail new">
+      <a href="https://github.com/puffinrocks/apps" title="add new application"><img src="{{ url_for('static', filename='images/new_application.png') }}" alt="new application"></a>
+      <div class="caption">
+        <h3>&nbsp;</h3>
+        <h4>add new application to the catalog</h4>
+      </div>
+    </div>
+  </div>
+{% endmacro %}

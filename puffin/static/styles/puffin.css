@@ -42,6 +42,10 @@ body {
     color: black;
 }
 
+.app.thumbnail.new {
+    opacity: 0.3;
+}
+
 .screenshots {
     margin-top: 20px;
 }

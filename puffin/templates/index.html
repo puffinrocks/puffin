@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% from 'macros.html' import application_thumbnail %}
+{% from 'macros.html' import application_thumbnail, new_application_thumbnail %}
 
 
 {% block title %}Puffin{% endblock %}
@@ -44,6 +44,7 @@
 {% for application in applications %}
     {{ application_thumbnail(application) }}
 {% endfor %}
+    {{ new_application_thumbnail() }}
 </div>
 
 {% endblock %}
