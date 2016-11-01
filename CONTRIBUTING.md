@@ -15,20 +15,8 @@ please report it via [GitHub Issues](https://github.com/puffinrocks/puffin/issue
 
 ## Adding new applications to the catalog
 
-First check how other applications are configured in [apps/](https://github.com/puffinrocks/apps) repository. 
-All you need is a standard docker-compose.yml and README.md files - Puffin does not require any custom 
-application manifest.
-
-To add your application contact us to create a repository for it under 
-[puffinrocks](https://github.com/puffinrocks) organisation or
-fork [apps](https://github.com/puffinrocks/apps) repository,
-add your own repository to it as a submodule and submit a Pull Request with your changes.
-
-If you run into any trouble, or would like to add an application to the wishlist,
-please visit the [Forum Apps Section](http://forum.puffin.rocks/t/apps).
-
-There is no strict policy which applications will be accepted to the Puffin catalog yet,
-but the main conditions are free / open source license and relatively low memory footprint.
+You are very welcome to submit your own or your favourite application to the Puffin catalog. See [apps](https://github.com/puffinrocks/apps)
+for more details. 
 
 ## Development
 
