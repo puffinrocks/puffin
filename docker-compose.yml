@@ -36,6 +36,9 @@ services:
             - 53:53/udp
         networks:
             back:
+        tmpfs:
+            - /run
+            - /tmp
 
     dnsfix:
         image: sequenceiq/alpine-dig
