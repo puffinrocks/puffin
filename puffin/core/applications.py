@@ -19,15 +19,29 @@ application_cache = TTLCache(maxsize=1, ttl=120)
 
 class Application:
     
-    def __init__(self, application_id, name, subtitle, description):
+    def __init__(self, application_id):
         self.application_id = application_id
-        self.name = name
-        self.subtitle = subtitle
-        self.description = description
-        
         self.path = join(APPLICATION_HOME, self.application_id)
+
+        readme = ""
+        if isfile(join(self.path, "README.md")):
+            with open(join(self.path, "README.md")) as readme_file:
+                readme = readme_file.read()
+
+        readme_lines = readme.split('\n', 2)
+        self.name = re.sub(r'\s*#\s*', '', readme_lines[0]) if len(readme) > 0 else application_id
+        self.subtitle = readme_lines[1].strip().strip("_") if len(readme_lines) > 1 else ""
+        self.description = "\n".join(readme_lines[1:]) if len(readme_lines) > 1 else ""
+        self.description = re.sub(r'([a-z0-9]+(/[a-z0-9-_]+)*\.(png|jpg))', '/media/' + application_id + r'/\1', self.description)
+
         self.compose = join(self.path, "docker-compose.yml")
-        self.logo = join(self.application_id, "logo.png") 
+        self.logo = join(self.application_id, "logo.png")
+
+        compose_data = {}
+        with open(self.compose) as compose_file:
+            compose_data = yaml.safe_load(compose_file)
+        
+        self.main_image = compose_data["services"]["main"]["image"]
 
 
 class ApplicationStatus(Enum):
@@ -83,18 +97,7 @@ def load_application(application_id):
     if not isdir(path):
         return None
 
-    readme = ""
-    if isfile(join(path, "README.md")):
-        with open(join(path, "README.md")) as readme_file:
-            readme = readme_file.read()
-
-    readme_lines = readme.split('\n', 2)
-    name = re.sub(r'\s*#\s*', '', readme_lines[0]) if len(readme) > 0 else application_id
-    subtitle = readme_lines[1].strip().strip("_") if len(readme_lines) > 1 else ""
-    description = "\n".join(readme_lines[1:]) if len(readme_lines) > 1 else ""
-    description = re.sub(r'([a-z0-9]+(/[a-z0-9-_]+)*\.(png|jpg))', '/media/' + application_id + r'/\1', description)
-   
-    application = Application(application_id, name, subtitle, description)
+    application = Application(application_id)
     return application
 
 def get_default_application_domain(user, application):
