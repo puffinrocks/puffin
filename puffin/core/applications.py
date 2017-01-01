@@ -114,6 +114,11 @@ def get_application_name(user, application):
     # docker-compose sanitizes project name, see https://github.com/docker/compose/issues/2119
     return re.sub(r'[^a-z0-9]', '', user.login + "x" + application.application_id).lower()
 
+def get_user_application_id(container_name):
+    if container_name.endswith("proxy"):
+        return (container_name[0:-6], "proxy")
+    return container_name.rsplit("x", 1)
+
 def get_application_settings(user_id, application_id):
     application_settings = db.session.query(ApplicationSettings).filter_by(
         user_id=user_id, application_id=application_id).first()

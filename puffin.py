@@ -134,10 +134,29 @@ def user_list():
 manager.add_command("user", user)
 
 
+application = Manager(usage="Manage apps")
+
+@application.command
+def list():
+    "List all apps"
+    app_list()
+
+def app_list():
+    applications = docker.get_all_running_applications()
+    line_format = "{:<14} {:<20} {:<30}"
+    print(line_format.format("User", "Application", "Domain"))
+    print("-" * 79)
+    for application in applications:
+        print(line_format.format(application[0].login, application[1].application_id, application[2]))
+
+manager.add_command("app", application)
+
+
 @manager.command
 @manager.option("-c", "--coverage", action="store_true", 
         help="Report test code coverage")
 def test(coverage=False):
+    "Run automated tests"
     args = []
 
     if coverage:

@@ -1,7 +1,7 @@
 from .machine import get_machine, get_tls_config
 from .compose import compose_start, compose_stop
 from .network import create_network
-from .applications import Application, ApplicationStatus, get_application, get_application_domain, get_application_list, get_application_name
+from .applications import Application, ApplicationStatus, get_application, get_application_domain, get_application_list, get_applications, get_application_name, get_user_application_id
 from .queue import task, task_exists
 from .security import User, get_user
 from .db import db
@@ -77,6 +77,47 @@ def _get_application_status(containers, name):
     else:
         return ApplicationStatus.DELETED
     
+def get_all_running_applications():
+    applications = get_applications()
+    
+    client = get_client()
+    containers = get_containers(client)
+    
+    running_applications = []
+    for container in containers:
+        user_application_id = _get_user_application_id(container)
+        
+        if not user_application_id:
+            continue
+
+        login, application_id = user_application_id
+        
+        application = applications.get(application_id)
+        if not application:
+            application = applications.get("_" + application_id)
+        
+        user = get_user(login)
+
+        if not application or not user:
+            continue
+
+        application_domain = get_application_domain(user, application)
+        if application_domain:
+            application_domain = "http://" + application_domain
+
+        running_applications.append((user, application, application_domain))
+
+    running_applications = sorted(running_applications, 
+            key=lambda a: (a[0].login, a[1].application_id))
+
+    return running_applications
+
+def _get_user_application_id(container):
+    for name in container["Names"]:
+        if name.endswith("_main_1"):
+            return get_user_application_id(name[1:-7])
+    return None
+
 def get_containers(client):
     return client.containers()
  
