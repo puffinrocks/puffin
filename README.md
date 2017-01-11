@@ -52,6 +52,17 @@ add the following lines at the top of your /etc/resolv.conf file:
 Make sure that you disable your other local DNS server, such as dnsmasq, 
 before running Puffin.
 
+#### Clone git repository
+
+Puffin application catalog is stored as git submodules. When cloning the repo 
+make sure to use --recursive option:
+
+    git clone --recursive git@github.com:puffinrocks/puffin.git
+
+Or if you have already cloned the repo then update the submodules:
+
+   git submodule update --init --recursive
+
 #### Run Puffin
 
 Clone the repository and use [Docker Compose](https://docs.docker.com/compose/):
