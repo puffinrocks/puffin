@@ -59,9 +59,9 @@ make sure to use --recursive option:
 
     git clone --recursive git@github.com:puffinrocks/puffin.git
 
-Or if you have already cloned the repo then update the submodules:
+Or if you have already cloned the repo then update the submodules in it:
 
-   git submodule update --init --recursive
+    git submodule update --init --recursive
 
 #### Run Puffin
 
