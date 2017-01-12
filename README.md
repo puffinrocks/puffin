@@ -69,10 +69,14 @@ Clone the repository and use [Docker Compose](https://docs.docker.com/compose/):
 
     docker-compose up
 
-Go to [http://puffin.localhost](http://puffin.localhost) to acces Puffin. 
+Go to [http://puffin.localhost](http://puffin.localhost) to access Puffin.
 Log In as user "puffin", password "puffin". 
 Emails sent from Puffin are accessible via embedded Mailhog server at 
 [http://mailhog.localhost](http://mailhog.localhost).
+
+If [http://puffin.localhost](http://puffin.localhost) is not accessible you can 
+try connecting to Puffin via a port: [http://localhost:8080](http://localhost:8080).
+However, without DNS configured correctly, you won't be able to access the apps. 
 
 Puffin server is automatically reloaded on every code change thanks 
 to [reload](https://github.com/loomchild/reload). 
