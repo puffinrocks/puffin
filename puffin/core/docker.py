@@ -6,8 +6,9 @@ from .queue import task, task_exists
 from .security import User, get_user
 from .db import db
 from .. import app
+from ..util import safe_get, env_dict
 
-from docker import Client
+from docker import Client, errors
 
 import requests
 from requests.exceptions import RequestException
@@ -118,6 +119,27 @@ def _get_user_application_id(container):
             return get_user_application_id(name[1:-7])
     return None
 
+def get_application_image_version(client, application):
+    image_name = application.main_image
+    try:
+        image_details = client.inspect_image(image_name)
+    except errors.NotFound:
+        return None
+    env_list = safe_get(image_details, "Config", "Env")
+    env = env_dict(env_list)
+    return env.get("VERSION")
+
+def get_application_version(client, user, application):
+    name = get_application_name(user, application)
+    containers = get_containers(client)
+    container = get_container(containers, name)
+    if not container or not container.get("Id"):
+        return None
+    container_details = client.inspect_container(container["Id"])
+    env_list = safe_get(container_details, "Config", "Env")
+    env = env_dict(env_list)
+    return env.get("VERSION")
+
 def get_containers(client):
     return client.containers()
  
@@ -125,7 +147,7 @@ def get_container(containers, name):
     main_name = "/" + name + "_main_1"
     container = [c for c in containers if main_name in c["Names"]]
     if len(container) > 0:
-        return container
+        return container[0]
     else:
         return None
 

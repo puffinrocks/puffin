@@ -4,7 +4,8 @@ from ..core.applications import ApplicationStatus, ApplicationSettings, APPLICAT
     get_application, get_application_list, get_application_settings, \
     update_application_settings, get_application_domain, get_default_application_domain
 from ..core.docker import get_client, create_application, delete_application, \
-    get_application_status, get_application_statuses
+    get_application_status, get_application_statuses, get_application_version, \
+    get_application_image_version
 from ..core.config import get_links
 from ..core.stats import get_stats
 from .. import app
@@ -55,6 +56,8 @@ def profile(login):
 def application(application_id):
     application_status = None
     application_domain = None
+    application_version = None
+    application_image_version = None
     form = None
 
     if current_user.is_authenticated():
@@ -73,9 +76,13 @@ def application(application_id):
         
         application_status = get_application_status(client, current_user, application)
         application_domain = get_application_domain(current_user, application)
+        application_version = get_application_version(client, current_user, application)
+        application_image_version = get_application_image_version(client, application)
 
     return render_template('application.html', application=get_application(application_id), 
-        application_status=application_status, application_domain=application_domain, form=form)
+        application_status=application_status, application_domain=application_domain, 
+        application_version=application_version, application_image_version=application_image_version,
+        form=form)
 
 @app.route('/application/<application_id>.json', methods=['GET'])
 @login_required

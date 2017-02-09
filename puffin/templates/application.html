@@ -18,6 +18,28 @@
     <div>
         {{ application.description | markdown | bclean | blinkify | safe }}
 
+        <div class="meta">
+            <span>
+                Version:
+                {% if application_image_version: %}
+                    {{ application_image_version }}
+                {% else %}
+                    Unknown
+                {% endif %}
+            </span>
+            &nbsp;
+            {% if application_status == ApplicationStatus.CREATED %}
+                <span>
+                    Running Version: 
+                    {% if application_version: %}
+                        {{ application_version }}
+                    {% else %}
+                        Unknown
+                    {% endif %}
+                </span>
+            {% endif %}
+        </div>
+
         <div class="actions">
             {% if current_user.is_authenticated() %}
                 <form class="form" method="post" role="form" action="">

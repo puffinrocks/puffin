@@ -1,4 +1,5 @@
 from ..util.homer import HOME
+from ..util import safe_get
 from .db import db, update_model_with_json
 from .. import app
 from enum import Enum
@@ -41,8 +42,8 @@ class Application:
         with open(self.compose) as compose_file:
             compose_data = yaml.safe_load(compose_file)
         
-        self.main_image = compose_data["services"]["main"]["image"]
-
+        self.main_image = safe_get(compose_data, "services", "main", "image")
+    
 
 class ApplicationStatus(Enum):
     DELETED = 0

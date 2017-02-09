@@ -42,3 +42,14 @@ class SafeSet():
         with self.lock:
             return element in self.data
 
+def safe_get(dct, *keys):
+    for key in keys:
+        try:
+            dct = dct[key]
+        except KeyError:
+            return None
+    return dct
+
+def env_dict(env_list):
+    return dict(map(lambda e: e.split("=", 1), env_list))
+

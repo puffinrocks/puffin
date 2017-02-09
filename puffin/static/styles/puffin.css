@@ -89,6 +89,10 @@ body {
     background-color: #ffffff;
 }
 
+.application div.meta {
+    margin-top: 20px;
+}
+
 .application div.actions {
     margin-top: 20px;
 }
