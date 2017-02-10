@@ -54,15 +54,15 @@ def profile(login):
 
 @app.route('/application/<application_id>.html', methods=['GET', 'POST'])
 def application(application_id):
+    client = get_client()
+    application = get_application(application_id)
     application_status = None
     application_domain = None
     application_version = None
-    application_image_version = None
+    application_image_version = get_application_image_version(client, application)
     form = None
 
     if current_user.is_authenticated():
-        application = get_application(application_id)
-        client = get_client()
 
         form = ApplicationForm()
         
@@ -77,9 +77,8 @@ def application(application_id):
         application_status = get_application_status(client, current_user, application)
         application_domain = get_application_domain(current_user, application)
         application_version = get_application_version(client, current_user, application)
-        application_image_version = get_application_image_version(client, application)
 
-    return render_template('application.html', application=get_application(application_id), 
+    return render_template('application.html', application=application, 
         application_status=application_status, application_domain=application_domain, 
         application_version=application_version, application_image_version=application_image_version,
         form=form)
