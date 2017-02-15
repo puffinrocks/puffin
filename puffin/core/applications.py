@@ -1,6 +1,7 @@
 from ..util.homer import HOME
 from ..util import safe_get
 from .db import db, update_model_with_json
+from .security import User, get_all_users
 from .. import app
 from enum import Enum
 
@@ -43,7 +44,13 @@ class Application:
             compose_data = yaml.safe_load(compose_file)
         
         self.main_image = safe_get(compose_data, "services", "main", "image")
-    
+ 
+    def __eq__(self, other):
+        return self.application_id == other.application_id
+
+    def __hash__(self):
+        return hash(self.application_id)
+
 
 class ApplicationStatus(Enum):
     DELETED = 0
@@ -110,6 +117,42 @@ def get_application_domain(user, application):
         get_application_settings(user.user_id, application.application_id)
     domain = application_settings.settings.get("domain", default_domain)
     return domain
+
+def get_application_started(user, application):
+    application_settings = \
+        get_application_settings(user.user_id, application.application_id)
+    started = application_settings.settings.get("started", False)
+    return started
+
+def set_application_started(user, application, started):
+    application_settings = \
+        get_application_settings(user.user_id, application.application_id)
+    if started:
+        application_settings.settings["started"] = True
+    else:
+        application_settings.settings.pop("started", None)
+    update_application_settings(application_settings)
+
+def get_all_started_applications():
+    applications = get_applications()
+    users = {u.user_id : u for u in get_all_users()}
+
+    all_application_settings = db.session.query(ApplicationSettings).all()
+    started_application_settings = \
+        [s for s in all_application_settings if s.settings.get("started")]
+    
+    started_applications = []
+    for application_settings in started_application_settings:
+        
+        application = applications.get(application_settings.application_id)
+        user = users.get(application_settings.user_id)
+        
+        if not application or not user:
+            continue
+
+        started_applications.append((user, application))
+
+    return set(started_applications)
 
 def get_application_name(user, application):
     # docker-compose sanitizes project name, see https://github.com/docker/compose/issues/2119

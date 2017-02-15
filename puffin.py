@@ -142,12 +142,25 @@ def list():
     app_list()
 
 def app_list():
-    applications = docker.get_all_running_applications()
-    line_format = "{:<14} {:<20} {:<30}"
-    print(line_format.format("User", "Application", "Domain"))
+    started_applications = applications.get_all_started_applications()
+    running_applications = docker.get_all_running_applications()
+    all_applications = sorted(started_applications.union(running_applications),
+            key=lambda a: (a[0].login, a[1].application_id))
+
+    line_format = "{:<14} {:<20} {:<3} {:<30}"
+    print(line_format.format("User", "Application", "Run", "Domain"))
     print("-" * 79)
-    for application in applications:
-        print(line_format.format(application[0].login, application[1].application_id, application[2]))
+    for application in all_applications:
+
+        running = "Y" if application in running_applications else "N"
+
+        user = application[0]
+        app = application[1]
+        domain = applications.get_application_domain(user, app)
+        if domain:
+            domain = "http://" + domain
+
+        print(line_format.format(user.login, app.application_id, running, domain))
 
 manager.add_command("app", application)
 

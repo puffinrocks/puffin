@@ -1,9 +1,11 @@
 from .machine import get_machine, get_tls_config
 from .compose import compose_start, compose_stop
 from .network import create_network
-from .applications import Application, ApplicationStatus, get_application, get_application_domain, get_application_list, get_applications, get_application_name, get_user_application_id
+from .applications import Application, ApplicationStatus, get_application, \
+        get_application_domain, get_application_list, get_applications, \
+        get_application_name, get_user_application_id, set_application_started
 from .queue import task, task_exists
-from .security import User, get_user
+from .security import User, get_user, get_all_users
 from .db import db
 from .. import app
 from ..util import safe_get, env_dict
@@ -43,6 +45,7 @@ def create_application_task(user_id, application):
     application_url = "http://" + get_application_domain(user, application)
     sleep(APPLICATION_SLEEP_AFTER_CREATE)
     wait_until_up(application_url)
+    set_application_started(user, application, True)
 
 def delete_application(client, user, application, async=True):
     if get_application_status(client, user, application) != ApplicationStatus.CREATED:
@@ -53,23 +56,23 @@ def delete_application(client, user, application, async=True):
 def delete_application_task(user_id, application):
     user = db.session.query(User).get(user_id)
     compose_stop(get_machine(), user, application)
+    set_application_started(user, application, False)
 
 def get_application_status(client, user, application):
-    name = get_application_name(user, application)
     containers = get_containers(client)
-    return _get_application_status(containers, name)
+    return _get_application_status(user, application, containers)
 
 def get_application_statuses(client, user):
     applications = get_application_list()
     containers = get_containers(client)
     application_statuses = []
     for application in applications:
-        name = get_application_name(user, application)
-        status = _get_application_status(containers, name)
+        status = _get_application_status(user, application, containers)
         application_statuses.append((application, status))
     return application_statuses
 
-def _get_application_status(containers, name):
+def _get_application_status(user, application, containers):
+    name = get_application_name(user, application)
     if task_exists(name):
         return ApplicationStatus.UPDATING
     container = get_container(containers, name)
@@ -80,6 +83,7 @@ def _get_application_status(containers, name):
     
 def get_all_running_applications():
     applications = get_applications()
+    users = {u.login : u for u in get_all_users()}
     
     client = get_client()
     containers = get_containers(client)
@@ -93,25 +97,17 @@ def get_all_running_applications():
 
         login, application_id = user_application_id
         
+        # ignores special applications
         application = applications.get(application_id)
-        if not application:
-            application = applications.get("_" + application_id)
-        
-        user = get_user(login)
+    
+        user = users.get(login)
 
         if not application or not user:
             continue
 
-        application_domain = get_application_domain(user, application)
-        if application_domain:
-            application_domain = "http://" + application_domain
+        running_applications.append((user, application))
 
-        running_applications.append((user, application, application_domain))
-
-    running_applications = sorted(running_applications, 
-            key=lambda a: (a[0].login, a[1].application_id))
-
-    return running_applications
+    return set(running_applications)
 
 def _get_user_application_id(container):
     for name in container["Names"]:

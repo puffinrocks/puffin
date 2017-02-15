@@ -42,6 +42,12 @@ class User(UserMixin):
     def confirmed(self):
         return self.confirmed_at != None
  
+    def __eq__(self, other):
+        return self.user_id == other.user_id
+
+    def __hash__(self):
+        return hash(self.user_id)
+
 
 security = None
 
