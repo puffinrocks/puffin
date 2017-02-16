@@ -17,10 +17,14 @@ from puffin.core import docker, applications
 
 def upgrade():
     running_applications = docker.get_all_running_applications()
-    for running_application in running_applications:
-        user = running_application[0]
-        application = running_application[1]
+    for a in running_applications:
+        user = a[0]
+        application = a[1]
         applications.set_application_started(user, application, True)
 
 def downgrade():
-    pass
+    started_applications = applications.get_all_started_applications()
+    for a in started_applications:
+        user = a[0]
+        application = a[1]
+        applications.set_application_started(user, application, False)
