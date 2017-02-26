@@ -1,7 +1,16 @@
+0.7
+
+* Add app: Nextcloud
+* Allow uploads of over 2M in proxy
+
 0.6
 
 * Add apps: Tiny Tiny RSS, wallabag, Piwik
 * Fix look of various pages on mobile
+* Support application version to prepare for application upgrade
+* Application stats and list commands
+* Simplify deployment
+* Update various apps and fix various bugs
 
 0.5
 
