@@ -51,5 +51,5 @@ def safe_get(dct, *keys):
     return dct
 
 def env_dict(env_list):
-    return dict(map(lambda e: e.split("=", 1), env_list))
+    return dict(filter(lambda e: len(e) == 2, map(lambda e: e.split("=", 1), env_list)))
 
