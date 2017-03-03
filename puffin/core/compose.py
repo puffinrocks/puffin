@@ -22,7 +22,8 @@ def compose_run(machine, user, application, *arguments, **environment):
     args += arguments
 
     domain = get_application_domain(user, application)
-    env = dict(PATH=environ['PATH'], VIRTUAL_HOST=domain)
+    env = dict(PATH=environ['PATH'], VIRTUAL_HOST=domain,
+            LETSENCRYPT_HOST=domain)
     env.update(get_env_vars(machine))
     env.update(**environment)
 
