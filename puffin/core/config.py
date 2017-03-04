@@ -58,6 +58,7 @@ class DefaultConfig:
 
     # HTTPS / Let's Encrypt
     LETSENCRYPT = False
+    LETSENCRYPT_TEST = True
 
     # URL and site ID for [Piwik](https://piwik.org). 
     ANALYTICS_PIWIK_BASE_URL = None
