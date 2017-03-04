@@ -1,4 +1,5 @@
 from flask_wtf import Form
+from flask_security.core import current_user
 from wtforms import StringField, IntegerField, PasswordField, SubmitField, SelectField
 from wtforms.validators import Required, Length, Regexp
 from ..core.db import db
