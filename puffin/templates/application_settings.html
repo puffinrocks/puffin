@@ -19,7 +19,9 @@
             {{ wtf.form_errors(form, hiddens="only") }}
 
 	        {{ wtf.form_field(form.domain) }}
-            
+
+	        {{ wtf.form_field(form.https) }}
+
             {{ wtf.form_field(form.submit, button_map={'submit': 'success'}) }}
         </form>
         

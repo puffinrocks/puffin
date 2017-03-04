@@ -1,5 +1,6 @@
-from .applications import get_application_domain, get_application_name
+from .applications import get_application_domain, get_application_name, get_application_https
 from .machine import get_env_vars
+from .security import get_admin
 from .. import app
 
 from subprocess import Popen, STDOUT, PIPE
@@ -24,7 +25,9 @@ def compose_run(machine, user, application, *arguments, **environment):
     domain = get_application_domain(user, application)
     env = dict(PATH=environ['PATH'], VIRTUAL_HOST=domain)
 
-    env.update(LETSENCRYPT_HOST=domain, LETSENCRYPT_EMAIL="pub@loomchild.net")
+    if app.config["LETSENCRYPT"] and get_application_https(user, application):
+        admin = get_admin()
+        env.update(LETSENCRYPT_HOST=domain, LETSENCRYPT_EMAIL=admin.email)
 
     env.update(get_env_vars(machine))
     env.update(**environment)

@@ -1,6 +1,6 @@
 from flask_wtf import Form
 from flask_security.core import current_user
-from wtforms import StringField, IntegerField, PasswordField, SubmitField, SelectField
+from wtforms import StringField, IntegerField, BooleanField, PasswordField, SubmitField, SelectField
 from wtforms.validators import Required, Length, Regexp
 from ..core.db import db
 from ..core.security import User
@@ -12,6 +12,7 @@ class ApplicationForm(Form):
 
 class ApplicationSettingsForm(Form):
     domain = StringField('Domain', description="If you change it then make sure you also configure it with your DNS provider")
+    https = BooleanField('HTTPS', description="Enable HTTPS")
     submit = SubmitField('Update')
 
     def validate(self):

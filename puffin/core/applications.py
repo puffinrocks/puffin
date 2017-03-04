@@ -118,6 +118,10 @@ def get_application_domain(user, application):
     domain = application_settings.settings.get("domain", default_domain)
     return domain
 
+def get_application_https(user, application):
+    return get_application_settings(user.user_id, application.application_id)\
+            .settings.get("https", False)
+
 def get_application_started(user, application):
     application_settings = \
         get_application_settings(user.user_id, application.application_id)

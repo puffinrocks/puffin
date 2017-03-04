@@ -127,9 +127,8 @@ def send_security_mail(message):
     send(message=message)
 
 def new_user_notification(sender, user):
-    admin = get_user("puffin")
-    if admin and admin.email:
-        send(recipient=admin.email, subject="New Puffin user: " + user.login, template="new_user", user=user)
+    admin = get_admin()
+    send(recipient=admin.email, subject="New Puffin user: " + user.login, template="new_user", user=user)
 
 def get_user(login):
     return security.datastore.get_user(login)
@@ -159,3 +158,5 @@ def update_user(user):
     db.session.add(user)
     db.session.commit()
 
+def get_admin():
+    return get_user("puffin")

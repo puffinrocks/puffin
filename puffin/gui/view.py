@@ -2,7 +2,8 @@ from ..util import to_uuid
 from ..core.security import User, update_user
 from ..core.applications import ApplicationStatus, ApplicationSettings, APPLICATION_HOME, \
     get_application, get_application_list, get_application_settings, \
-    update_application_settings, get_application_domain, get_default_application_domain
+    update_application_settings, get_application_domain, get_default_application_domain, \
+    get_application_https
 from ..core.docker import get_client, create_application, delete_application, \
     get_application_status, get_application_statuses, get_application_version, \
     get_application_image_version
@@ -122,11 +123,17 @@ def application_settings(application_id):
             application_settings.settings["domain"] = domain
         else:
             application_settings.settings.pop("domain", None)
+        https = form.https.data
+        if https:
+            application_settings.settings["https"] = True
+        else:
+            application_settings.settings.pop("https", None)
         update_application_settings(application_settings)
         flash("Settings have been updated, but the changes will take effect once you restart the application")
         return redirect(url_for('application', application_id=application_id))
 
     form.domain.data = get_application_domain(user, application)
+    form.https.data = get_application_https(user, application)
 
     return render_template('application_settings.html', application=application, 
         application_settings=application_settings, form=form)
