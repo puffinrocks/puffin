@@ -12,7 +12,7 @@ class ApplicationForm(Form):
 
 class ApplicationSettingsForm(Form):
     domain = StringField('Domain', description="If you change it then make sure you also configure it with your DNS provider")
-    https = BooleanField('HTTPS', description="Enable HTTPS")
+    https = BooleanField('HTTPS', description="Enable HTTPS via Let's Encrypt")
     submit = SubmitField('Update')
 
     def validate(self):
