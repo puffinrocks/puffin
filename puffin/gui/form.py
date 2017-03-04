@@ -20,7 +20,9 @@ class ApplicationSettingsForm(Form):
 
         if self.domain.data:
             server_name = app.config["SERVER_NAME_FULL"]
-            if server_name != "localhost" and self.domain.data.endswith(server_name):
+            if (server_name != "localhost"
+                    and not self.domain.data.endswith(current_user.login + "." + server_name)
+                    and self.domain.data.endswith(server_name)):
                 self.domain.errors.append('Invalid domain, cannot end with ' + server_name)
                 return False
         
