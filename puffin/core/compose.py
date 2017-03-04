@@ -28,7 +28,7 @@ def compose_run(machine, user, application, *arguments, **environment):
     if app.config["LETSENCRYPT"] and get_application_https(user, application):
         admin = get_admin()
         env.update(LETSENCRYPT_HOST=domain, LETSENCRYPT_EMAIL=admin.email,
-                LETSENCRYPT_TEST=app.config["LETSENCRYPT_TEST"])
+                LETSENCRYPT_TEST=str(app.config["LETSENCRYPT_TEST"]))
 
     env.update(get_env_vars(machine))
     env.update(**environment)
