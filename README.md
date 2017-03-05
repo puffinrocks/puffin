@@ -49,6 +49,10 @@ add the following lines at the top of your /etc/resolv.conf file:
     nameserver 127.0.0.1
     options ndots:0
 
+Which can be done by executing the following command as root:
+
+    echo -e "nameserver 127.0.0.1\noptions ndots:0\n$(cat /etc/resolv.conf)" > /etc/resolv.conf
+
 Make sure that you disable your other local DNS server, such as dnsmasq, 
 before running Puffin.
 
