@@ -162,6 +162,19 @@ def app_list():
 
         print(line_format.format(user.login, app.application_id, running, domain))
 
+@application.command
+def init_running():
+    "Initialize currently running applications"
+    app_init_running()
+
+def app_init_running():
+    running_applications = docker.get_all_running_applications()
+    for (user, application) in running_applications:
+        if not applications.get_application_started(user, application):
+            print("Marking user: {}, application: {} as started"
+                    .format(user.login, application.application_id))
+            applications.set_application_started(user, application, True)
+
 manager.add_command("app", application)
 
 
