@@ -11,6 +11,7 @@
 * Application stats and list commands
 * Simplify deployment
 * Update various apps and fix various bugs
+* Manual migration: Run 'app init_running' command to update table with currently running apps
 
 0.5
 
