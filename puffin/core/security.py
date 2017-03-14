@@ -44,7 +44,7 @@ class User(UserMixin):
  
     def __eq__(self, other):
         if other == None:
-            return false
+            return False
         # Need to use get_id method because AnonymousUser has it, and it's used
         # during registration email verification
         return self.get_id() == other.get_id()
