@@ -43,10 +43,12 @@ class User(UserMixin):
         return self.confirmed_at != None
  
     def __eq__(self, other):
-        return self.user_id == other.user_id
+        # Need to use get_id method because AnonymousUser has it, and it's used
+        # during registration email verification
+        return self.get_id() == other.get_id()
 
     def __hash__(self):
-        return hash(self.user_id)
+        return hash(self.get_id())
 
 
 security = None
