@@ -40,9 +40,10 @@ class Worker(Thread):
         while True:
             task_id, func, args, kwargs = self.queue.get()
             try: 
-                func(*args, **kwargs)
+                with app.app_context():
+                    func(*args, **kwargs)
             except Exception as e: 
-                app.logger.warn("Error processing task", e)
+                app.logger.warn("Error processing task", exc_info=e)
             finally:
                 self.queue.task_done()
                 if task_id:

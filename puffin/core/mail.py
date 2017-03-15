@@ -17,13 +17,12 @@ def send(recipient=None, subject=None, template=None, message=None, async=True, 
         message = create_message(recipient, subject, template, **kwargs)
     
     if async:
-        task(None, send_message, app, message)
+        task(None, send_message, message)
     else:
-        send_message(app, message)
+        send_message(message)
 
-def send_message(app, message):
-    with app.app_context():
-        mail.send(message)
+def send_message(message):
+    mail.send(message)
 
 def create_message(recipient, subject, template, **kwargs):
     message = Message(subject, recipients=[recipient])
