@@ -48,7 +48,7 @@
                 {% if application_status == ApplicationStatus.CREATED %}
                     <a class="btn btn-primary" role="button" href="{{ "http://" + application_domain }}" target="_blank"><span class="glyphicon glyphicon-share-alt"></span> Open</a>
                     <button type="submit" name="stop" value="Stop" class="btn btn-danger"><span class="glyphicon glyphicon-stop"></span> Stop</button>
-                    <a class="btn btn-info" role="button" href="{{ url_for("application_settings", application_id=application.application_id) }}"><span class="glyphicon glyphicon-cog"></span> Settings</a>
+                    <button type="button" class="btn btn-info" disabled="disabled" title="Stop the application before modifying the settings"><span class="glyphicon glyphicon-cog"></span> Settings</button>
                 {% elif application_status == ApplicationStatus.DELETED %}
                     <button type="submit" name="start" value="Start" class="btn btn-success"><span class="glyphicon glyphicon-play"></span> Run</button>
                     <a class="btn btn-info" role="button" href="{{ url_for("application_settings", application_id=application.application_id) }}"><span class="glyphicon glyphicon-cog"></span> Settings</a>

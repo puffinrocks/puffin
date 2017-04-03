@@ -129,7 +129,6 @@ def application_settings(application_id):
         else:
             application_settings.settings.pop("https", None)
         update_application_settings(application_settings)
-        flash("Settings have been updated, but the changes will take effect once you restart the application")
         return redirect(url_for('application', application_id=application_id))
 
     form.domain.data = get_application_domain(user, application)
