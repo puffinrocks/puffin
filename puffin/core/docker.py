@@ -10,7 +10,7 @@ from .db import db
 from .. import app
 from ..util import safe_get, env_dict
 
-from docker import Client, errors
+from docker import DockerClient, errors
 
 import requests
 from requests.exceptions import RequestException
@@ -28,7 +28,7 @@ def init():
 
 def get_client():
     machine = get_machine()
-    client = Client(base_url=machine.url, tls=get_tls_config(machine), version="auto")
+    client = DockerClient(base_url=machine.url, tls=get_tls_config(machine), version="auto")
     client.ping()
     return client
 
@@ -110,18 +110,17 @@ def get_all_running_applications():
     return set(running_applications)
 
 def _get_user_application_id(container):
-    for name in container["Names"]:
-        if name.endswith("_main_1"):
-            return get_user_application_id(name[1:-7])
+    if container.name.endswith("_main_1"):
+        return get_user_application_id(container.name[1:-7])
     return None
 
 def get_application_image_version(client, application):
     image_name = application.main_image
     try:
-        image_details = client.inspect_image(image_name)
-    except errors.NotFound:
+        image = client.images.get(image_name)
+    except errors.ImageNotFound:
         return None
-    env_list = safe_get(image_details, "Config", "Env")
+    env_list = safe_get(image.attrs, "Config", "Env")
     env = env_dict(env_list)
     return env.get("VERSION")
 
@@ -129,19 +128,18 @@ def get_application_version(client, user, application):
     name = get_application_name(user, application)
     containers = get_containers(client)
     container = get_container(containers, name)
-    if not container or not container.get("Id"):
+    if not container:
         return None
-    container_details = client.inspect_container(container["Id"])
-    env_list = safe_get(container_details, "Config", "Env")
+    env_list = safe_get(container.attrs, "Config", "Env")
     env = env_dict(env_list)
     return env.get("VERSION")
 
 def get_containers(client):
-    return client.containers()
+    return client.containers.list()
  
 def get_container(containers, name):
-    main_name = "/" + name + "_main_1"
-    container = [c for c in containers if main_name in c["Names"]]
+    main_name = name + "_main_1"
+    container = [c for c in containers if c.name == main_name]
     if len(container) > 0:
         return container[0]
     else:
@@ -188,9 +186,9 @@ def _install(name, **environment):
 def create_networks():
     #TODO: replace with running _network app and remove prefix once custom network names supported
     client = get_client()
-    networks = client.networks(names=("puffin_front", "puffin_back"))
+    networks = client.networks.list(names=["puffin_front", "puffin_back"])
     if len(networks) == 2:
         return False
-    client.create_network("puffin_front")
-    client.create_network("puffin_back")
+    client.networks.create("puffin_front")
+    client.networks.create("puffin_back")
     return True

@@ -1,18 +1,18 @@
 from ipaddress import ip_network
-from docker.utils import create_ipam_pool, create_ipam_config
+from docker.types import IPAMConfig, IPAMPool
 
 
 def init():
     pass
 
 def get_next_cidr(client):
-    networks = client.networks()
+    networks = client.networks.list()
     last_cidr = ip_network("10.0.0.0/24")
     for network in networks:
-        if (network["IPAM"] and network["IPAM"]["Config"] 
-                and len(network["IPAM"]["Config"]) > 0
-                and network["IPAM"]["Config"][0]["Subnet"]):
-            cidr = ip_network(network["IPAM"]["Config"][0]["Subnet"])
+        if (network.attrs["IPAM"] and network.attrs["IPAM"]["Config"] 
+                and len(network.attrs["IPAM"]["Config"]) > 0
+                and network.attrs["IPAM"]["Config"][0]["Subnet"]):
+            cidr = ip_network(network.attrs["IPAM"]["Config"][0]["Subnet"])
             if cidr.network_address.packed[0] == 10:
                 if cidr.prefixlen != 24:
                     raise Exception(
@@ -31,12 +31,12 @@ def create_network(client, name):
     cidr = get_next_cidr(client)
     print("Creating network {0} with subnet {1}".format(name, cidr.exploded))
     
-    networks = client.networks(names=(name,))
+    networks = client.networks.list(names=[name])
     if len(networks) > 0:
         for network in networks:
-            client.remove_network(name)
+            network.remove()
     
-    ipam_pool = create_ipam_pool(
-            subnet=cidr.exploded, gateway=(cidr.network_address + 1).exploded)
-    ipam_config = create_ipam_config(pool_configs=[ipam_pool])
-    client.create_network(name, ipam=ipam_config)
+    ipam_pool = IPAMPool(subnet=cidr.exploded, 
+            gateway=(cidr.network_address + 1).exploded)
+    ipam_config = IPAMConfig(pool_configs=[ipam_pool])
+    client.networks.create(name, ipam=ipam_config)
