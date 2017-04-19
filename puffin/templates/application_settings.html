@@ -14,19 +14,39 @@
     </div>
     <div class="col-md-6">
 
+        <a href="{{ url_for('application', application_id=application.application_id) }}">« Back</a>
+
         <form class="form" method="post" role="form" action="">
             {{ form.hidden_tag() }}
             {{ wtf.form_errors(form, hiddens="only") }}
 
-	        {{ wtf.form_field(form.domain) }}
+            <p>{{ wtf.form_field(form.domain) }}</p>
 
-	        {{ wtf.form_field(form.https) }}
+            <p>{{ wtf.form_field(form.https) }}</p>
+
+            <p>{{ wtf.form_field(form.update, button_map={'update': 'success'}) }}</p>
 
             <br/>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Backup &amp; Restore</h3>
+                </div>
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        Create new &nbsp;
+                        <button type="submit" name="backup" value="Backup" class="btn btn-success"><span class="glyphicon glyphicon-save"></span> Backup</button>
+                    </li>
+                    {% for backup in backups %}
+                    <li class="list-group-item">
+                        {{ backup }}&nbsp;
+                        <button type="submit" name="restore" value="{{ backup }}" class="btn btn-warning"><span class="glyphicon glyphicon-open"></span> Restore</button>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
 
-            {{ wtf.form_field(form.submit, button_map={'submit': 'success'}) }}
         </form>
-        
+
     </div>
 
 </div>

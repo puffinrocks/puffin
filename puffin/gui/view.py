@@ -7,6 +7,7 @@ from ..core.applications import ApplicationStatus, ApplicationSettings, APPLICAT
 from ..core.docker import get_client, create_application, delete_application, \
     get_application_status, get_application_statuses, get_application_version, \
     get_application_image_version
+from ..core import backup
 from ..core.config import get_links
 from ..core.stats import get_stats
 from .. import app
@@ -116,23 +117,34 @@ def application_settings(application_id):
     application_settings = get_application_settings(user.user_id, application_id)
     default_domain = get_default_application_domain(user, application)
 
+    backups = backup.list(user, application)
+
     form = ApplicationSettingsForm()
     if form.validate_on_submit():
-        domain = form.domain.data.strip()
-        if len(domain) != 0 and domain != default_domain:
-            application_settings.settings["domain"] = domain
-        else:
-            application_settings.settings.pop("domain", None)
-        https = form.https.data
-        if https:
-            application_settings.settings["https"] = True
-        else:
-            application_settings.settings.pop("https", None)
-        update_application_settings(application_settings)
-        return redirect(url_for('application', application_id=application_id))
+
+        if form.update.data:
+            domain = form.domain.data.strip()
+            if len(domain) != 0 and domain != default_domain:
+                application_settings.settings["domain"] = domain
+            else:
+                application_settings.settings.pop("domain", None)
+            https = form.https.data
+            if https:
+                application_settings.settings["https"] = True
+            else:
+                application_settings.settings.pop("https", None)
+            update_application_settings(application_settings)
+
+        if form.backup.data:
+            backup.backup(user, application)
+            flash("Backup created successfully.")
+
+        if form.restore.data:
+            backup.restore(user, application, form.restore.raw_data[0])
+            flash("Backup restored successfully.")
 
     form.domain.data = get_application_domain(user, application)
     form.https.data = get_application_https(user, application)
 
     return render_template('application_settings.html', application=application, 
-        application_settings=application_settings, form=form)
+        application_settings=application_settings, backups=backups, form=form)
