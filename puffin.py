@@ -8,7 +8,8 @@ import pytest
 
 from puffin import app
 from puffin import core
-from puffin.core import db, queue, mail, security, docker, applications, machine, compose
+from puffin.core import db, queue, mail, security, docker, applications, \
+        machine, compose, backup as backup_module
 
 from time import sleep
 import sys
@@ -63,6 +64,16 @@ def network():
 def machine_network():
     if docker.create_networks():
         print("Created Docker networks on machine")
+
+@machine.command
+def volume():
+    "Create Docker volumes"
+    machine_volume()
+
+def machine_volume():
+    if docker.create_volumes():
+        print("Created Docker volumes on machine")
+
 
 @machine.command
 def proxy():
@@ -175,6 +186,22 @@ def app_init_running():
                     .format(user.login, application.application_id))
             applications.set_application_started(user, application, True)
 
+@application.command
+def backup(user, application):
+    "Backup application"
+    app_backup(user, application)
+
+def app_backup(user_login, application_id):
+    backup_module.backup(user_login, application_id)
+
+@application.command
+def restore(user, application):
+    "Restore application from backup"
+    app_restore(user, application)
+
+def app_restore(user_login, application_id):
+    pass
+
 manager.add_command("app", application)
 
 
@@ -204,6 +231,7 @@ def init():
     db_upgrade()
     user_create("puffin")
     machine_network()
+    machine_volume()
     machine_proxy()
     machine_mail()
 

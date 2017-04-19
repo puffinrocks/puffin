@@ -1,5 +1,5 @@
 from .machine import get_machine, get_tls_config
-from .compose import compose_start, compose_stop
+from .compose import compose_start, compose_stop, compose_run
 from .network import create_network
 from .applications import Application, ApplicationStatus, get_application, \
         get_application_domain, get_application_list, get_applications, \
@@ -58,6 +58,9 @@ def delete_application_task(user_id, application):
     compose_stop(get_machine(), user, application)
     set_application_started(user, application, False)
 
+def run_service(client, user, application, service, **environment):
+    compose_run(get_machine(), user, application, "run", service, **environment)
+
 def get_application_status(client, user, application):
     containers = get_containers(client)
     return _get_application_status(user, application, containers)
@@ -111,7 +114,7 @@ def get_all_running_applications():
 
 def _get_user_application_id(container):
     if container.name.endswith("_main_1"):
-        return get_user_application_id(container.name[1:-7])
+        return get_user_application_id(container.name[:-7])
     return None
 
 def get_application_image_version(client, application):
@@ -191,4 +194,12 @@ def create_networks():
         return False
     client.networks.create("puffin_front")
     client.networks.create("puffin_back")
+    return True
+
+def create_volumes():
+    client = get_client()
+    volumes = client.volumes.list(filters={"name" : "puffin_backup"})
+    if len(volumes) > 0:
+        return False
+    client.volumes.create("puffin_backup")
     return True

@@ -8,6 +8,7 @@ from . import machine
 from . import compose
 from . import network
 from . import docker
+from . import backup
 from . import stats
 from . import analytics
 from . import db_tables
@@ -24,6 +25,7 @@ def init():
     compose.init()
     network.init()
     docker.init()
+    backup.init()
     stats.init()
     analytics.init()
     db_tables.init()

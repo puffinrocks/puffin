@@ -44,6 +44,10 @@ class Application:
             compose_data = yaml.safe_load(compose_file)
         
         self.main_image = safe_get(compose_data, "services", "main", "image")
+
+        # Retrieve all volumes except external ones
+        self.volumes = [v[0] for v in compose_data.get("volumes", {}).items() 
+                if not (v[1] and "external" in v[1])]
  
     def __eq__(self, other):
         return self.application_id == other.application_id
@@ -75,7 +79,7 @@ def init():
 
 def get_application(application_id):
     applications = get_applications()
-    return applications[application_id]
+    return applications.get(application_id)
 
 def get_application_list():
     applications = get_applications().values()
