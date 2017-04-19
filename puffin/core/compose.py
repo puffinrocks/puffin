@@ -36,8 +36,5 @@ def compose_run(machine, user, application, *arguments, **environment):
     process = Popen(args, stderr=STDOUT, stdout=PIPE, universal_newlines=True, env=env)
     process.wait()
     out, err = process.communicate()
-    out = out.strip()
-    if out:
-        print(out)
-    #app.logger.info("Compose:", out)
+    return out.strip()
 

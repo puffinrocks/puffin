@@ -59,7 +59,7 @@ def delete_application_task(user_id, application):
     set_application_started(user, application, False)
 
 def run_service(client, user, application, service, **environment):
-    compose_run(get_machine(), user, application, "run", service, **environment)
+    return compose_run(get_machine(), user, application, "run", service, **environment)
 
 def get_application_status(client, user, application):
     containers = get_containers(client)

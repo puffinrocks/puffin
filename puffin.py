@@ -192,15 +192,31 @@ def backup(user, application):
     app_backup(user, application)
 
 def app_backup(user_login, application_id):
-    backup_module.backup(user_login, application_id)
+    user = get_existing_user(user_login)
+    application = get_existing_application(application_id)
+    backup_module.backup(user, application)
 
 @application.command
-def restore(user, application):
-    "Restore application from backup"
-    app_restore(user, application)
+def restore(user, application, name):
+    "Restore application from backup with given name"
+    app_restore(user, application, name)
 
-def app_restore(user_login, application_id):
-    pass
+def app_restore(user_login, application_id, backup_name):
+    user = get_existing_user(user_login)
+    application = get_existing_application(application_id)
+    backups = backup_module.restore(user, application, backup_name)
+
+@application.command
+def backups(user, application):
+    "List application backups"
+    app_backups(user, application)
+
+def app_backups(user_login, application_id):
+    user = get_existing_user(user_login)
+    application = get_existing_application(application_id)
+    backups = backup_module.list(user, application)
+    for backup in backups:
+        print(backup)
 
 manager.add_command("app", application)
 
@@ -243,6 +259,19 @@ def up(reload=False):
     "Initialize Puffin dependencies and run the server"
     init()
     server(reload)
+
+
+def get_existing_user(user_login):
+    user = security.get_user(user_login)
+    if not user:
+        raise Exception("User {} does not exist".format(user_login))
+    return user
+
+def get_existing_application(application_id):
+    application = applications.get_application(application_id)
+    if not application:
+        raise Exception("Application {} does not exist".format(application_id))
+    return application
 
 
 if __name__ == "__main__":
