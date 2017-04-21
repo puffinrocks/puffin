@@ -58,7 +58,7 @@ def delete_application_task(user_id, application):
     compose_stop(get_machine(), user, application)
     set_application_started(user, application, False)
 
-def run_service(client, user, application, service, **environment):
+def run_service(user, application, service, **environment):
     return compose_run(get_machine(), user, application, "run", service, **environment)
 
 def get_application_status(client, user, application):

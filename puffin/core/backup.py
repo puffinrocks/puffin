@@ -23,7 +23,7 @@ def backup(user, application):
     for volume in application.volumes:
         full_volume = get_full_volume(user, application, volume)
         full_archive = get_full_archive(user, application, volume, backup_name)
-        run_service(client, admin, backup_application, "backup", 
+        run_service(admin, backup_application, "backup", 
                 BACKUP="puffin_backup", VOLUME=full_volume, ARCHIVE=full_archive)
 
 def restore(user, application, backup_name):
@@ -39,16 +39,15 @@ def restore(user, application, backup_name):
     for volume in application.volumes:
         full_volume = get_full_volume(user, application, volume)
         full_archive = get_full_archive(user, application, volume, backup_name)
-        run_service(client, admin, backup_application, "restore", 
+        run_service(admin, backup_application, "restore", 
                 BACKUP="puffin_backup", VOLUME=full_volume, ARCHIVE=full_archive)
 
 def list(user, application):
-    client = get_client()
     admin = get_admin()
     backup_application = get_application("_backup")
     application_name = get_application_name(user, application)
 
-    backups = run_service(client, admin, backup_application, "list", 
+    backups = run_service(admin, backup_application, "list", 
             BACKUP="puffin_backup", VOLUME="puffin_backup", ARCHIVE=application_name)
 
     return sorted(backups.split(), reverse=True)
