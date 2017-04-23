@@ -1,86 +1,81 @@
-from ..util import to_uuid
-from ..core.security import User, update_user
-from ..core.applications import ApplicationStatus, ApplicationSettings, APPLICATION_HOME, \
-    get_application, get_application_list, get_application_settings, \
-    update_application_settings, get_application_domain, get_default_application_domain, \
-    get_application_https
-from ..core.docker import get_client, create_application, delete_application, \
-    get_application_status, get_application_statuses, get_application_version, \
-    get_application_image_version
-from ..core import backup
-from ..core.config import get_links
-from ..core.stats import get_stats
-from .. import app
-from .form import ApplicationForm, ApplicationSettingsForm, ProfileForm
+import time
 
-from flask import redirect, render_template, request, url_for, flash, abort, send_file, send_from_directory, jsonify
+import flask
 from flask_security.core import current_user
 from flask_security.decorators import login_required
-import time
+
+from puffin import app
+from puffin.core import security
+from puffin.core import applications
+from puffin.core import docker
+from puffin.core import backup
+from puffin.core import stats
+from . import forms
 
 
 @app.context_processor
 def utility_processor():
     return dict(current_user=current_user, version=app.config.get("VERSION"), 
-            links=app.config.get("LINKS", []), ApplicationStatus=ApplicationStatus,
-        stats=get_stats())
+            links=app.config.get("LINKS", []), 
+            ApplicationStatus=applications.ApplicationStatus,
+            stats=stats.get_stats())
 
 @app.route('/', methods=['GET'])
 def index():
-    return render_template('index.html', applications=get_application_list())
+    return flask.render_template('index.html', applications=applications.get_application_list())
 
 @app.route('/about.html', methods=['GET'])
 def about():
-    return render_template('about.html')
+    return flask.render_template('about.html')
 
 @app.route('/profile.html', methods=['GET'])
 @login_required
 def my_profile():
-    return redirect(url_for('profile', login=current_user.login))
+    return flask.redirect(flask.url_for('profile', login=current_user.login))
 
 @app.route('/profile/<login>.html', methods=['GET', 'POST'])
 @login_required
 def profile(login):
     if current_user.login != login:
-        abort(403, "You are not allowed to view this profile") 
+        flask.abort(403, "You are not allowed to view this profile") 
     
     user = current_user
     
-    form = ProfileForm(obj=user)
+    form = forms.ProfileForm(obj=user)
     if form.validate_on_submit():
         user.name = form.name.data
-        update_user(user)
-        return redirect(url_for('profile', login=login))
+        security.update_user(user)
+        return flask.redirect(flask.url_for('profile', login=login))
 
-    return render_template('profile.html', user=current_user, form=form)
+    return flask.render_template('profile.html', user=current_user, form=form)
 
 @app.route('/application/<application_id>.html', methods=['GET', 'POST'])
 def application(application_id):
-    client = get_client()
-    application = get_application(application_id)
+    client = docker.get_client()
+    application = applications.get_application(application_id)
     application_status = None
     application_domain = None
     application_version = None
-    application_image_version = get_application_image_version(client, application)
+    application_image_version = docker.get_application_image_version(client, application)
     form = None
 
     if current_user.is_authenticated():
 
-        form = ApplicationForm()
+        form = forms.ApplicationForm()
         
         if form.validate_on_submit():
             if form.start.data:
-                create_application(client, current_user, application)
+                docker.create_application(client, current_user, application)
             
             if form.stop.data:
-                delete_application(client, current_user, application)
-            return redirect(url_for('application', application_id=application_id))
+                docker.delete_application(client, current_user, application)
+            return flask.redirect(flask.url_for('application', application_id=application_id))
         
-        application_status = get_application_status(client, current_user, application)
-        application_domain = get_application_domain(current_user, application)
-        application_version = get_application_version(client, current_user, application)
+        application_status = docker.get_application_status(client, current_user, application)
+        application_domain = applications.get_application_domain(current_user, application)
+        application_version = docker.get_application_version(client, current_user, application)
 
-    return render_template('application.html', application=application, 
+    return flask.render_template('application.html', application=application, 
         application_status=application_status, application_domain=application_domain, 
         application_version=application_version, application_image_version=application_image_version,
         form=form)
@@ -88,38 +83,37 @@ def application(application_id):
 @app.route('/application/<application_id>.json', methods=['GET'])
 @login_required
 def application_status(application_id):
-    client = get_client()
-    application = get_application(application_id)
-    client = get_client()
-    status = get_application_status(client, current_user, application).name
-    return jsonify(status=status)
+    client = docker.get_client()
+    application = applications.get_application(application_id)
+    status = docker.get_application_status(client, current_user, application).name
+    return flask.jsonify(status=status)
 
-@app.route('/applications', methods=['GET'])
+@app.route('/applications', methods=['GET'], endpoint='applications')
 @login_required
-def applications():
-    client = get_client()
-    application_statuses = get_application_statuses(client, current_user)
-    applications = [a[0] for a in application_statuses if a[1] == ApplicationStatus.CREATED]
-    return render_template('applications.html', applications=applications)
+def apps():
+    client = docker.get_client()
+    app_statuses = docker.get_application_statuses(client, current_user)
+    apps = [a[0] for a in application_statuses if a[1] == applications.ApplicationStatus.CREATED]
+    return flask.render_template('applications.html', applications=apps)
 
 @app.route('/media/<path:path>')
 def media(path):
     if not path[-3:] in ("png", "jpg"):
         raise Exception("Unsupported media file format")
-    return send_from_directory(APPLICATION_HOME, path)
+    return flask.send_from_directory(applications.APPLICATION_HOME, path)
 
 @app.route('/application/<application_id>/settings.html', methods=['GET', 'POST'])
 @login_required
 def application_settings(application_id):
     user = current_user
-    application = get_application(application_id)
+    application = applications.get_application(application_id)
     
-    application_settings = get_application_settings(user.user_id, application_id)
-    default_domain = get_default_application_domain(user, application)
+    application_settings = applications.get_application_settings(user.user_id, application_id)
+    default_domain = applications.get_default_application_domain(user, application)
 
     backups = backup.list(user, application)
 
-    form = ApplicationSettingsForm()
+    form = forms.ApplicationSettingsForm()
     if form.validate_on_submit():
 
         if form.update.data:
@@ -133,18 +127,18 @@ def application_settings(application_id):
                 application_settings.settings["https"] = True
             else:
                 application_settings.settings.pop("https", None)
-            update_application_settings(application_settings)
+            applications.update_application_settings(application_settings)
 
         if form.backup.data:
             backup.backup(user, application)
-            flash("Backup created successfully.")
+            flask.flash("Backup created successfully.")
 
         if form.restore.data:
             backup.restore(user, application, form.restore.raw_data[0])
-            flash("Backup restored successfully.")
+            flask.flash("Backup restored successfully.")
 
-    form.domain.data = get_application_domain(user, application)
-    form.https.data = get_application_https(user, application)
+    form.domain.data = applications.get_application_domain(user, application)
+    form.https.data = applications.get_application_https(user, application)
 
-    return render_template('application_settings.html', application=application, 
+    return flask.render_template('application_settings.html', application=application, 
         application_settings=application_settings, backups=backups, form=form)

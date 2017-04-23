@@ -1,33 +1,33 @@
-from ..util.homer import HOME
-from ..util import safe_get
-from .db import db, update_model_with_json
-from .security import User, get_all_users
-from .. import app
-from enum import Enum
-
-from flaskext.markdown import Markdown
-from flask_bleach import Bleach
-from bleach import ALLOWED_TAGS, ALLOWED_ATTRIBUTES
-from cachetools import cached, TTLCache
-from os import listdir
-from os.path import join, exists, isdir, isfile
-import yaml
 import re
+import os
+import os.path
+import cachetools
+import enum
+
+import yaml
+import bleach
+import flaskext.markdown
+import flask_bleach
+
+from puffin import app
+from .db import db, update_model_with_json
+from .. import util
+from . import security
 
 
-APPLICATION_HOME = join(HOME, "apps")
-application_cache = TTLCache(maxsize=1, ttl=120)
+APPLICATION_HOME = os.path.join(util.HOME, "apps")
+application_cache = cachetools.TTLCache(maxsize=1, ttl=120)
 
 
 class Application:
     
     def __init__(self, application_id):
         self.application_id = application_id
-        self.path = join(APPLICATION_HOME, self.application_id)
+        self.path = os.path.join(APPLICATION_HOME, self.application_id)
 
         readme = ""
-        if isfile(join(self.path, "README.md")):
-            with open(join(self.path, "README.md")) as readme_file:
+        if os.path.isfile(os.path.join(self.path, "README.md")):
+            with open(os.path.join(self.path, "README.md")) as readme_file:
                 readme = readme_file.read()
 
         readme_lines = readme.split('\n', 2)
@@ -36,14 +36,14 @@ class Application:
         self.description = "\n".join(readme_lines[1:]) if len(readme_lines) > 1 else ""
         self.description = re.sub(r'([a-z0-9]+(/[a-z0-9-_]+)*\.(png|jpg))', '/media/' + application_id + r'/\1', self.description)
 
-        self.compose = join(self.path, "docker-compose.yml")
-        self.logo = join(self.application_id, "logo.png")
+        self.compose = os.path.join(self.path, "docker-compose.yml")
+        self.logo = os.path.join(self.application_id, "logo.png")
 
         compose_data = {}
         with open(self.compose) as compose_file:
             compose_data = yaml.safe_load(compose_file)
         
-        self.main_image = safe_get(compose_data, "services", "main", "image")
+        self.main_image = util.safe_get(compose_data, "services", "main", "image")
 
         # Retrieve all volumes except external ones
         self.volumes = [v[0] for v in compose_data.get("volumes", {}).items() 
@@ -56,7 +56,7 @@ class Application:
         return hash(self.application_id)
 
 
-class ApplicationStatus(Enum):
+class ApplicationStatus(enum.Enum):
     DELETED = 0
     CREATED = 10
     UPDATING = 20
@@ -72,10 +72,10 @@ class ApplicationSettings:
 
 
 def init():
-    Markdown(app)
-    app.config['BLEACH_ALLOWED_TAGS'] = ALLOWED_TAGS + ["p", "h1", "h2", "h3", "h4", "h5", "h6", "img"]
-    app.config['BLEACH_ALLOWED_ATTRIBUTES'] = dict(ALLOWED_ATTRIBUTES, img=["src"])
-    Bleach(app)
+    flaskext.markdown.Markdown(app)
+    app.config['BLEACH_ALLOWED_TAGS'] = bleach.ALLOWED_TAGS + ["p", "h1", "h2", "h3", "h4", "h5", "h6", "img"]
+    app.config['BLEACH_ALLOWED_ATTRIBUTES'] = dict(bleach.ALLOWED_ATTRIBUTES, img=["src"])
+    flask_bleach.Bleach(app)
 
 def get_application(application_id):
     applications = get_applications()
@@ -92,10 +92,10 @@ def get_application_list():
     
     return applications
 
-@cached(application_cache)
+@cachetools.cached(application_cache)
 def get_applications():
     applications = {}
-    for application_id in listdir(APPLICATION_HOME):
+    for application_id in os.listdir(APPLICATION_HOME):
         application = load_application(application_id)
         if application:
             applications[application_id] = application
@@ -105,8 +105,8 @@ def load_application(application_id):
     if application_id.startswith("."):
         return None
 
-    path = join(APPLICATION_HOME, application_id)
-    if not isdir(path):
+    path = os.path.join(APPLICATION_HOME, application_id)
+    if not os.path.isdir(path):
         return None
 
     application = Application(application_id)
@@ -143,7 +143,7 @@ def set_application_started(user, application, started):
 
 def get_all_started_applications():
     applications = get_applications()
-    users = {u.user_id : u for u in get_all_users()}
+    users = {u.user_id : u for u in security.get_all_users()}
 
     all_application_settings = db.session.query(ApplicationSettings).all()
     started_application_settings = \

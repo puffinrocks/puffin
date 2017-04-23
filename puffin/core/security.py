@@ -1,20 +1,21 @@
-from uuid import UUID
-from datetime import datetime
-from flask_security import Security, UserMixin
-from flask_security.datastore import SQLAlchemyDatastore, UserDatastore
-from flask_security.forms import LoginForm, RegisterForm
-from flask_security.utils import encrypt_password
-from flask_security.signals import user_confirmed
-from flask import Markup
-from wtforms import StringField
-from wtforms.validators import Required, Length, Regexp
-from .. import app
+import uuid
+import datetime
+
+import flask
+import flask_security
+import flask_security.datastore
+import flask_security.forms
+import flask_security.utils
+import flask_security.signals
+import wtforms
+from wtforms import validators
+
+from puffin import app
 from .db import db
-from .config import DefaultConfig
-from .mail import send
+from . import mail
 
 
-class User(UserMixin):
+class User(flask_security.UserMixin):
     
     def __init__(self, login, name, email, password, active, roles, 
             confirmed=False):
@@ -24,7 +25,7 @@ class User(UserMixin):
         self.password = password
         self.active = active
         if confirmed:
-            self.confirmed_at = datetime.now()
+            self.confirmed_at = datetime.datetime.now()
     
     @property
     def id(self):
@@ -64,7 +65,7 @@ def init():
     app.config['SECURITY_POST_CHANGE_VIEW'] = "profile.html"
     app.config['SECURITY_PASSWORD_HASH'] = "bcrypt"
     app.config['SECURITY_MSG_CONFIRMATION_REQUIRED'] = (
-            Markup('Email requires confirmation. <a href="/confirm">Resend confirmation instructions</a>.'), 
+            flask.Markup('Email requires confirmation. <a href="/confirm">Resend confirmation instructions</a>.'), 
             'error')
     # This comes from config: app.config['SECURITY_REGISTERABLE']
 
@@ -79,7 +80,7 @@ def init():
 
     app.config['SECURITY_POST_LOGIN_VIEW'] = "/"
 
-    security = Security(app, CustomUserDatastore(), 
+    security = flask_security.Security(app, CustomUserDatastore(), 
             login_form=CustomLoginForm,
             register_form=CustomRegisterForm,
             confirm_register_form=CustomRegisterForm)
@@ -87,17 +88,17 @@ def init():
     security.send_mail_task(send_security_mail)
 
     if app.config['SECURITY_CONFIRMABLE'] and app.config['NEW_USER_NOTIFICATION']:
-        user_confirmed.connect(new_user_notification, app)
+        flask_security.signals.user_confirmed.connect(new_user_notification, app)
 
 
-class CustomUserDatastore(SQLAlchemyDatastore, UserDatastore):
+class CustomUserDatastore(flask_security.datastore.SQLAlchemyDatastore, flask_security.datastore.UserDatastore):
     
     def __init__(self):
-        SQLAlchemyDatastore.__init__(self, db)
-        UserDatastore.__init__(self, User, None)
+        flask_security.datastore.SQLAlchemyDatastore.__init__(self, db)
+        flask_security.datastore.UserDatastore.__init__(self, User, None)
 
     def get_user(self, identifier):
-        if isinstance(identifier, UUID):
+        if isinstance(identifier, uuid.UUID):
             user = db.session.query(User).get(identifier)
         else:
             user = db.session.query(User).filter_by(email=identifier).first()
@@ -115,31 +116,32 @@ class CustomUserDatastore(SQLAlchemyDatastore, UserDatastore):
     def find_role(self, role):
         return None
 
-class CustomLoginForm(LoginForm):
+class CustomLoginForm(flask_security.forms.LoginForm):
 
-    email = StringField("Email or Login")
+    email = wtforms.StringField("Email or Login")
 
-class CustomRegisterForm(RegisterForm):
+class CustomRegisterForm(flask_security.forms.RegisterForm):
     
-    login = StringField('Login', validators=[Required(), Length(3, 32), 
-            Regexp(r'^[a-z][a-z0-9_]*$', 0, 'Login must have only lowercase letters, numbers or underscores')])
+    login = wtforms.StringField('Login', validators=[validators.Required(), validators.Length(3, 32), 
+            validators.Regexp(r'^[a-z][a-z0-9_]*$', 0, 'Login must have only lowercase letters, numbers or underscores')])
 
-    name = StringField('Name', validators=[Required(), Length(1, 64), 
-            Regexp(r'^[A-Za-z0-9_\- ]+$', 0, 'Name must have only letters, numbers, spaces, dots, dashes or underscores')])
+    name = wtforms.StringField('Name', validators=[validators.Required(), validators.Length(1, 64), 
+            validators.Regexp(r'^[A-Za-z0-9_\- ]+$', 0, 'Name must have only letters, numbers, spaces, dots, dashes or underscores')])
 
 def send_security_mail(message):
-    send(message=message)
+    mail.send(message=message)
 
 def new_user_notification(sender, user):
     admin = get_admin()
-    send(recipient=admin.email, subject="New Puffin user: " + user.login, template="new_user", user=user)
+    mail.send(recipient=admin.email, subject="New Puffin user: " + user.login, template="new_user", user=user)
 
 def get_user(login):
     return security.datastore.get_user(login)
 
 def create_user(login):
     user = security.datastore.create_user(login=login, name=login.capitalize(), 
-        email=login + "@" + app.config["SERVER_NAME_FULL"], password=encrypt_password(login),
+        email=login + "@" + app.config["SERVER_NAME_FULL"], 
+        password=flask_security.utils.encrypt_password(login),
         confirmed=True)
     update_user(user)
 

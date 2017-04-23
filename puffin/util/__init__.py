@@ -1,11 +1,15 @@
-from uuid import UUID
-from threading import Lock
+import uuid
+import threading
+import os
+from os import path
 
+
+HOME=path.abspath(path.join(path.dirname(path.abspath(__file__)), '..', '..'))
 
 def to_uuid(string):
     "Convert given string to UUID, return None if not possible"
     try:
-        return UUID(string)
+        return uuid.UUID(string)
     except ValueError:
         return None
 
@@ -26,7 +30,7 @@ class SafeSet():
     
     def __init__(self):
         self.data = set()
-        self.lock = Lock()
+        self.lock = threading.Lock()
 
     def add(self, element):
         with self.lock:

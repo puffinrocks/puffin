@@ -1,9 +1,9 @@
-from flask_bootstrap import Bootstrap
-from flask import Flask
+import flask
+import flask_bootstrap
 
-app = Flask(__name__)
+app = flask.Flask(__name__)
 
-Bootstrap(app)
+flask_bootstrap.Bootstrap(app)
 app.config['BOOTSTRAP_SERVE_LOCAL'] = True
 
 from . import gui

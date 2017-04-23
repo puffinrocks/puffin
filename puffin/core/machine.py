@@ -1,6 +1,6 @@
-from docker.tls import TLSConfig
+import docker.tls
 
-from .. import app
+from puffin import app
 
 
 class Machine:
@@ -36,7 +36,7 @@ def get_tls_config(machine):
     if not machine.path:
         return None
 
-    return TLSConfig(
+    return docker.tls.TLSConfig(
         client_cert=(machine.cert, machine.key),
         verify=machine.ca,
         assert_hostname = False

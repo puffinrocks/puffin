@@ -1,5 +1,6 @@
-from ipaddress import ip_network
-from docker.types import IPAMConfig, IPAMPool
+import ipaddress
+
+import docker.types
 
 
 def init():
@@ -7,12 +8,12 @@ def init():
 
 def get_next_cidr(client):
     networks = client.networks.list()
-    last_cidr = ip_network("10.0.0.0/24")
+    last_cidr = ipaddress.ip_network("10.0.0.0/24")
     for network in networks:
         if (network.attrs["IPAM"] and network.attrs["IPAM"]["Config"] 
                 and len(network.attrs["IPAM"]["Config"]) > 0
                 and network.attrs["IPAM"]["Config"][0]["Subnet"]):
-            cidr = ip_network(network.attrs["IPAM"]["Config"][0]["Subnet"])
+            cidr = ipaddress.ip_network(network.attrs["IPAM"]["Config"][0]["Subnet"])
             if cidr.network_address.packed[0] == 10:
                 if cidr.prefixlen != 24:
                     raise Exception(
@@ -21,7 +22,7 @@ def get_next_cidr(client):
                 if cidr > last_cidr:
                     last_cidr = cidr
     
-    next_cidr = ip_network((last_cidr.network_address + 256).exploded + "/24")
+    next_cidr = ipaddress.ip_network((last_cidr.network_address + 256).exploded + "/24")
     if next_cidr.network_address.packed[0] > 10:
         raise Exception("No more networks available")
     last_cidr = next_cidr
@@ -36,7 +37,7 @@ def create_network(client, name):
         for network in networks:
             network.remove()
     
-    ipam_pool = IPAMPool(subnet=cidr.exploded, 
+    ipam_pool = docker.types.IPAMPool(subnet=cidr.exploded, 
             gateway=(cidr.network_address + 1).exploded)
-    ipam_config = IPAMConfig(pool_configs=[ipam_pool])
+    ipam_config = docker.types.IPAMConfig(pool_configs=[ipam_pool])
     client.networks.create(name, ipam=ipam_config)

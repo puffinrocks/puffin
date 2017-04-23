@@ -1,20 +1,20 @@
-from .machine import get_machine, get_tls_config
-from .compose import compose_start, compose_stop, compose_run
-from .network import create_network
-from .applications import Application, ApplicationStatus, get_application, \
-        get_application_domain, get_application_list, get_applications, \
-        get_application_name, get_user_application_id, set_application_started
-from .queue import task, task_exists
-from .security import User, get_user, get_all_users
-from .db import db
-from .. import app
-from ..util import safe_get, env_dict
-
-from docker import DockerClient, errors
+import time
 
 import requests
-from requests.exceptions import RequestException
-from time import time, sleep
+import requests.exceptions
+import docker
+import docker.errors
+
+from puffin import app
+from .db import db
+from . import machine as machine_module
+from . import compose
+from . import network
+from . import applications
+from . import queue
+from . import security
+from .. import util
+
 
 # How long to wait after creating an app, to allow dependencies startup
 APPLICATION_SLEEP_AFTER_CREATE = 10
@@ -27,46 +27,46 @@ def init():
     pass
 
 def get_client():
-    machine = get_machine()
-    client = DockerClient(base_url=machine.url, tls=get_tls_config(machine), version="auto")
+    machine = machine_module.get_machine()
+    client = docker.DockerClient(base_url=machine.url, tls=machine_module.get_tls_config(machine), version="auto")
     client.ping()
     return client
 
 def create_application(client, user, application):
-    if get_application_status(client, user, application) != ApplicationStatus.DELETED:
+    if get_application_status(client, user, application) != applications.ApplicationStatus.DELETED:
         raise RuntimeError("Application already installed or updating, user: {}, application: {}".format(user.login, application.application_id))
-    name = get_application_name(user, application)
-    task(name, create_application_task, user.user_id, application)
+    name = applications.get_application_name(user, application)
+    queue.task(name, create_application_task, user.user_id, application)
 
 def create_application_task(user_id, application):
-    user = db.session.query(User).get(user_id)
-    create_network(get_client(), get_application_name(user, application) + "_default")
-    compose_start(get_machine(), user, application)
-    application_url = "http://" + get_application_domain(user, application)
-    sleep(APPLICATION_SLEEP_AFTER_CREATE)
+    user = db.session.query(security.User).get(user_id)
+    network.create_network(get_client(), applications.get_application_name(user, application) + "_default")
+    compose.compose_start(machine_module.get_machine(), user, application)
+    application_url = "http://" + applications.get_application_domain(user, application)
+    time.sleep(APPLICATION_SLEEP_AFTER_CREATE)
     wait_until_up(application_url)
-    set_application_started(user, application, True)
+    applications.set_application_started(user, application, True)
 
 def delete_application(client, user, application, async=True):
-    if get_application_status(client, user, application) != ApplicationStatus.CREATED:
+    if get_application_status(client, user, application) != applications.ApplicationStatus.CREATED:
         raise RuntimeError("Application not installed or updating, user: {}, application: {}".format(user.login, application.application_id))
-    name = get_application_name(user, application)
-    task(name, delete_application_task, user.user_id, application)
+    name = applications.get_application_name(user, application)
+    queue.task(name, delete_application_task, user.user_id, application)
 
 def delete_application_task(user_id, application):
-    user = db.session.query(User).get(user_id)
-    compose_stop(get_machine(), user, application)
-    set_application_started(user, application, False)
+    user = db.session.query(security.User).get(user_id)
+    compose.compose_stop(machine_module.get_machine(), user, application)
+    applications.set_application_started(user, application, False)
 
 def run_service(user, application, service, **environment):
-    return compose_run(get_machine(), user, application, "run", service, **environment)
+    return compose.compose_run(machine_module.get_machine(), user, application, "run", service, **environment)
 
 def get_application_status(client, user, application):
     containers = get_containers(client)
     return _get_application_status(user, application, containers)
 
 def get_application_statuses(client, user):
-    applications = get_application_list()
+    applications = applications.get_application_list()
     containers = get_containers(client)
     application_statuses = []
     for application in applications:
@@ -75,18 +75,18 @@ def get_application_statuses(client, user):
     return application_statuses
 
 def _get_application_status(user, application, containers):
-    name = get_application_name(user, application)
-    if task_exists(name):
-        return ApplicationStatus.UPDATING
+    name = applications.get_application_name(user, application)
+    if queue.task_exists(name):
+        return applications.ApplicationStatus.UPDATING
     container = get_container(containers, name)
     if container:
-        return ApplicationStatus.CREATED
+        return applications.ApplicationStatus.CREATED
     else:
-        return ApplicationStatus.DELETED
+        return applications.ApplicationStatus.DELETED
     
 def get_all_running_applications():
-    applications = get_applications()
-    users = {u.login : u for u in get_all_users()}
+    apps = applications.get_applications()
+    users = {u.login : u for u in security.get_all_users()}
     
     client = get_client()
     containers = get_containers(client)
@@ -101,7 +101,7 @@ def get_all_running_applications():
         login, application_id = user_application_id
         
         # ignores special applications
-        application = applications.get(application_id)
+        application = apps.get(application_id)
     
         user = users.get(login)
 
@@ -114,27 +114,27 @@ def get_all_running_applications():
 
 def _get_user_application_id(container):
     if container.name.endswith("_main_1"):
-        return get_user_application_id(container.name[:-7])
+        return applications.get_user_application_id(container.name[:-7])
     return None
 
 def get_application_image_version(client, application):
     image_name = application.main_image
     try:
         image = client.images.get(image_name)
-    except errors.ImageNotFound:
+    except docker.errors.ImageNotFound:
         return None
-    env_list = safe_get(image.attrs, "Config", "Env")
-    env = env_dict(env_list)
+    env_list = util.safe_get(image.attrs, "Config", "Env")
+    env = util.env_dict(env_list)
     return env.get("VERSION")
 
 def get_application_version(client, user, application):
-    name = get_application_name(user, application)
+    name = applications.get_application_name(user, application)
     containers = get_containers(client)
     container = get_container(containers, name)
     if not container:
         return None
-    env_list = safe_get(container.attrs, "Config", "Env")
-    env = env_dict(env_list)
+    env_list = util.safe_get(container.attrs, "Config", "Env")
+    env = util.env_dict(env_list)
     return env.get("VERSION")
 
 def get_containers(client):
@@ -149,17 +149,17 @@ def get_container(containers, name):
         return None
 
 def wait_until_up(url, timeout=APPLICATION_CREATE_TIMEOUT):
-    start_time = time()
+    start_time = time.time()
     while True:
         try:
             r = requests.get(url)
             if r.status_code == 200:
                 break
-        except RequestException:
+        except requests.exceptions.RequestException:
             pass
-        if start_time + timeout <= time():
+        if start_time + timeout <= time.time():
             break
-        sleep(1)
+        time.sleep(1)
 
 def install_proxy():
     return _install("_proxy")
@@ -179,11 +179,11 @@ def install_dns():
 
 def _install(name, **environment):
     client = get_client()
-    user = get_user("puffin")
-    application = get_application(name)
-    if get_application_status(client, user, application) != ApplicationStatus.DELETED:
+    user = security.get_user("puffin")
+    application = applications.get_application(name)
+    if get_application_status(client, user, application) != applications.ApplicationStatus.DELETED:
         return False
-    compose_start(get_machine(), user, application, **environment)
+    compose.compose_start(machine_module.get_machine(), user, application, **environment)
     return True
 
 def create_networks():

@@ -1,6 +1,9 @@
-import subprocess, re, os
-from ..util.homer import HOME
-from .. import app
+import subprocess
+import re
+import os
+
+from puffin import app
+from .. import util
 
 
 class DefaultConfig:
@@ -89,7 +92,7 @@ def get_version():
     try:
         description = subprocess.check_output(
             ["git", "describe", "--long",  "--match", "[0-9].*"], 
-            stderr=subprocess.STDOUT, cwd=HOME, universal_newlines=True)
+            stderr=subprocess.STDOUT, cwd=util.HOME, universal_newlines=True)
         m = re.match(r"([\w\.]+)-\d+-g(\w+)", description)
         if m:
             version = (m.group(1), m.group(2))

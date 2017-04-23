@@ -1,14 +1,14 @@
-from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import create_engine
-from sqlalchemy.orm import mapper, object_mapper
-from sqlalchemy.orm.attributes import flag_modified
-from sqlalchemy.dialects.postgresql import JSON
-from flask_migrate import Migrate
+import sqlalchemy
+import sqlalchemy.orm
+import sqlalchemy.orm.attributes
+import sqlalchemy.dialects.postgresql
+import flask_sqlalchemy
+import flask_migrate
 
-from .. import app
+from puffin import app
 
 
-db = SQLAlchemy()
+db = flask_sqlalchemy.SQLAlchemy()
 
 
 def init():
@@ -23,14 +23,14 @@ def init():
     # See http://piotr.banaszkiewicz.org/blog/2012/06/29/flask-sqlalchemy-init_app/, option 2
     db.app = app
 
-    migrate = Migrate(app, db)
+    migrate = flask_migrate.Migrate(app, db)
 
 def create(name):
     "Create database if it does not exist"
     url = get_url(app.config["DB_USER"], app.config["DB_PASSWORD"], 
         app.config["DB_HOST"], app.config["DB_PORT"], "postgres")
  
-    engine = create_engine(url)
+    engine = sqlalchemy.create_engine(url)
     with engine.connect() as conn:
  
         result = conn.execute(
@@ -67,10 +67,10 @@ def get_url(user, password, host, port, name):
 
 def update_model_with_json(model):
     # Needed for JSON fields, see https://bashelton.com/2014/03/updating-postgresql-json-fields-via-sqlalchemy/
-    mapper = object_mapper(model)
+    mapper = sqlalchemy.orm.object_mapper(model)
     for column in mapper.columns.values():
-        if isinstance(column.type, JSON):
-            flag_modified(model, column.name)
+        if isinstance(column.type, sqlalchemy.dialects.postgresql.JSON):
+            sqlalchemy.orm.attributes.flag_modified(model, column.name)
     
     db.session.add(model)
 

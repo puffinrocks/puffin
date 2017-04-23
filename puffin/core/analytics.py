@@ -1,5 +1,6 @@
-from flask_analytics import Analytics
-from .. import app
+import flask_analytics
+
+from puffin import app
 
 
 analytics = None
@@ -11,4 +12,4 @@ def init():
         app.config['ANALYTICS']['PIWIK'] = {}
         app.config['ANALYTICS']['PIWIK']['BASE_URL'] = app.config['ANALYTICS_PIWIK_BASE_URL']
         app.config['ANALYTICS']['PIWIK']['SITE_ID'] = app.config['ANALYTICS_PIWIK_SITE_ID']
-    analytics = Analytics(app)
+    analytics = flask_analytics.Analytics(app)

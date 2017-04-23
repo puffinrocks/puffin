@@ -1,10 +1,11 @@
-from flask import render_template
-from flask_mail import Mail, Message
-from .. import app
-from .queue import task
+import flask
+import flask_mail
+
+from puffin import app
+from . import queue
 
 
-mail = Mail()
+mail = flask_mail.Mail()
 
 def init():
     mail.init_app(app)
@@ -17,7 +18,7 @@ def send(recipient=None, subject=None, template=None, message=None, async=True, 
         message = create_message(recipient, subject, template, **kwargs)
     
     if async:
-        task(None, send_message, message)
+        queue.task(None, send_message, message)
     else:
         send_message(message)
 
@@ -25,6 +26,6 @@ def send_message(message):
     mail.send(message)
 
 def create_message(recipient, subject, template, **kwargs):
-    message = Message(subject, recipients=[recipient])
-    message.body = render_template("mail/" + template + ".txt", **kwargs)
+    message = flask_mail.Message(subject, recipients=[recipient])
+    message.body = flask.render_template("mail/" + template + ".txt", **kwargs)
     return message

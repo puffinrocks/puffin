@@ -1,19 +1,21 @@
-from .. import app
-from queue import Queue
-from threading import Thread, Lock
-from ..util import SafeSet
+import queue as queue_module
+import threading
+
+from puffin import app
+from .. import util
+
 
 # Based on http://code.activestate.com/recipes/577187-python-thread-pool/
 
 queue = None
 
-task_ids = SafeSet()
+task_ids = util.SafeSet()
 
 
 def init():
     global queue
     threads = 1
-    queue = Queue()
+    queue = queue_module.Queue()
     for _ in range(threads): 
         Worker(queue)
 
@@ -28,10 +30,10 @@ def task_exists(task_id):
 def wait():
     queue.join()
 
-class Worker(Thread):
+class Worker(threading.Thread):
     """Thread executing tasks from a given tasks queue"""
     def __init__(self, queue):
-        Thread.__init__(self)
+        threading.Thread.__init__(self)
         self.queue = queue
         self.daemon = True
         self.start()

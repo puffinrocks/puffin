@@ -1,10 +1,10 @@
-from .security import get_all_users
+import cachetools
+
+from . import security
 from . import docker
 
-from cachetools import cached, TTLCache
 
-
-stats_cache = TTLCache(maxsize=1, ttl=60)
+stats_cache = cachetools.TTLCache(maxsize=1, ttl=60)
 
 
 class Stats:
@@ -14,7 +14,7 @@ class Stats:
 def init():
     pass
 
-@cached(stats_cache)
+@cachetools.cached(stats_cache)
 def get_stats():
     stats = Stats()
     stats.users = get_users()
@@ -23,7 +23,7 @@ def get_stats():
     return stats    
 
 def get_users():
-    return len([u for u in get_all_users() if u.confirmed])
+    return len([u for u in security.get_all_users() if u.confirmed])
 
 def get_apps():
     return len(docker.get_all_running_applications())

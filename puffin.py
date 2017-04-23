@@ -1,20 +1,28 @@
 #!/usr/bin/env python3
 
-from waitress import serve
-from reload import reload_me
-from flask_script import Manager, Shell
-from flask_migrate import MigrateCommand, upgrade as db_upgrade
+import time
+import sys
+
+import waitress
+import reload as reload_module
+import flask_script
+import flask_migrate
 import pytest
 
 from puffin import app
 from puffin import core
-from puffin.core import db, queue, mail, security, docker, applications, \
-        machine, compose, backup as backup_module
+from puffin.core import db
+from puffin.core import queue
+from puffin.core import mail
+from puffin.core import security
+from puffin.core import docker
+from puffin.core import applications
+from puffin.core import machine
+from puffin.core import compose
+from puffin.core import backup as backup_module
 
-from time import sleep
-import sys
 
-manager = Manager(app, with_default_commands=False)
+manager = flask_script.Manager(app, with_default_commands=False)
 
 
 @manager.command
@@ -23,9 +31,9 @@ manager = Manager(app, with_default_commands=False)
 def server(reload=False):
     "Run the server"
     if reload:
-        reload_me("server")
+        reload_module.reload_me("server")
     else:
-        serve(app, host=app.config["HOST"], port=app.config["PORT"], 
+        waitress.serve(app, host=app.config["HOST"], port=app.config["PORT"], 
                 threads=app.config["THREADS"])
 
 
@@ -34,10 +42,10 @@ def make_shell_context():
         security=security, docker=docker, applications=applications,
         machine=machine, compose=compose)
 
-manager.add_command("shell", Shell(make_context=make_shell_context))
+manager.add_command("shell", flask_script.Shell(make_context=make_shell_context))
 
 
-@MigrateCommand.command
+@flask_migrate.MigrateCommand.command
 def create():
     "Create the database"
     db_create()
@@ -51,10 +59,10 @@ def create_database(name):
     if db.create(name):
         print("Created {} database".format(name))
 
-manager.add_command('db', MigrateCommand)
+manager.add_command('db', flask_migrate.MigrateCommand)
 
 
-machine = Manager(usage="Perform hosting server operations")
+machine = flask_script.Manager(usage="Perform hosting server operations")
 
 @machine.command
 def network():
@@ -96,7 +104,7 @@ def machine_mail():
 manager.add_command("machine", machine)
 
 
-user = Manager(usage="Manage users")
+user = flask_script.Manager(usage="Manage users")
 
 @user.command
 def create(login):
@@ -145,7 +153,7 @@ def user_list():
 manager.add_command("user", user)
 
 
-application = Manager(usage="Manage apps")
+application = flask_script.Manager(usage="Manage apps")
 
 @application.command
 def list():
@@ -237,14 +245,14 @@ def test(coverage=False):
 @manager.command
 def wait():
     "Wait until dependencies are up"
-    sleep(6)
+    time.sleep(6)
 
 
 def init():
     "Initialize Puffin dependencies"
     wait()
     db_create()
-    db_upgrade()
+    flask_migrate.upgrade()
     user_create("puffin")
     machine_network()
     machine_volume()
