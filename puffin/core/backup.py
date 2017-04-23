@@ -12,7 +12,8 @@ def init():
 def backup(user, application):
     client = docker.get_client()
 
-    if docker.get_application_status(client, user, application) != applications.ApplicationStatus.DELETED:
+    application_status = docker.get_application_status(client, user, application)
+    if application_status not in (applications.ApplicationStatus.DELETED, applications.ApplicationStatus.UPDATING):
         raise Exception("Can't backup running application, user: {}, application: {}"
                 .format(user.login, application.application_id))
 

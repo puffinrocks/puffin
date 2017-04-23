@@ -13,6 +13,7 @@ from . import network
 from . import applications
 from . import queue
 from . import security
+from . import backup
 from .. import util
 
 
@@ -56,6 +57,7 @@ def delete_application(client, user, application, async=True):
 def delete_application_task(user_id, application):
     user = db.session.query(security.User).get(user_id)
     compose.compose_stop(machine_module.get_machine(), user, application)
+    backup.backup(user, application)
     applications.set_application_started(user, application, False)
 
 def run_service(user, application, service, **environment):
