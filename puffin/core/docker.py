@@ -68,10 +68,10 @@ def get_application_status(client, user, application):
     return _get_application_status(user, application, containers)
 
 def get_application_statuses(client, user):
-    applications = applications.get_application_list()
+    apps = applications.get_application_list()
     containers = get_containers(client)
     application_statuses = []
-    for application in applications:
+    for application in apps:
         status = _get_application_status(user, application, containers)
         application_statuses.append((application, status))
     return application_statuses

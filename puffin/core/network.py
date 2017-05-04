@@ -18,7 +18,7 @@ def get_next_cidr(client):
                 if cidr.prefixlen != 24:
                     raise Exception(
                             "Invalid network prefix length {0} for network {1}"
-                            .format(cidr.prefixlen, network["Name"]))
+                            .format(cidr.prefixlen, network.name))
                 if cidr > last_cidr:
                     last_cidr = cidr
     
