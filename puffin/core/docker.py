@@ -21,7 +21,7 @@ from .. import util
 APPLICATION_SLEEP_AFTER_CREATE = 10
 
 # How long wait for application startup
-APPLICATION_CREATE_TIMEOUT = 60
+APPLICATION_CREATE_TIMEOUT = 120
 
 
 def init():
