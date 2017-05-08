@@ -4,7 +4,7 @@ from . import security
 from . import docker
 
 
-stats_cache = cachetools.TTLCache(maxsize=1, ttl=60)
+stats_cache = cachetools.TTLCache(maxsize=1, ttl=300)
 
 
 class Stats:
