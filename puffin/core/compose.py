@@ -37,5 +37,8 @@ def compose_run(machine, user, application, *arguments, **environment):
             universal_newlines=True, env=env)
     process.wait()
     out, err = process.communicate()
-    return out.strip()
+    out = out.strip()
+    if out:
+        print(out)
+    return out
 
