@@ -1,4 +1,5 @@
 import time
+import inspect
 
 import requests
 import requests.exceptions
@@ -64,23 +65,31 @@ def run_service(user, application, service, **environment):
     return compose.compose_run(machine_module.get_machine(), user, application, "run", service, **environment)
 
 def get_application_status(client, user, application):
-    containers = get_containers(client)
-    return _get_application_status(user, application, containers)
+    container = get_main_container(client, user, application)
+    return _get_application_status(user, application, container)
 
 def get_application_statuses(client, user):
-    apps = applications.get_application_list()
-    containers = get_containers(client)
+    apps = applications.get_applications()
     application_statuses = []
-    for application in apps:
-        status = _get_application_status(user, application, containers)
+    containers = get_containers(client, user.login + "x.*_main_1")
+    for container in containers:
+        user_application_id = _get_user_application_id(container)
+        if not user_application_id:
+            continue
+        login, application_id = user_application_id
+
+        application = apps.get(application_id)
+        if not application:
+            continue
+
+        status = _get_application_status(user, application, container)
         application_statuses.append((application, status))
     return application_statuses
 
-def _get_application_status(user, application, containers):
+def _get_application_status(user, application, container):
     name = applications.get_application_name(user, application)
     if queue.task_exists(name):
         return applications.ApplicationStatus.UPDATING
-    container = get_container(containers, name)
     if container:
         return applications.ApplicationStatus.CREATED
     else:
@@ -91,22 +100,17 @@ def get_all_running_applications():
     users = {u.login : u for u in security.get_all_users()}
     
     client = get_client()
-    containers = get_containers(client)
+    containers = get_containers(client, "_main_1")
     
     running_applications = []
     for container in containers:
         user_application_id = _get_user_application_id(container)
-        
         if not user_application_id:
             continue
-
         login, application_id = user_application_id
         
-        # ignores special applications
         application = apps.get(application_id)
-    
         user = users.get(login)
-
         if not application or not user:
             continue
 
@@ -131,22 +135,21 @@ def get_application_image_version(client, application):
 
 def get_application_version(client, user, application):
     name = applications.get_application_name(user, application)
-    containers = get_containers(client)
-    container = get_container(containers, name)
+    container = get_main_container(client, user, application)
     if not container:
         return None
     env_list = util.safe_get(container.attrs, "Config", "Env")
     env = util.env_dict(env_list)
     return env.get("VERSION")
 
-def get_containers(client):
-    return client.containers.list()
+def get_containers(client, name=""):
+    return client.containers.list(filters=dict(name=name))
  
-def get_container(containers, name):
-    main_name = name + "_main_1"
-    container = [c for c in containers if c.name == main_name]
-    if len(container) > 0:
-        return container[0]
+def get_main_container(client, user, application):
+    name = applications.get_application_name(user, application) + "_main_1"
+    containers = get_containers(client, name)
+    if len(containers) == 1:
+        return containers[0]
     else:
         return None
 
