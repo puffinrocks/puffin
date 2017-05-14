@@ -19,6 +19,7 @@ from puffin.core import docker
 from puffin.core import applications
 from puffin.core import machine
 from puffin.core import compose
+from puffin.core import network
 from puffin.core import backup as backup_module
 
 
@@ -40,7 +41,7 @@ def server(reload=False):
 def make_shell_context():
     return dict(app=app, db=db.db, queue=queue, mail=mail, 
         security=security, docker=docker, applications=applications,
-        machine=machine, compose=compose)
+        machine=machine, compose=compose, network=network)
 
 manager.add_command("shell", flask_script.Shell(make_context=make_shell_context))
 
