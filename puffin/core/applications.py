@@ -48,6 +48,8 @@ class Application:
             compose_data = yaml.safe_load(compose_file)
         
         self.main_image = util.safe_get(compose_data, "services", "main", "image")
+        if not self.main_image:
+            raise Exception("Missing main image in docker-compose.yml for application: " + application_id)
 
         # Retrieve all volumes except external ones
         self.volumes = [v[0] for v in compose_data.get("volumes", {}).items() 
