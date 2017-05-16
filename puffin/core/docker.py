@@ -43,7 +43,9 @@ def create_application(client, user, application):
 def create_application_task(user_id, application):
     user = db.session.query(security.User).get(user_id)
     network.create_network(get_client(), applications.get_application_name(user, application) + "_default")
-    compose.compose_start(machine_module.get_machine(), user, application)
+    output = compose.compose_start(machine_module.get_machine(), user, application)
+    if output:
+        print(output)
     application_url = "http://" + applications.get_application_domain(user, application)
     time.sleep(APPLICATION_SLEEP_AFTER_CREATE)
     wait_until_up(application_url)
@@ -57,7 +59,9 @@ def delete_application(client, user, application, async=True):
 
 def delete_application_task(user_id, application):
     user = db.session.query(security.User).get(user_id)
-    compose.compose_stop(machine_module.get_machine(), user, application)
+    output = compose.compose_stop(machine_module.get_machine(), user, application)
+    if output:
+        print(output)
     backup.backup(user, application)
     applications.set_application_started(user, application, False)
 

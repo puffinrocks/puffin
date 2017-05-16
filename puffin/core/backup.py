@@ -25,8 +25,10 @@ def backup(user, application):
     for volume in application.volumes:
         full_volume = get_full_volume(user, application, volume)
         full_archive = get_full_archive(user, application, volume, backup_name)
-        docker.run_service(admin, backup_application, "backup", 
+        output = docker.run_service(admin, backup_application, "backup", 
                 BACKUP="puffin_backup", VOLUME=full_volume, ARCHIVE=full_archive)
+        if output:
+            print(output)
 
 def restore(user, application, backup_name):
     client = docker.get_client()
@@ -41,8 +43,10 @@ def restore(user, application, backup_name):
     for volume in application.volumes:
         full_volume = get_full_volume(user, application, volume)
         full_archive = get_full_archive(user, application, volume, backup_name)
-        docker.run_service(admin, backup_application, "restore", 
+        output = docker.run_service(admin, backup_application, "restore", 
                 BACKUP="puffin_backup", VOLUME=full_volume, ARCHIVE=full_archive)
+        if output:
+            print(output)
 
 def list(user, application):
     admin = security.get_admin()

@@ -11,10 +11,10 @@ def init():
     pass
 
 def compose_start(machine, user, application, **environment):
-    compose_run(machine, user, application, "up", "-d", **environment)
+    return compose_run(machine, user, application, "up", "-d", **environment)
 
 def compose_stop(machine, user, application):
-    compose_run(machine, user, application, "down")
+    return compose_run(machine, user, application, "down")
 
 def compose_run(machine, user, application, *arguments, **environment):
     name = applications.get_application_name(user, application)
@@ -38,7 +38,5 @@ def compose_run(machine, user, application, *arguments, **environment):
     process.wait()
     out, err = process.communicate()
     out = out.strip()
-    if out:
-        print(out)
     return out
 
