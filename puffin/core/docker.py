@@ -71,7 +71,8 @@ def get_application_status(client, user, application):
 def get_application_statuses(client, user):
     apps = applications.get_applications()
     application_statuses = []
-    containers = get_containers(client, user.login + "x.*_main_1")
+    container_name = applications.get_application_name(user, None) + ".*_main_1"
+    containers = get_containers(client, container_name)
     for container in containers:
         user_application_id = _get_user_application_id(container)
         if not user_application_id:

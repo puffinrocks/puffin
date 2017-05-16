@@ -16,6 +16,10 @@ from . import security
 
 
 APPLICATION_HOME = os.path.join(util.HOME, "apps")
+
+# Name separator between user and application, also check apps/_proxy
+APPLICATION_SEPARATOR = "xxxx"
+
 application_cache = cachetools.TTLCache(maxsize=1, ttl=120)
 
 
@@ -163,13 +167,14 @@ def get_all_started_applications():
     return set(started_applications)
 
 def get_application_name(user, application):
+    name = user.login + APPLICATION_SEPARATOR
+    if application:
+        name += application.application_id
     # docker-compose sanitizes project name, see https://github.com/docker/compose/issues/2119
-    return re.sub(r'[^a-z0-9]', '', user.login + "x" + application.application_id).lower()
+    return re.sub(r'[^a-z0-9]', '', name.lower())
 
 def get_user_application_id(container_name):
-    if container_name.endswith("proxy"):
-        return (container_name[0:-6], "proxy")
-    return container_name.rsplit("x", 1)
+    return container_name.split(APPLICATION_SEPARATOR, 1)
 
 def get_application_settings(user_id, application_id):
     application_settings = db.session.query(ApplicationSettings).filter_by(
