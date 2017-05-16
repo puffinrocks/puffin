@@ -111,8 +111,6 @@ def application_settings(application_id):
     application_settings = applications.get_application_settings(user.user_id, application_id)
     default_domain = applications.get_default_application_domain(user, application)
 
-    backups = backup.list(user, application)
-
     form = forms.ApplicationSettingsForm()
     if form.validate_on_submit():
 
@@ -136,6 +134,8 @@ def application_settings(application_id):
         if form.restore.data:
             backup.restore(user, application, form.restore.raw_data[0])
             flask.flash("Backup restored successfully.")
+
+    backups = backup.list(user, application)
 
     form.domain.data = applications.get_application_domain(user, application)
     form.https.data = applications.get_application_https(user, application)
