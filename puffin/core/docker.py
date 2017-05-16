@@ -61,8 +61,8 @@ def delete_application_task(user_id, application):
     backup.backup(user, application)
     applications.set_application_started(user, application, False)
 
-def run_service(user, application, service, **environment):
-    return compose.compose_run(machine_module.get_machine(), user, application, "run", service, **environment)
+def run_service(user, application, service, *arguments, **environment):
+    return compose.compose_run(machine_module.get_machine(), user, application, "run", "--rm", service, *arguments, **environment)
 
 def get_application_status(client, user, application):
     container = get_main_container(client, user, application)
