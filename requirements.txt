@@ -23,5 +23,5 @@ bleach              >= 1.5, < 2.0
 
 pytest              >= 2.8, < 3.0
 pytest-cov          >= 2.2, < 3.0
-ipython             >= 4.0, < 5.0
+ipython             >= 6.0, < 7.0
 reload              >= 0.9, < 1.0
