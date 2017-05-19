@@ -76,6 +76,30 @@ class ApplicationSettings:
         self.application_id = application_id
         self.settings = settings
 
+        self.user = security.get_user(self.user_id)
+        self.application = get_application(self.application_id)
+
+    def default(self, key):
+        if key == "domain":
+            return "{}.{}.{}".format(self.application.application_id,
+                    self.user.login, app.config["SERVER_NAME_FULL"])
+        elif key in ("https", "started"):
+            return False
+        else:
+            return None
+
+    def reset(self, key):
+        self.settings.pop(key, None)
+
+    def __setitem__(self, key, value):
+        if value != self.default(key):
+            self.settings[key] = value
+        else:
+            self.reset(key)
+
+    def __getitem__(self, key):
+        return self.settings.get(key, self.default(key))
+
 
 def init():
     flaskext.markdown.Markdown(app)
