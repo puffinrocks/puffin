@@ -1,4 +1,4 @@
-import os 
+import os
 import subprocess
 
 from puffin import app
@@ -32,8 +32,8 @@ def compose_run(machine, user, application, *arguments, **environment):
     env.update(machine_module.get_env_vars(machine))
     env.update(**environment)
 
-    process = subprocess.Popen(args, 
-            stderr=subprocess.STDOUT, stdout=subprocess.PIPE, 
+    process = subprocess.Popen(args,
+            stderr=subprocess.STDOUT, stdout=subprocess.PIPE,
             universal_newlines=True, env=env)
     process.wait()
     out, err = process.communicate()

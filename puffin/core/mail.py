@@ -16,7 +16,7 @@ def send(recipient=None, subject=None, template=None, message=None, async=True, 
 
     if not message:
         message = create_message(recipient, subject, template, **kwargs)
-    
+
     if async:
         queue.task(None, send_message, message)
     else:

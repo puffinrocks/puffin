@@ -14,7 +14,7 @@
     </div>
 
     <div class="pull-right"><img class="logo" src="{{ url_for('media', path=application.logo) }}" alt="{{ application.name }}"></div>
-  
+
     <div>
         {{ application.description | markdown | bclean | blinkify | safe }}
 
@@ -30,7 +30,7 @@
             &nbsp;
             {% if application_status == ApplicationStatus.CREATED %}
                 <span>
-                    Running Version: 
+                    Running Version:
                     {% if application_version: %}
                         {{ application_version }}
                     {% else %}
@@ -69,16 +69,16 @@
                 {% endif %}
                 </form>
             {% else %}
-                <a href="{{ url_for('security.login', next=request.path) }}">Log In</a> or 
+                <a href="{{ url_for('security.login', next=request.path) }}">Log In</a> or
                 {% if config.SECURITY_REGISTERABLE %}
                     <a href="{{ url_for('security.register', next=request.path) }}">Register</a>
                 {% endif %}
                 to run application.
             {% endif %}
         </div>
-        
+
     </div>
-    
+
 </div>
 
 {% endblock %}

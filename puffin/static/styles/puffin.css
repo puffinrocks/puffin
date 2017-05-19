@@ -7,7 +7,7 @@ html {
 body {
   padding-top: 50px;
   padding-bottom: 20px;
-  
+
   /* Margin bottom by footer height */
   margin-bottom: 60px;
 
@@ -23,7 +23,7 @@ body {
   position: absolute;
   bottom: 0;
   width: 100%;
-  
+
   /* Set the fixed height of the footer here */
   height: 60px;
 }
@@ -52,16 +52,16 @@ body {
 }
 
 .blinking {
-  animation: blinker 1.5s cubic-bezier(.5, 0, 1, 1) infinite alternate;  
+  animation: blinker 1.5s cubic-bezier(.5, 0, 1, 1) infinite alternate;
 }
-@keyframes blinker {  
+@keyframes blinker {
   from { opacity: 1; }
   to { opacity: 0.5; }
 }
 
 .version {
     font-size: 16px;
-    color: #9d9d9d; 
+    color: #9d9d9d;
 }
 
 .about div {

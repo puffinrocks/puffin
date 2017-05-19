@@ -24,7 +24,7 @@ application_cache = cachetools.TTLCache(maxsize=1, ttl=120)
 
 
 class Application:
-    
+
     def __init__(self, application_id):
         self.application_id = application_id
         self.path = os.path.join(APPLICATION_HOME, self.application_id)
@@ -46,15 +46,15 @@ class Application:
         compose_data = {}
         with open(self.compose) as compose_file:
             compose_data = yaml.safe_load(compose_file)
-        
+
         self.main_image = util.safe_get(compose_data, "services", "main", "image")
         if not self.main_image:
             raise Exception("Missing main image in docker-compose.yml for application: " + application_id)
 
         # Retrieve all volumes except external ones
-        self.volumes = [v[0] for v in compose_data.get("volumes", {}).items() 
+        self.volumes = [v[0] for v in compose_data.get("volumes", {}).items()
                 if not (v[1] and "external" in v[1])]
- 
+
     def __eq__(self, other):
         return self.application_id == other.application_id
 
@@ -70,7 +70,7 @@ class ApplicationStatus(enum.Enum):
 
 
 class ApplicationSettings:
-    
+
     def __init__(self, user_id, application_id, settings):
         self.user_id = user_id
         self.application_id = application_id
@@ -89,13 +89,13 @@ def get_application(application_id):
 
 def get_application_list():
     applications = get_applications().values()
-    
+
     # Filter private applications
     applications = (a for a in applications if not a.application_id.startswith("_"))
-    
+
     # Sort alphabetically
     applications = sorted(applications, key=lambda a: a.name.lower())
-    
+
     return applications
 
 @cachetools.cached(application_cache)
@@ -154,13 +154,13 @@ def get_all_started_applications():
     all_application_settings = db.session.query(ApplicationSettings).all()
     started_application_settings = \
         [s for s in all_application_settings if s.settings.get("started")]
-    
+
     started_applications = []
     for application_settings in started_application_settings:
-        
+
         application = applications.get(application_settings.application_id)
         user = users.get(application_settings.user_id)
-        
+
         if not application or not user:
             continue
 

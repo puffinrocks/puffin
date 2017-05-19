@@ -99,21 +99,21 @@ def _get_application_status(user, application, container):
         return applications.ApplicationStatus.CREATED
     else:
         return applications.ApplicationStatus.DELETED
-    
+
 def get_all_running_applications():
     apps = applications.get_applications()
     users = {u.login : u for u in security.get_all_users()}
-    
+
     client = get_client()
     containers = get_containers(client, "_main_1")
-    
+
     running_applications = []
     for container in containers:
         user_application_id = _get_user_application_id(container)
         if not user_application_id:
             continue
         login, application_id = user_application_id
-        
+
         application = apps.get(application_id)
         user = users.get(login)
         if not application or not user:
@@ -149,7 +149,7 @@ def get_application_version(client, user, application):
 
 def get_containers(client, name=""):
     return client.containers.list(filters=dict(name=name))
- 
+
 def get_main_container(client, user, application):
     name = applications.get_application_name(user, application) + "_main_1"
     containers = get_containers(client, name)
@@ -176,12 +176,12 @@ def install_proxy():
 
 def install_mail():
     env = {
-        'MAIL_SERVER': app.config['MAIL_SERVER'], 
+        'MAIL_SERVER': app.config['MAIL_SERVER'],
         'MAIL_PORT': str(app.config['MAIL_PORT']),
         'MAIL_USERNAME': app.config['MAIL_USERNAME'] or 'username',
         'MAIL_PASSWORD': app.config['MAIL_PASSWORD'] or 'password',
     }
-    
+
     return _install("_mail", **env)
 
 def install_dns():

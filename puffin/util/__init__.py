@@ -27,7 +27,7 @@ def deproxy(o):
     return o
 
 class SafeSet():
-    
+
     def __init__(self):
         self.data = set()
         self.lock = threading.Lock()

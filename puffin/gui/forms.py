@@ -29,18 +29,18 @@ class ApplicationSettingsForm(flask_wtf.Form):
                     and self.domain.data.endswith(server_name)):
                 self.domain.errors.append('Invalid domain, cannot end with ' + server_name)
                 return False
-        
+
         return True
 
 class ProfileForm(flask_wtf.Form):
     login = wtforms.StringField('Login')
     email = wtforms.StringField('Email')
 
-    name = wtforms.StringField('Name', 
+    name = wtforms.StringField('Name',
             validators=[
-                validators.Required(), 
-                validators.Length(1, 64), 
+                validators.Required(),
+                validators.Length(1, 64),
                 validators.Regexp(r'^[A-Za-z0-9_\- ]+$', 0, 'Name must have only letters, numbers, spaces, dots, dashes or underscores')])
-    
+
     submit = wtforms.SubmitField('Update')
 

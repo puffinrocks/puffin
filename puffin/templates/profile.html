@@ -21,12 +21,12 @@
 	        {{ wtf.form_field(form.login, disabled=True) }}
 	        {{ wtf.form_field(form.email, disabled=True) }}
 	        {{ wtf.form_field(form.name) }}
-            
+
             <div class="form-group">
                 {{ wtf.form_field(form.submit) }}
             </div>
         </form>
-        
+
         <div>
             <a href="{{ url_for("security.change_password") }}" class="btn btn-warning">Change Password</a>
         </div>

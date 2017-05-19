@@ -20,7 +20,7 @@ def get_stats():
     stats.users = get_users()
     stats.apps = get_apps()
     stats.containers = get_containers()
-    return stats    
+    return stats
 
 def get_users():
     return len([u for u in security.get_all_users() if u.confirmed])

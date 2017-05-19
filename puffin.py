@@ -27,19 +27,19 @@ manager = flask_script.Manager(app, with_default_commands=False)
 
 
 @manager.command
-@manager.option("-r", "--reload", action="store_true", 
+@manager.option("-r", "--reload", action="store_true",
         help="Reload the server if any file changes")
 def server(reload=False):
     "Run the server"
     if reload:
         reload_module.reload_me("server")
     else:
-        waitress.serve(app, host=app.config["HOST"], port=app.config["PORT"], 
+        waitress.serve(app, host=app.config["HOST"], port=app.config["PORT"],
                 threads=app.config["THREADS"])
 
 
 def make_shell_context():
-    return dict(app=app, db=db.db, queue=queue, mail=mail, 
+    return dict(app=app, db=db.db, queue=queue, mail=mail,
         security=security, docker=docker, applications=applications,
         machine=machine, compose=compose, network=network)
 
@@ -148,7 +148,7 @@ def user_list():
     print(line_format.format("Login", "Email", "Name", "Active", "Confirmed"))
     print("-" * 79)
     for user in users:
-        print(line_format.format(user.login, user.email, user.name, 
+        print(line_format.format(user.login, user.email, user.name,
                 user.active, user.confirmed))
 
 manager.add_command("user", user)
@@ -231,7 +231,7 @@ manager.add_command("app", application)
 
 
 @manager.command
-@manager.option("-c", "--coverage", action="store_true", 
+@manager.option("-c", "--coverage", action="store_true",
         help="Report test code coverage")
 def test(coverage=False):
     "Run automated tests"
@@ -262,7 +262,7 @@ def init():
 
 
 @manager.command
-@manager.option("-r", "--reload", action="store_true", 
+@manager.option("-r", "--reload", action="store_true",
         help="Reload the server if any file changes")
 def up(reload=False):
     "Initialize Puffin dependencies and run the server"

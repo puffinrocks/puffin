@@ -15,8 +15,8 @@ from . import forms
 
 @app.context_processor
 def utility_processor():
-    return dict(current_user=current_user, version=app.config.get("VERSION"), 
-            links=app.config.get("LINKS", []), 
+    return dict(current_user=current_user, version=app.config.get("VERSION"),
+            links=app.config.get("LINKS", []),
             ApplicationStatus=applications.ApplicationStatus,
             stats=stats.get_stats())
 
@@ -37,10 +37,10 @@ def my_profile():
 @login_required
 def profile(login):
     if current_user.login != login:
-        flask.abort(403, "You are not allowed to view this profile") 
-    
+        flask.abort(403, "You are not allowed to view this profile")
+
     user = current_user
-    
+
     form = forms.ProfileForm(obj=user)
     if form.validate_on_submit():
         user.name = form.name.data
@@ -62,21 +62,21 @@ def application(application_id):
     if current_user.is_authenticated():
 
         form = forms.ApplicationForm()
-        
+
         if form.validate_on_submit():
             if form.start.data:
                 docker.create_application(client, current_user, application)
-            
+
             if form.stop.data:
                 docker.delete_application(client, current_user, application)
             return flask.redirect(flask.url_for('application', application_id=application_id))
-        
+
         application_status = docker.get_application_status(client, current_user, application)
         application_domain = applications.get_application_domain(current_user, application)
         application_version = docker.get_application_version(client, current_user, application)
 
-    return flask.render_template('application.html', application=application, 
-        application_status=application_status, application_domain=application_domain, 
+    return flask.render_template('application.html', application=application,
+        application_status=application_status, application_domain=application_domain,
         application_version=application_version, application_image_version=application_image_version,
         form=form)
 
@@ -107,7 +107,7 @@ def media(path):
 def application_settings(application_id):
     user = current_user
     application = applications.get_application(application_id)
-    
+
     application_settings = applications.get_application_settings(user.user_id, application_id)
     default_domain = applications.get_default_application_domain(user, application)
 
@@ -140,5 +140,5 @@ def application_settings(application_id):
     form.domain.data = applications.get_application_domain(user, application)
     form.https.data = applications.get_application_https(user, application)
 
-    return flask.render_template('application_settings.html', application=application, 
+    return flask.render_template('application_settings.html', application=application,
         application_settings=application_settings, backups=backups, form=form)

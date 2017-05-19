@@ -16,8 +16,8 @@ from . import mail
 
 
 class User(flask_security.UserMixin):
-    
-    def __init__(self, login, name, email, password, active, roles, 
+
+    def __init__(self, login, name, email, password, active, roles,
             confirmed=False):
         self.login = login
         self.name = name
@@ -26,7 +26,7 @@ class User(flask_security.UserMixin):
         self.active = active
         if confirmed:
             self.confirmed_at = datetime.datetime.now()
-    
+
     @property
     def id(self):
         return self.user_id
@@ -42,7 +42,7 @@ class User(flask_security.UserMixin):
     @property
     def confirmed(self):
         return self.confirmed_at != None
- 
+
     def __eq__(self, other):
         if other == None:
             return False
@@ -58,21 +58,21 @@ security = None
 
 def init():
     global security
-    
+
     app.config['SECURITY_CONFIRMABLE'] = not app.config['MAIL_SUPPRESS_SEND']
     app.config['SECURITY_CHANGEABLE'] = True
     app.config['SECURITY_SEND_PASSWORD_CHANGE_EMAIL'] = not app.config['MAIL_SUPPRESS_SEND']
     app.config['SECURITY_POST_CHANGE_VIEW'] = "profile.html"
     app.config['SECURITY_PASSWORD_HASH'] = "bcrypt"
     app.config['SECURITY_MSG_CONFIRMATION_REQUIRED'] = (
-            flask.Markup('Email requires confirmation. <a href="/confirm">Resend confirmation instructions</a>.'), 
+            flask.Markup('Email requires confirmation. <a href="/confirm">Resend confirmation instructions</a>.'),
             'error')
     # This comes from config: app.config['SECURITY_REGISTERABLE']
 
     # Update all salts with SECRET_KEY if they are not set
     secret_key = app.config['SECRET_KEY']
-    for salt in ('SECURITY_PASSWORD_SALT', 'SECURITY_CONFIRM_SALT', 
-            'SECURITY_RESET_SALT', 'SECURITY_LOGIN_SALT', 
+    for salt in ('SECURITY_PASSWORD_SALT', 'SECURITY_CONFIRM_SALT',
+            'SECURITY_RESET_SALT', 'SECURITY_LOGIN_SALT',
             'SECURITY_REMEMBER_SALT'):
         app.config[salt] = app.config.get(salt, secret_key)
 
@@ -80,7 +80,7 @@ def init():
 
     app.config['SECURITY_POST_LOGIN_VIEW'] = "/"
 
-    security = flask_security.Security(app, CustomUserDatastore(), 
+    security = flask_security.Security(app, CustomUserDatastore(),
             login_form=CustomLoginForm,
             register_form=CustomRegisterForm,
             confirm_register_form=CustomRegisterForm)
@@ -92,7 +92,7 @@ def init():
 
 
 class CustomUserDatastore(flask_security.datastore.SQLAlchemyDatastore, flask_security.datastore.UserDatastore):
-    
+
     def __init__(self):
         flask_security.datastore.SQLAlchemyDatastore.__init__(self, db)
         flask_security.datastore.UserDatastore.__init__(self, User, None)
@@ -121,11 +121,11 @@ class CustomLoginForm(flask_security.forms.LoginForm):
     email = wtforms.StringField("Email or Login")
 
 class CustomRegisterForm(flask_security.forms.RegisterForm):
-    
-    login = wtforms.StringField('Login', validators=[validators.Required(), validators.Length(3, 32), 
+
+    login = wtforms.StringField('Login', validators=[validators.Required(), validators.Length(3, 32),
             validators.Regexp(r'^[a-z][a-z0-9_]*$', 0, 'Login must have only lowercase letters, numbers or underscores')])
 
-    name = wtforms.StringField('Name', validators=[validators.Required(), validators.Length(1, 64), 
+    name = wtforms.StringField('Name', validators=[validators.Required(), validators.Length(1, 64),
             validators.Regexp(r'^[A-Za-z0-9_\- ]+$', 0, 'Name must have only letters, numbers, spaces, dots, dashes or underscores')])
 
 def send_security_mail(message):
@@ -139,8 +139,8 @@ def get_user(login):
     return security.datastore.get_user(login)
 
 def create_user(login):
-    user = security.datastore.create_user(login=login, name=login.capitalize(), 
-        email=login + "@" + app.config["SERVER_NAME_FULL"], 
+    user = security.datastore.create_user(login=login, name=login.capitalize(),
+        email=login + "@" + app.config["SERVER_NAME_FULL"],
         password=flask_security.utils.encrypt_password(login),
         confirmed=True)
     update_user(user)

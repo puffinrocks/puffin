@@ -5,7 +5,7 @@ services:
     puffin:
         build: .
         image: puffinrocks/puffin
-        volumes: 
+        volumes:
             - /var/run/docker.sock:/var/run/docker.sock
             - .:/usr/src/app
         depends_on:
@@ -16,7 +16,7 @@ services:
         environment:
             - VIRTUAL_HOST=puffin.localhost
             - VIRTUAL_PORT=8080
-        ports: 
+        ports:
             - "8080:8080"
         networks:
             - front
@@ -29,10 +29,10 @@ services:
             - 5432
         networks:
             back:
-    
+
     dns:
         image: puffinrocks/dns
-        ports: 
+        ports:
             - 53:53/udp
         networks:
             back:
@@ -47,7 +47,7 @@ services:
 
     mailhog:
         image: mailhog/mailhog
-        ports: 
+        ports:
             - "8025:8025"
             - 1025
         environment:
@@ -58,6 +58,6 @@ services:
             back:
 
 networks:
-    
+
     front:
     back:

@@ -25,7 +25,7 @@ def backup(user, application):
     for volume in application.volumes:
         full_volume = get_full_volume(user, application, volume)
         full_archive = get_full_archive(user, application, volume, backup_name)
-        output = docker.run_service(admin, backup_application, "backup", 
+        output = docker.run_service(admin, backup_application, "backup",
                 BACKUP="puffin_backup", VOLUME=full_volume, ARCHIVE=full_archive)
         if output:
             print(output)
@@ -43,7 +43,7 @@ def restore(user, application, backup_name):
     for volume in application.volumes:
         full_volume = get_full_volume(user, application, volume)
         full_archive = get_full_archive(user, application, volume, backup_name)
-        output = docker.run_service(admin, backup_application, "restore", 
+        output = docker.run_service(admin, backup_application, "restore",
                 BACKUP="puffin_backup", VOLUME=full_volume, ARCHIVE=full_archive)
         if output:
             print(output)
@@ -53,7 +53,7 @@ def list(user, application):
     backup_application = applications.get_application("_backup")
     application_name = applications.get_application_name(user, application)
 
-    backups = docker.run_service(admin, backup_application, "list", 
+    backups = docker.run_service(admin, backup_application, "list",
             BACKUP="puffin_backup", VOLUME="puffin_backup", ARCHIVE=application_name)
 
     return sorted(backups.split(), reverse=True)

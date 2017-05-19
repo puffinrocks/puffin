@@ -16,7 +16,7 @@ def init():
     global queue
     threads = 1
     queue = queue_module.Queue()
-    for _ in range(threads): 
+    for _ in range(threads):
         Worker(queue)
 
 def task(task_id, func, *args, **kwargs):
@@ -37,14 +37,14 @@ class Worker(threading.Thread):
         self.queue = queue
         self.daemon = True
         self.start()
-    
+
     def run(self):
         while True:
             task_id, func, args, kwargs = self.queue.get()
-            try: 
+            try:
                 with app.app_context():
                     func(*args, **kwargs)
-            except Exception as e: 
+            except Exception as e:
                 app.logger.warn("Error processing task", exc_info=e)
             finally:
                 self.queue.task_done()
