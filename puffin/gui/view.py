@@ -53,6 +53,8 @@ def profile(login):
 def application(application_id):
     client = docker.get_client()
     application = applications.get_application(application_id)
+    if not application:
+        flask.abort(404)
     application_status = None
     application_domain = None
     application_version = None
