@@ -115,32 +115,49 @@ def application_settings(application_id):
 
     form = forms.ApplicationSettingsForm()
     if form.validate_on_submit():
+        domain = form.domain.data.strip()
+        if len(domain) != 0 and domain != default_domain:
+            application_settings.settings["domain"] = domain
+        else:
+            application_settings.settings.pop("domain", None)
+        https = form.https.data
+        if https:
+            application_settings.settings["https"] = True
+        else:
+            application_settings.settings.pop("https", None)
+        applications.update_application_settings(application_settings)
 
-        if form.update.data:
-            domain = form.domain.data.strip()
-            if len(domain) != 0 and domain != default_domain:
-                application_settings.settings["domain"] = domain
-            else:
-                application_settings.settings.pop("domain", None)
-            https = form.https.data
-            if https:
-                application_settings.settings["https"] = True
-            else:
-                application_settings.settings.pop("https", None)
-            applications.update_application_settings(application_settings)
-
-        if form.backup.data:
-            backup.backup(user, application)
-            flask.flash("Backup created successfully.")
-
-        if form.restore.data:
-            backup.restore(user, application, form.restore.raw_data[0])
-            flask.flash("Backup restored successfully.")
-
-    backups = backup.list(user, application)
+        flask.flash("Settings updated successfully")
+        return flask.redirect(flask.url_for('application', application_id=application_id))
 
     form.domain.data = applications.get_application_domain(user, application)
     form.https.data = applications.get_application_https(user, application)
 
     return flask.render_template('application_settings.html', application=application,
-        application_settings=application_settings, backups=backups, form=form)
+        application_settings=application_settings, form=form)
+
+@app.route('/application/<application_id>/backup.html', methods=['GET', 'POST'])
+@login_required
+def application_backup(application_id):
+    user = current_user
+    application = applications.get_application(application_id)
+
+    backups = backup.list(user, application)
+
+    form = forms.ApplicationBackupForm()
+    form.name.choices = [(b,b) for b in backups]
+
+    if form.validate_on_submit():
+        if form.backup.data:
+            backup.backup(user, application)
+            flask.flash("Backup created successfully.")
+            return flask.redirect(flask.url_for('application', application_id=application_id))
+
+        if form.restore.data:
+            backup_name = form.name.data
+            backup.restore(user, application, backup_name)
+            flask.flash("Backup {} restored successfully.".format(backup_name))
+            return flask.redirect(flask.url_for('application', application_id=application_id))
+
+    return flask.render_template('application_backup.html', application=application,
+        backups=backups, form=form)

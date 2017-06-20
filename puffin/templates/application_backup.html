@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+
+{% block title %}Puffin | {{ application.name }} backup{% endblock %}
+
+
+{% block page %}
+
+<div>
+
+    <div class="page-header">
+        <h1>{{ application.name }} backup</h1>
+    </div>
+    <div class="col-md-6">
+
+        <p><a href="{{ url_for('application', application_id=application.application_id) }}">« Back</a></p>
+
+        <form class="form" method="post" role="form" action="">
+
+            {{ form.hidden_tag() }}
+
+            <p>
+                Create new backup &nbsp;
+                <button type="submit" name="backup" value="Backup" class="btn btn-success"><span class="glyphicon glyphicon-save"></span> Backup</button>
+            </p>
+
+            <p>
+                Restore existing backup &nbsp;
+                <select name="name">
+                    {% for backup in backups %}
+                    <option value="{{ backup }}">{{ backup }}</option>
+                    {% endfor %}
+                </select>
+                <button type="submit" name="restore" value="Restore" class="btn btn-warning" style="vertical-align: top;"><span class="glyphicon glyphicon-open"></span> Restore</button>
+            </p>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+

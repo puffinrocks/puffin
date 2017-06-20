@@ -14,8 +14,6 @@ class ApplicationSettingsForm(flask_wtf.Form):
     domain = wtforms.StringField('Domain', description="If you change it then make sure you also configure it with your DNS provider")
     https = wtforms.BooleanField('HTTPS', description="Enable HTTPS via Let's Encrypt")
     update = wtforms.SubmitField('Update')
-    backup = wtforms.SubmitField('Backup')
-    restore = wtforms.SubmitField('Restore')
 
     def validate(self):
         rv = flask_wtf.Form.validate(self)
@@ -31,6 +29,11 @@ class ApplicationSettingsForm(flask_wtf.Form):
                 return False
 
         return True
+
+class ApplicationBackupForm(flask_wtf.Form):
+    name = wtforms.SelectField('Name')
+    backup = wtforms.SubmitField('Backup')
+    restore = wtforms.SubmitField('Restore')
 
 class ProfileForm(flask_wtf.Form):
     login = wtforms.StringField('Login')

@@ -49,9 +49,11 @@
                     <a class="btn btn-primary" role="button" href="{{ "http://" + application_domain }}" target="_blank"><span class="glyphicon glyphicon-share-alt"></span> Open</a>
                     <button type="submit" name="stop" value="Stop" class="btn btn-danger"><span class="glyphicon glyphicon-stop"></span> Stop</button>
                     <button type="button" class="btn btn-info" disabled="disabled" title="Stop the application before modifying the settings"><span class="glyphicon glyphicon-cog"></span> Settings</button>
+                    <button type="button" class="btn btn-warning" disabled="disabled" title="Stop the application before managing backups"><span class="glyphicon glyphicon-hdd"></span> Backup</button>
                 {% elif application_status == ApplicationStatus.DELETED %}
                     <button type="submit" name="start" value="Start" class="btn btn-success"><span class="glyphicon glyphicon-play"></span> Run</button>
                     <a class="btn btn-info" role="button" href="{{ url_for("application_settings", application_id=application.application_id) }}"><span class="glyphicon glyphicon-cog"></span> Settings</a>
+                    <a class="btn btn-warning" role="button" href="{{ url_for("application_backup", application_id=application.application_id) }}"><span class="glyphicon glyphicon-hdd"></span> Backup</a>
                 {% elif application_status == ApplicationStatus.UPDATING %}
                     <button type="button" class="btn btn-warning blinking"><span class="glyphicon glyphicon-refresh"></span> Updating</button>
                     <script>
