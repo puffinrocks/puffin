@@ -11,7 +11,6 @@ before_install:
     - git submodule update --init
     - sed -i 's/git@github.com:/https:\/\/github.com\//' apps/.gitmodules
     - git submodule update --init --recursive
-    - sudo apt-get -o Dpkg::Options::="--force-confnew" install -y docker-engine
 
 script:
     - docker-compose run -d --no-deps puffindb
