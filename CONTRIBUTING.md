@@ -4,7 +4,7 @@ There are many ways you can contribute to Puffin project, I hope that everyone w
 
 ## Discussion and Contact
 
-If you would like to discuss any subject related to Puffin please visit our [Forum](http://forum.puffin.rocks/).
+If you would like to discuss any subject related to Puffin please create an [issue on GitHub](https://github.com/puffinrocks/puffin/issues).
 
 If you'd like to contact us directly, please send an email to [puffin@puffin.rocks](mailto:puffin@puffin.rocks).
 
@@ -32,7 +32,7 @@ First you need to do is to is to install Docker on your server - the easiest way
 achieve that is via [Docker Machine](README.md#docker-machine).
 Next you need to run Puffin [Production Deployment](README.md#production-deployment).
 
-If you run into any trouble, please visit the [Forum Hosting Section](http://forum.puffin.rocks/t/hosting).
+If you run into any trouble, please feel free to create an [issue on GitHub](https://github.com/puffinrocks/puffin/issues).
 
 Keep in mind the software is in early alpha development stage, so for the moment it should be used for
 experimentation only.

@@ -1,7 +1,9 @@
 0.7
 
+* Add app: Mastodon
 * Add app: Nextcloud
 * Allow uploads of over 2M in proxy
+* Remove Forum for simplicity
 
 0.6
 
