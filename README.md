@@ -164,6 +164,11 @@ machine than Puffin server itself. To achieve that take a look on MACHINE\_\* op
 You also won't need network sections in your docker-compose file,
 since the networks will be created automatically on the remote machine.
 
+#### Application Update & Backup
+
+Application versions are regularly updated. In order to assure than new version doesn't
+corrupt the data, an automatic backup of all volumes is performed on every application restart.
+
 # Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md).
