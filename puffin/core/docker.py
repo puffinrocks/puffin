@@ -34,28 +34,37 @@ def get_client():
     client.ping()
     return client
 
-def create_application(client, user, application):
+def create_application(client, user, application, async=True):
     if get_application_status(client, user, application) != applications.ApplicationStatus.DELETED:
         raise RuntimeError("Application already installed or updating, user: {}, application: {}".format(user.login, application.application_id))
     name = applications.get_application_name(user, application)
-    queue.task(name, create_application_task, user.user_id, application)
 
-def create_application_task(user_id, application):
+    if async:
+        queue.task(name, create_application_task, user.user_id, application)
+    else:
+        create_application_task(user.user_id, application, False)
+
+def create_application_task(user_id, application, wait=True):
     user = db.session.query(security.User).get(user_id)
     network.create_network(get_client(), applications.get_application_name(user, application) + "_default")
     output = compose.compose_start(machine_module.get_machine(), user, application)
     if output:
         print(output)
     application_url = "http://" + applications.get_application_domain(user, application)
-    time.sleep(APPLICATION_SLEEP_AFTER_CREATE)
-    wait_until_up(application_url)
+    if wait:
+        time.sleep(APPLICATION_SLEEP_AFTER_CREATE)
+        wait_until_up(application_url)
     applications.set_application_started(user, application, True)
 
 def delete_application(client, user, application, async=True):
     if get_application_status(client, user, application) != applications.ApplicationStatus.CREATED:
         raise RuntimeError("Application not installed or updating, user: {}, application: {}".format(user.login, application.application_id))
     name = applications.get_application_name(user, application)
-    queue.task(name, delete_application_task, user.user_id, application)
+
+    if async:
+        queue.task(name, delete_application_task, user.user_id, application)
+    else:
+        delete_application_task(user.user_id, application)
 
 def delete_application_task(user_id, application):
     user = db.session.query(security.User).get(user_id)

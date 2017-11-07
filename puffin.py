@@ -196,6 +196,28 @@ def app_init_running():
             applications.set_application_started(user, application, True)
 
 @application.command
+def start(user, application):
+    "Start an application"
+    app_start(user, application)
+
+def app_start(user_login, application_id):
+    user = get_existing_user(user_login)
+    application = get_existing_application(application_id)
+    client = docker.get_client()
+    docker.create_application(client, user, application, False)
+
+@application.command
+def stop(user, application):
+    "Stop an application"
+    app_stop(user, application)
+
+def app_stop(user_login, application_id):
+    user = get_existing_user(user_login)
+    application = get_existing_application(application_id)
+    client = docker.get_client()
+    docker.delete_application(client, user, application, False)
+
+@application.command
 def backup(user, application):
     "Backup application"
     app_backup(user, application)
