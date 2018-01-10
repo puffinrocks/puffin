@@ -34,14 +34,6 @@ body {
 }
 
 /* Application thumbnails */
-.app.thumbnail {
-    height: 335px;
-}
-
-.app.thumbnail a {
-    color: black;
-}
-
 .app.thumbnail.new {
     opacity: 0.3;
     border: 2px dashed #999;

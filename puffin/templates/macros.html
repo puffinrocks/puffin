@@ -1,23 +1,28 @@
-{% macro application_thumbnail(application) %}
-    <div class="col-sm-4 col-md-3">
-    <div class="app thumbnail">
-      <a href="{{ url_for('application', application_id=application.application_id) }}"><img src="{{ url_for('media', path=application.logo) }}" alt="{{ application.name }}"></a>
-      <div class="caption">
-        <h3><a href="{{ url_for('application', application_id=application.application_id) }}">{{ application.name }}</a></h3>
-        <h4>{{ application.subtitle }}</h4>
-      </div>
-    </div>
-  </div>
-{% endmacro %}
+{% import "bootstrap/wtf.html" as wtf %}
 
-{% macro new_application_thumbnail() %}
-    <div class="col-sm-4 col-md-3">
-    <div class="app thumbnail new">
-      <a href="https://github.com/puffinrocks/apps" title="add new application"><img src="{{ url_for('static', filename='images/new_application.png') }}" alt="new application"></a>
-      <div class="caption">
-        <h3>&nbsp;</h3>
-        <h4>add new application to the catalog</h4>
-      </div>
+{% macro application_thumbnail(application) %}
+    <div class="col-sm-12 col-md-6">
+    <div class="app thumbnail">
+        <div class="row">
+            <div class="col-sm-4">
+                {% if application %}
+                    <a href="{{ url_for('application', application_id=application.application_id) }}"><img src="{{ url_for('media', path=application.logo) }}" alt="{{ application.name }}"></a>
+                {% else %}
+                    <a href="https://github.com/puffinrocks/apps" title="add new application"><img src="{{ url_for('static', filename='images/new_application.png') }}" alt="new application"></a>
+                {% endif %}
+            </div>
+            <div class="col-sm-8">
+                <div class="caption">
+                    {% if application %}
+                        <h3><a href="{{ url_for('application', application_id=application.application_id) }}">{{ application.name }}</a></h3>
+                        <h4>{{ application.subtitle }}</h4>
+                    {% else %}
+                        <h3>&nbsp;</h3>
+                        <h4>add new application to the catalog</h4>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
     </div>
   </div>
 {% endmacro %}
