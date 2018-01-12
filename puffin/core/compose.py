@@ -21,16 +21,7 @@ def compose_run(machine, user, application, *arguments, **environment):
     args = ["docker-compose", "-f", application.compose, "-p", name]
     args += arguments
 
-    domain = applications.get_application_domain(user, application)
-    env = dict(PATH=os.environ['PATH'], VIRTUAL_HOST=domain)
-
-    if app.config["LETSENCRYPT"] and applications.get_application_https(user, application):
-        admin = security.get_admin()
-        env.update(LETSENCRYPT_HOST=domain, LETSENCRYPT_EMAIL=admin.email,
-                LETSENCRYPT_TEST="true" if app.config["LETSENCRYPT_TEST"] else "")
-
-    env.update(machine_module.get_env_vars(machine))
-    env.update(**environment)
+    env = _get_env(machine, user, application, **environment)
 
     process = subprocess.Popen(args,
             stderr=subprocess.STDOUT, stdout=subprocess.PIPE,
@@ -40,3 +31,26 @@ def compose_run(machine, user, application, *arguments, **environment):
     out = out.strip()
     return out
 
+def _get_env(machine, user, application, **environment):
+    domain = applications.get_application_domain(user, application)
+    env = dict(PATH=os.environ['PATH'], VIRTUAL_HOST=domain)
+
+    env.update({k: v for (k, v) in zip(
+        map(lambda s: 'VIRTUAL_HOST_' + s.upper(), application.subdomains),
+        map(lambda s: s + '.' + domain, application.subdomains))})
+
+    if app.config["LETSENCRYPT"] and applications.get_application_https(user, application):
+        admin = security.get_admin()
+        env.update(LETSENCRYPT_HOST=domain, LETSENCRYPT_EMAIL=admin.email,
+                LETSENCRYPT_TEST="true" if app.config["LETSENCRYPT_TEST"] else "")
+
+        env.update({k: v for (k, v) in zip(
+            map(lambda s: 'LETSENCRYPT_HOST_' + s.upper(), application.subdomains),
+            map(lambda s: s + '.' + domain, application.subdomains))})
+
+
+    env.update(machine_module.get_env_vars(machine))
+
+    env.update(**environment)
+
+    return env

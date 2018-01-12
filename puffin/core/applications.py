@@ -3,6 +3,7 @@ import os
 import os.path
 import cachetools
 import enum
+import re
 
 import yaml
 import bleach
@@ -19,6 +20,8 @@ APPLICATION_HOME = os.path.join(util.HOME, "apps")
 
 # Name separator between user and application, also check apps/_proxy
 APPLICATION_SEPARATOR = "xxxx"
+
+SUBDOMAIN_PATTERN = re.compile('(?:VIRTUAL_HOST|LETSENCRYPT_HOST)_([A-Za-z0-9]+)')
 
 application_cache = cachetools.TTLCache(maxsize=1, ttl=120)
 
@@ -54,6 +57,14 @@ class Application:
         # Retrieve all volumes except external ones
         self.volumes = [v[0] for v in compose_data.get("volumes", {}).items()
                 if not (v[1] and "external" in v[1])]
+
+        subdomains = set()
+        for service in compose_data["services"].values():
+            for env in service.get("environment", []):
+                m = SUBDOMAIN_PATTERN.search(env)
+                if m:
+                    subdomains.add(m.group(1).lower())
+        self.subdomains = list(subdomains)
 
     def __eq__(self, other):
         return self.application_id == other.application_id
