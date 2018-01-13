@@ -33,6 +33,10 @@ body {
     margin-top: 30px;
 }
 
+.app.thumbnail a {
+    color: black;
+}
+
 /* Application thumbnails */
 .app.thumbnail.new {
     opacity: 0.3;
