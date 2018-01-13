@@ -102,6 +102,9 @@ def apps():
 def media(path):
     if not path[-3:] in ("png", "jpg"):
         raise Exception("Unsupported media file format")
+    if path.startswith('image-'):
+        path = path[6:]
+    print(path)
     return flask.send_from_directory(applications.APPLICATION_HOME, path)
 
 @app.route('/application/<application_id>/settings.html', methods=['GET', 'POST'])

@@ -44,7 +44,9 @@ class Application:
         self.description = re.sub(r'([a-z0-9]+(/[a-z0-9-_]+)*\.(png|jpg))', '/media/' + application_id + r'/\1', self.description)
 
         self.compose = os.path.join(self.path, "docker-compose.yml")
-        self.logo = os.path.join(self.application_id, "logo.png")
+
+        # add prefix to trick ad blockers
+        self.logo = 'image-' + os.path.join(self.application_id, "logo.png")
 
         compose_data = {}
         with open(self.compose) as compose_file:
