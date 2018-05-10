@@ -1,4 +1,11 @@
-FROM python:3-onbuild
+FROM python:3.6.4
+
+WORKDIR /usr/src/app
+
+COPY requirements.txt /usr/src/app/
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY . /usr/src/app
 
 ENV PYTHONUNBUFFERED=1
 ENTRYPOINT ["python3", "puffin.py"]
