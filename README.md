@@ -1,6 +1,8 @@
 # Puffin
 [![Build Status](https://travis-ci.org/puffinrocks/puffin.svg?branch=master)](https://travis-ci.org/puffinrocks/puffin)
 
+**Note** The project is not maintained anymore, the code is here for historical / fork purposes.
+
 ## Introduction
 
 The goal of the project is to allow average, tech-oriented user to run web applications with ease.
