@@ -1,7 +1,7 @@
 # Puffin
 [![Build Status](https://travis-ci.org/puffinrocks/puffin.svg?branch=master)](https://travis-ci.org/puffinrocks/puffin)
 
-**Note** The project is not maintained anymore, the code is here for historical / fork purposes.
+**NOTE**: The project is not maintained anymore, the code is here for historical / fork purposes.
 
 ## Introduction
 
